@@ -1,7 +1,3 @@
-const _ = require('lodash');
-
-const TABLE_NAME = 'sources';
-
 module.exports = container => {
     const r = container.get('rethinkdb');
 
@@ -9,19 +5,20 @@ module.exports = container => {
         return r.table(TABLE_NAME).run();
     };
 
-    const findAllWithThemes = () => {
-        return r.table(TABLE_NAME)
-            .outerJoin(r.table('themes'), (source, theme) => {
-                return source('themes').default([]).contains(theme('id'));
+    const findAllWithTopics = () => {
+        return r.table('sources')
+            .outerJoin(r.table('topics'), (source, topic) => {
+                return source('topics').default([]).contains(topic('id'));
             })
             .group(row => row('left')('id'))
             .ungroup()
             .map(group => {
                 const source = group('reduction').nth(0)('left');
+
                 return source.merge(r.branch(
-                    source('themes').default([]).isEmpty(),
-                    { themes: [] },
-                    { themes: group('reduction').map(pair => pair('right')) }
+                    source('topics').default([]).isEmpty(),
+                    { topics: [] },
+                    { topics: group('reduction').map(pair => pair('right')) }
                 ))
             })
             .run()
@@ -29,15 +26,15 @@ module.exports = container => {
     };
 
     const find = id => {
-        return r.table(TABLE_NAME).get(id).run();
+        return r.table('sources').get(id).run();
     };
 
-    const findWithThemes = id => {
+    const findWithTopics = id => {
         return r.table('sources').get(id)
             .merge(source => {
                 return {
-                    themes: r.table('themes')
-                        .filter(theme => source('themes').contains(theme('id')))
+                    topics: r.table('topics')
+                        .filter(theme => source('topics').contains(theme('id')))
                         .coerceTo('array')
                 };
             })
@@ -46,8 +43,8 @@ module.exports = container => {
 
     return {
         find,
-        findWithThemes,
+        findWithTopics,
         findAll,
-        findAllWithThemes,
+        findAllWithTopics,
     };
 };

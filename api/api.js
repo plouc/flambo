@@ -18,6 +18,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get('/', (req, res) => {
+    res.send(`
+        <ul>
+            <li><a href="/api/v1/users">/api/v1/users</a></li>
+            <li><a href="/api/v1/topics">/api/v1/topics</a></li>
+            <li><a href="/api/v1/sources">/api/v1/sources</a></li>
+        </ul>
+    `);
+});
 app.use('/api/v1/users',      Users(container));
 app.use('/api/v1/topics',     Topics(container));
 app.use('/api/v1/sources',    Sources(container));
@@ -38,7 +47,7 @@ wss.on('connection', (ws) => {
     const r = container.get('rethinkdb');
     r
         .table('users').merge({ type: 'users' })
-        .union(r.table('themes').merge({ type: 'themes' }))
+        .union(r.table('topics').merge({ type: 'topics' }))
         .union(r.table('sources').merge({ type: 'sources' }))
         .changes().run((err, cursor) => {
             if (err) throw err;

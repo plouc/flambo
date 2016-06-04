@@ -6,7 +6,7 @@ const container = require('./src/container');
 
 const r = container.get('rethinkdb');
 
-r.table('themes').run()
+r.table('topics').run()
     .then(() => {
         console.log('Already setup');
         r.getPoolMaster().drain();
@@ -14,7 +14,7 @@ r.table('themes').run()
     .error(() => {
         r.dbCreate(container.get('rethinkdb_db')).run()
             .then(() => {
-                return r.tableCreate('themes').run();
+                return r.tableCreate('topics').run();
             })
             .then(() => {
                 return r.tableCreate('users').run();

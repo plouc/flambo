@@ -12,13 +12,13 @@ const r = container.get('rethinkdb');
 
 const util = require('util');
 
-r.table('themes').delete().run()
+r.table('topics').delete().run()
     .then(() => {
-        console.log('loading themes');
-        return r.table('themes').insert(themes.map(theme => {
-            theme.createdAt = r.now();
+        console.log('loading topics');
+        return r.table('topics').insert(topics.map(topic => {
+            topic.createdAt = r.now();
 
-            return theme;
+            return topic;
         }), { returnChanges: true }).run()
             .then(res => {
                 console.log(util.inspect(res, { depth: null, colors: true }));

@@ -9,7 +9,7 @@ module.exports = container => {
     const repo = SourcesRepository(container);
 
     router.get('/', (req, res) => {
-        repo.findAllWithThemes()
+        repo.findAllWithTopics()
             .then(result => {
                 res.json(result);
             })
@@ -20,7 +20,7 @@ module.exports = container => {
     });
 
     router.get('/:id', (req, res) => {
-        repo.findWithThemes(req.params.id)
+        repo.findWithTopics(req.params.id)
             .then(source => {
                 if (source === null) {
                     res.status(404).send();

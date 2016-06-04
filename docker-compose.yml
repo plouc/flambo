@@ -9,3 +9,21 @@ elastic:
   ports:
     - "9200:9200"
     - "9300:9300"
+
+api:
+  build: ./docker/api
+  links:
+    - rethink
+    - elastic
+  ports:
+    - "3000:3000"
+  environment:
+    APP_PORT:           3000
+    ELASTIC_HOST:       elastic
+    ELASTIC_PORT:       9200
+    RETHINKDB_HOST:     rethink
+    RETHINKDB_PORT:     28015
+    RETHINKDB_AUTH_KEY: ""
+    RETHINKDB_DB:       flambo
+  volumes :
+    - ./api:/api

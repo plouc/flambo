@@ -1,24 +1,20 @@
-const _ = require('lodash');
-
-const TABLE_NAME = 'themes';
-
 module.exports = container => {
     const r = container.get('rethinkdb');
 
     const findAll = () => {
-        return r.table(TABLE_NAME).run();
+        return r.table('topics').run();
     };
 
     const find = id => {
-        return r.table(TABLE_NAME).get(id).run();
+        return r.table('topics').get(id).run();
     };
 
     const findWithSources = id => {
-        return r.table(TABLE_NAME).get(id)
+        return r.table('topics').get(id)
             .merge(() => {
                 return {
                     sources: r.table('sources').filter(source => {
-                        return source('themes').contains(id);
+                        return source('topics').contains(id);
                     }).coerceTo('array')
                 };
             })

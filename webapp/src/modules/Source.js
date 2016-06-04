@@ -38,7 +38,7 @@ class Source extends Component {
                 {source && (
                     <p>
                         topics:&nbsp;
-                        <SourceTopics source={source} topics={source.themes}/>
+                        <SourceTopics source={source} topics={source.topics}/>
                     </p>
                 )}
                 {loading && (

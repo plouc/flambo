@@ -1,6 +1,6 @@
 const router           = require('express').Router();
 const Joi              = require('joi');
-const themeSchema      = require('../schemas/themeSchema');
+const topicSchema      = require('../schemas/topicSchema');
 const TopicsRepository = require('../repositories/TopicsRepository');
 
 
@@ -38,7 +38,7 @@ module.exports = container => {
 
     router.get('/:id/news_items', (req, res) => {
         r.table('sources').filter(doc => {
-            return doc('themes').contains(req.params.id);
+            return doc('topics').contains(req.params.id);
         }).run()
             .then(sources => sources.map(({ id }) => id))
             .then(sourceIds => {
@@ -76,9 +76,9 @@ module.exports = container => {
     });
 
     router.post('/', (req, res, next) => {
-        const themeData = req.body;
+        const data = req.body;
 
-        Joi.validate(themeData, themeSchema, (err, value) => {
+        Joi.validate(data, topicSchema, (err, value) => {
             if (err) {
                 res.status(400).json({
                     errors: err.details
@@ -86,7 +86,7 @@ module.exports = container => {
             } else {
                 value.createdAt = r.now();
 
-                r.table('themes').insert(value, { returnChanges: true }).run()
+                r.table('topics').insert(value, { returnChanges: true }).run()
                     .then(result => {
                         if (result.inserted !== 1) {
                             // @todo handle error…

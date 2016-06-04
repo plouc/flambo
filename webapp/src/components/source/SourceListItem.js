@@ -14,7 +14,7 @@ class SourceListItem extends Component {
                     <Link to={`/sources/${source.id}`}>{sourceTitle(source)}</Link>
                 </td>
                 <td>
-                    <SourceTopics source={source} topics={source.themes || []}/>
+                    <SourceTopics source={source} topics={source.topics}/>
                 </td>
                 <td>
                     <Link to={`/sources/${source.id}/edit`}>edit</Link>
