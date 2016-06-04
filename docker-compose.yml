@@ -1,29 +1,31 @@
-rethink:
-  image: rethinkdb
-  ports:
-    - "8080:8080"
-    - "28015:28015"
+version: '2'
+services:
+  rethink:
+    image: rethinkdb
+    ports:
+      - "8080:8080"
+      - "28015:28015"
 
-elastic:
-  image: elasticsearch
-  ports:
-    - "9200:9200"
-    - "9300:9300"
+  elastic:
+    image: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
 
-api:
-  build: ./docker/api
-  links:
-    - rethink
-    - elastic
-  ports:
-    - "3000:3000"
-  environment:
-    APP_PORT:           3000
-    ELASTIC_HOST:       elastic
-    ELASTIC_PORT:       9200
-    RETHINKDB_HOST:     rethink
-    RETHINKDB_PORT:     28015
-    RETHINKDB_AUTH_KEY: ""
-    RETHINKDB_DB:       flambo
-  volumes :
-    - ./api:/api
+  api:
+    build: ./docker/api
+    depends_on:
+      - rethink
+      - elastic
+    ports:
+      - "3000:3000"
+    environment:
+      APP_PORT:           3000
+      ELASTIC_HOST:       elastic
+      ELASTIC_PORT:       9200
+      RETHINKDB_HOST:     rethink
+      RETHINKDB_PORT:     28015
+      RETHINKDB_AUTH_KEY: ""
+      RETHINKDB_DB:       flambo
+    volumes :
+      - ./api:/api
