@@ -1,5 +1,5 @@
 .DS_Store
-.env
+api/.env
 node_modules
 .idea
 rethinkdb_data
