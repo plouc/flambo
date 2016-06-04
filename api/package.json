@@ -1,0 +1,29 @@
+{
+  "name": "flambo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Raphaël Benitte <benitteraphael+npm@gmail.com> (http://www.rbenitte.com/)",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "3.4.0",
+    "body-parser": "1.15.1",
+    "cors": "2.7.1",
+    "dotenv": "2.0.0",
+    "elasticsearch": "11.0.1",
+    "express": "4.13.4",
+    "feedparser": "1.1.4",
+    "gravatar": "1.5.2",
+    "jimple": "1.4.2",
+    "joi": "8.1.1",
+    "lodash": "4.13.1",
+    "moment": "2.13.0",
+    "request": "2.72.0",
+    "rethinkdbdash": "2.3.6",
+    "twit": "2.2.4",
+    "uws": "0.4.1"
+  }
+}

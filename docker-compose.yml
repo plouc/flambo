@@ -1,0 +1,11 @@
+rethink:
+  image: rethinkdb
+  ports:
+    - "8080:8080"
+    - "28015:28015"
+
+elastic:
+  image: elasticsearch
+  ports:
+    - "9200:9200"
+    - "9300:9300"

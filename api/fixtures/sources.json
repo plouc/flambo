@@ -1,0 +1,76 @@
+[
+  {
+    "type": "twitter",
+    "data": {
+      "user": "nodejs"
+    }
+  },
+  {
+    "type": "twitter",
+    "data": {
+      "user": "reactjs"
+    }
+  },
+  {
+    "type": "twitter",
+    "data": {
+      "user": "ReactJSNews"
+    },
+    "themes": []
+  },
+  {
+    "type": "twitter",
+    "data": {
+      "user": "React_Rocks"
+    },
+    "themes": []
+  },
+  {
+    "type": "twitter",
+    "data": {
+      "user": "golang"
+    },
+    "themes": []
+  },
+  {
+    "type": "twitter",
+    "data": {
+      "user": "githubstatus"
+    },
+    "themes": []
+  },
+  {
+    "type": "twitter",
+    "data": {
+      "user": "climagic"
+    },
+    "themes": []
+  },
+  {
+    "type": "twitter",
+    "data": {
+      "user": "Vjeux"
+    },
+    "themes": []
+  },
+  {
+    "type": "twitter",
+    "data": {
+      "user": "dotGoEu"
+    },
+    "themes": []
+  },
+  {
+    "type": "twitter",
+    "data": {
+      "user": "dailyjs"
+    },
+    "themes": []
+  },
+  {
+    "type": "rss",
+    "data": {
+      "url": "https://nodejs.org/en/feed/blog.xml"
+    }
+  }
+]
