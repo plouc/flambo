@@ -21,7 +21,7 @@ r.table('topics').delete().run()
             return topic;
         }), { returnChanges: true }).run()
             .then(res => {
-                console.log(util.inspect(res, { depth: null, colors: true }));
+                //console.log(util.inspect(res, { depth: null, colors: true }));
             })
         ;
     })

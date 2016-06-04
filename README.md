@@ -37,3 +37,12 @@ You should now be able to access the webapp at http://localhost:8081/
 
 This repository provides a postman collection to play with the API.
 To run it simply import `flamb.postman_collection.json` into postman.
+
+
+## Operations
+
+Reloading default data:
+
+```sh
+docker-compose exec api /bin/bash -c "cd api && node loadData.js"
+```
