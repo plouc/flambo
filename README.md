@@ -46,3 +46,9 @@ Reloading default data:
 ```sh
 docker-compose exec api /bin/bash -c "cd api && node loadData.js"
 ```
+
+Collecting and indexing from existing sources
+
+```sh
+docker-compose exec api /bin/bash -c "cd api && node collect.js"
+```

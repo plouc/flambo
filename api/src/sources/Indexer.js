@@ -24,7 +24,12 @@ module.exports = client => {
                 } else {
                     if (resp.errors === true) {
                         console.error('encountred errors while indexing');
-                        console.error(util.inspect(resp.items, { showHidden: true, depth: null, colors: true }));
+                        console.error(util.inspect(resp.items, {
+                            showHidden:     true,
+                            depth:          null,
+                            maxArrayLength: null,
+                            colors:         true
+                        }));
                     } else {
                         console.log('successfully index documents');
                     }
