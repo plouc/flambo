@@ -8,6 +8,8 @@
 
 ## Installation
 
+### Api
+
 Launch rethinkdb, elasticsearch and the api
 
 ```sh
@@ -15,6 +17,16 @@ docker-compose up --build
 ```
 
 You should now be able to acces the api at http://localhost:3000/
+
+### webapp
+
+```sh
+cd webapp
+npm install
+npm start
+```
+
+You should now be able to access the webapp at http://localhost:8081/
 
 ## Accessing services
 
