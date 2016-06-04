@@ -19,7 +19,7 @@ You should now be able to acces the api at http://localhost:3000/
 ## Accessing services
 
 - **rethinkdb ui** http://localhost:8080/
-- **elasticsearch** http://localhost:9200/
+- **elasticsearch** http://localhost:9200/, I strongly encourage you to install the [sense chrome extension](https://chrome.google.com/webstore/detail/sense-beta/lhjgkmllcaadmopgmanpapmpjgmfcfig)
 
 ## Postman
 
