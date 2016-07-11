@@ -1,0 +1,25 @@
+parserOptions:
+  ecmaVersion: 6
+  sourceType:  module
+env:
+  es6:  true
+  node: true
+extends: eslint:recommended
+rules:
+  no-return-assign:      error
+  global-require:        error
+  key-spacing:           [ error, { align: value, beforeColon: false, afterColon: true } ]
+  no-multi-spaces:       off
+  indent:                [ error, 4, { SwitchCase: 1 } ]
+  max-len:               [ error, 140 ]
+  object-shorthand:      [ warn, always ]
+  no-use-before-define': off
+  consistent-return:     warn
+  newline-before-return: error
+  arrow-parens:          [ warn, as-needed ]
+  no-console:            off
+  valid-jsdoc:           [ error, { requireParamDescription: false, requireReturnDescription: false } ]
+  require-jsdoc:         warn
+  global-strict:         off
+  no-extra-strict:       off
+  comma-dangle:          [ warn, always-multiline ]

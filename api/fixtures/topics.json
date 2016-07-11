@@ -1,32 +1,64 @@
-[
-  {
-    "name": "Node.js"
-  },
-  {
-    "name": "Ansible"
-  },
-  {
-    "name": "PHP"
-  },
-  {
-    "name": "Devops"
-  },
-  {
-    "name": "Java"
-  },
-  {
-    "name": "CSS"
-  },
-  {
-    "name": "Reactjs"
-  },
-  {
-    "name": "golang"
-  },
-  {
-    "name": "Docker"
-  },
-  {
-    "name": "github"
+{
+  "topics": {
+    "node": {
+      "user": "$users:0.id",
+      "name": "Node.js",
+      "description": "Stuff related to Node.js.",
+      "picture": null
+    },
+    "ansible": {
+      "user": "$users:0.id",
+      "name": "Ansible",
+      "description": "Ansible is the simplest way to automate apps and IT infrastructure.",
+      "picture": null
+    },
+    "php": {
+      "user": "$users:0.id",
+      "name": "PHP",
+      "description": "Stuff related to the famous language powering a myriad of websites.",
+      "picture": null
+    },
+    "devops": {
+      "user": "$users:0.id",
+      "name": "DevOps",
+      "description": "Stuff related to DevOps culture.",
+      "picture": null
+    },
+    "java": {
+      "user": "$users:0.id",
+      "name": "Java",
+      "description": "Stuff related to java.",
+      "picture": null
+    },
+    "css": {
+      "user": "$users:0.id",
+      "name": "CSS",
+      "description": "Stuff related to CSS.",
+      "picture": null
+    },
+    "reactjs": {
+      "user": "$users:0.id",
+      "name": "Reactjs",
+      "description": "Stuff related to Reactjs.",
+      "picture": null
+    },
+    "go": {
+      "user": "$users:0.id",
+      "name": "golang",
+      "description": "Stuff related to golang.",
+      "picture": null
+    },
+    "docker": {
+      "user": "$users:0.id",
+      "name": "Docker",
+      "description": "Stuff related to Docker.",
+      "picture": null
+    },
+    "github": {
+      "user": "$users:0.id",
+      "name": "github",
+      "description": "Stuff related to github.",
+      "picture": null
+    }
   }
-]
+}

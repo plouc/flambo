@@ -1,5 +1,11 @@
 .DS_Store
 api/.env
+api/uploads
 node_modules
 .idea
 rethinkdb_data
+npm-debug*
+webapp/public
+docs/api
+docs/webapp
+docs/styleguide

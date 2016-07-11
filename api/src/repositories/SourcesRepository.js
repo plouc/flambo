@@ -1,50 +1,54 @@
-module.exports = container => {
-    const r = container.get('rethinkdb');
+/**
+ * @module repositories/SourcesRepository
+ */
+'use strict'
 
-    const findAll = () => {
-        return r.table(TABLE_NAME).run();
-    };
+const container = require('../container')
+const r         = container.get('rethinkdb')
 
-    const findAllWithTopics = () => {
-        return r.table('sources')
-            .outerJoin(r.table('topics'), (source, topic) => {
-                return source('topics').default([]).contains(topic('id'));
-            })
-            .group(row => row('left')('id'))
-            .ungroup()
-            .map(group => {
-                const source = group('reduction').nth(0)('left');
+/**
+ * Returns all sources.
+ *
+ * @returns {Promise.<Array.<Source>, Error>} A promise for the sources
+ */
+module.exports.findAll = () => r.table(TABLE_NAME).run()
 
-                return source.merge(r.branch(
-                    source('topics').default([]).isEmpty(),
-                    { topics: [] },
-                    { topics: group('reduction').map(pair => pair('right')) }
-                ))
-            })
-            .run()
-        ;
-    };
+module.exports.findAllWithTopics = () => r.table('sources')
+    .outerJoin(r.table('topics'), (source, topic) => source('topics').default([]).contains(topic('id')))
+    .group(row => row('left')('id'))
+    .ungroup()
+    .map(group => {
+        const source = group('reduction').nth(0)('left')
 
-    const find = id => {
-        return r.table('sources').get(id).run();
-    };
+        return source.merge(r.branch(
+            source('topics').default([]).isEmpty(),
+            { topics: [] },
+            { topics: group('reduction').map(pair => pair('right')) }
+        ))
+    })
+    .orderBy(r.desc('createdAt'))
+    .run()
 
-    const findWithTopics = id => {
-        return r.table('sources').get(id)
-            .merge(source => {
-                return {
-                    topics: r.table('topics')
-                        .filter(theme => source('topics').contains(theme('id')))
-                        .coerceTo('array')
-                };
-            })
-        ;
-    };
+/**
+ * Find a source by its id.
+ *
+ * @param {string} id - The source id
+ * @returns {Promise.<Source|null, Error>} A promise for the source, resolved with null if not found
+ */
+module.exports.find = id => r.table('sources').get(id).run()
 
-    return {
-        find,
-        findWithTopics,
-        findAll,
-        findAllWithTopics,
-    };
-};
+/**
+ * Find a source by its id and join matching topics.
+ *
+ * @param {string} id - The source id
+ * @returns {Promise.<Source|null, Error>} A promise for the source, resolved with null if not found
+ */
+module.exports.findWithTopics = id => r.table('sources')
+    .get(id)
+    .do(source => r.branch(
+        source,
+        source.merge(source => ({
+            topics: r.table('topics').filter(theme => source('topics').contains(theme('id'))).coerceTo('array'),
+        })),
+        null
+    ))

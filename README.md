@@ -1,37 +1,51 @@
 # flambo
 
+## Features
+
+- Collect data from several data sources:
+    - Twitter
+    - RSS feeds
+    - Meetup
+    - …
+- Create topics and attach data sources
+- Create custom collections
+
 ## Requirements
 
 - Docker
 - docker-compose
-- Node 6
+- Node 6 (only for development)
 
-## Installation
+## Stack
 
-### Api
+- Rethinkdb
+- elasticsearch
+- rabbitmq
+- Node.js
 
-Launch rethinkdb, elasticsearch and the api
-
-```sh
-docker-compose up --build
-```
-
-You should now be able to acces the api at http://localhost:3000/
-
-### webapp
+## Run it
 
 ```sh
-cd webapp
-npm install
-npm start
+make run
 ```
 
-You should now be able to access the webapp at http://localhost:8081/
+Now you can acces the app at http://localhost:3000/
+
+## Development mode
+
+Launch rethinkdb, elasticsearch and the api and start the webapp dev server.
+
+```sh
+make run-dev
+```
+
+You should now be able to access the api at http://localhost:3000/ and the webapp at http://localhost:8081
 
 ## Accessing services
 
 - **rethinkdb ui** http://localhost:8080/
 - **elasticsearch** http://localhost:9200/, I strongly encourage you to install the [sense chrome extension](https://chrome.google.com/webstore/detail/sense-beta/lhjgkmllcaadmopgmanpapmpjgmfcfig)
+- **rabbitmq management console** http://localhost:15672/ 
 
 ## Postman
 
@@ -44,11 +58,27 @@ To run it simply import `flamb.postman_collection.json` into postman.
 Reloading default data:
 
 ```sh
-docker-compose exec api /bin/bash -c "cd api && node loadData.js"
+make data-reset
 ```
 
 Collecting and indexing from existing sources
 
 ```sh
-docker-compose exec api /bin/bash -c "cd api && node collect.js"
+docker-compose exec api /bin/bash -c "cd flambo && node collect.js"
 ```
+
+Running api functional tests
+
+```sh
+make test-api-bdd
+```
+
+## Documentation
+
+You can generate several documentations (Node.js required on the host):
+
+- **API** `make doc-api`
+- **CSS styleguide** `make doc-css-styleguide`
+- **webapp** `make doc-webapp`
+
+If you want to build all docs at once `make doc`

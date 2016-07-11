@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-
-cd /api
+cd /flambo
 
 echo "installing node modules"
 npm install

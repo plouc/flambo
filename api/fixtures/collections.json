@@ -1,0 +1,22 @@
+{
+  "collections": [
+    {
+      "user": "$users:0.id",
+      "name": "My collection",
+      "description": "A sample collection.",
+      "news_items": []
+    },
+    {
+      "user": "$users:1.id",
+      "name": "Awesome collection",
+      "description": "Another sample collection.",
+      "news_items": []
+    },
+    {
+      "user": "$users:2.id",
+      "name": "JS collection",
+      "description": "A sample collection for javascript stuff.",
+      "news_items": []
+    }
+  ]
+}

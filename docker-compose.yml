@@ -12,20 +12,47 @@ services:
       - "9200:9200"
       - "9300:9300"
 
-  api:
-    build: ./docker/api
+  rabbit:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+
+  worker:
+    build: ./docker/worker
     depends_on:
       - rethink
       - elastic
-    ports:
-      - "3000:3000"
+      - rabbit
     environment:
+      NODE_ENV:           ${NODE_ENV}
       APP_PORT:           3000
       ELASTIC_HOST:       elastic
       ELASTIC_PORT:       9200
+      RABBITMQ_HOST:      rabbit
       RETHINKDB_HOST:     rethink
       RETHINKDB_PORT:     28015
       RETHINKDB_AUTH_KEY: ""
       RETHINKDB_DB:       flambo
     volumes :
-      - ./api:/api
+      - ./api:/flambo
+
+  api:
+    build: ./docker/api
+    depends_on:
+      - rethink
+      - elastic
+      - rabbit
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV:           ${NODE_ENV}
+      APP_PORT:           3000
+      ELASTIC_HOST:       elastic
+      ELASTIC_PORT:       9200
+      RABBITMQ_HOST:      rabbit
+      RETHINKDB_HOST:     rethink
+      RETHINKDB_PORT:     28015
+      RETHINKDB_AUTH_KEY: ""
+      RETHINKDB_DB:       flambo
+    volumes :
+      - ./api:/flambo

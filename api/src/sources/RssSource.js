@@ -3,31 +3,32 @@ const request    = require('request');
 const moment     = require('moment');
 
 
-module.exports = container => {
+module.exports = () => {
     return {
         load(config) {
-            console.log('loading from rss source', config);
+            console.log('loading from rss source', config)
+
             return new Promise((resolve, reject) => {
-                const req        = request(config.url);
-                const feedparser = new FeedParser();
+                const req        = request(config.url)
+                const feedparser = new FeedParser()
 
                 req.on('error', err => {
-                    reject(err);
-                });
+                    reject(err)
+                })
 
                 req.on('response', function (res) {
                     if (res.statusCode != 200) {
-                        return this.emit('error', new Error('Bad status code'));
+                        return this.emit('error', new Error('Bad status code'))
                     }
 
-                    this.pipe(feedparser);
+                    this.pipe(feedparser)
                 });
 
-                const items = [];
+                const items = []
 
                 feedparser.on('error', err => {
-                    reject(err);
-                });
+                    reject(err)
+                })
 
                 feedparser.on('readable', function () {
                     // This is where the action is!

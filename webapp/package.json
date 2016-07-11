@@ -1,33 +1,55 @@
 {
-  "name": "flambo-ui",
+  "name": "flambo-webapp",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "hjs-dev-server",
-    "build": "NODE_ENV=production webpack"
+    "start": "NODE_ENV=development node devServer.js",
+    "build": "NODE_ENV=production webpack",
+    "styleguide": "npm run build && kss --source src/styles --homepage ../../../docs/README.md --title \"flambo style guide\" --css ../public/flambo-ui.1.0.0.css --destination ../docs/styleguide",
+    "doc": "jsdoc src --configure .jsdoc.json --readme ../docs/README.md"
   },
   "author": "Raphaël Benitte <benitteraphael+npm@gmail.com> (http://www.rbenitte.com/)",
   "license": "ISC",
   "devDependencies": {
+    "autoprefixer": "6.3.7",
     "babel": "6.5.2",
     "babel-core": "6.9.0",
     "babel-loader": "6.2.4",
     "babel-preset-es2015": "6.9.0",
     "babel-preset-react": "6.5.0",
     "babel-preset-react-hmre": "1.1.1",
+    "babel-preset-stage-2": "6.11.0",
     "css-loader": "0.23.1",
+    "docdash": "0.4.0",
+    "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.8.5",
-    "hjs-webpack": "8.2.0",
+    "html-webpack-plugin": "2.22.0",
+    "jsdoc": "3.4.0",
+    "kss": "3.0.0-beta.14",
+    "postcss-css-variables": "0.5.1",
+    "postcss-import": "8.1.2",
     "postcss-loader": "0.9.1",
-    "style-loader": "0.13.1"
+    "react-hot-loader": "1.3.0",
+    "style-loader": "0.13.1",
+    "webpack-dev-server": "1.14.1"
   },
   "dependencies": {
+    "classnames": "2.2.5",
     "combokeys": "2.4.6",
-    "object-assign": "4.1.0",
-    "react": "15.1.0",
-    "react-dom": "15.1.0",
+    "intl": "1.2.4",
+    "lodash": "4.13.1",
+    "react": "15.2.1",
+    "react-addons-shallow-compare": "15.2.1",
+    "react-dom": "15.2.1",
+    "react-dropzone": "3.5.3",
+    "react-intl": "2.1.3",
+    "react-redux": "4.4.5",
     "react-router": "2.4.1",
+    "react-router-redux": "4.0.5",
+    "react-select": "1.0.0-beta13",
+    "redux": "3.5.2",
+    "redux-thunk": "2.1.0",
     "whatwg-fetch": "1.0.0"
   }
 }

@@ -1,36 +1,30 @@
-const dotenv        = require('dotenv');
-const SourceLoader  = require('./src/sources/SourceLoader');
-const TwitterSource = require('./src/sources/TwitterSource');
-const RssSource     = require('./src/sources/RssSource');
-const Indexer       = require('./src/sources/Indexer');
+const dotenv        = require('dotenv')
+const SourceLoader  = require('./src/sources/SourceLoader')
+const TwitterSource = require('./src/sources/TwitterSource')
+const RssSource     = require('./src/sources/RssSource')
+const Indexer       = require('./src/sources/Indexer')
 
-dotenv.config({ silent: true });
+dotenv.config({ silent: true })
 
-const container = require('./src/container');
+const container = require('./src/container')
+const indexer   = Indexer(container.get('elastic'))
 
-const indexer = Indexer(container.get('elastic'));
+SourceLoader.registerLoaders({
+    rss:     RssSource(),
+    twitter: TwitterSource(Object.assign({}, container.get('twitter_config'), { timeout_ms: 10 * 1000 })),
+})
 
-SourceLoader.register('twitter', TwitterSource({
-    consumer_key:        process.env.TWITTER_CONSUMER_KEY,
-    consumer_secret:     process.env.TWITTER_CONSUMER_SECRET,
-    access_token:        process.env.TWITTER_ACCESS_TOKEN,
-    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-    timeout_ms:          10*1000
-}));
-
-SourceLoader.register('rss', RssSource());
-
-const r = container.get('rethinkdb');
+const r = container.get('rethinkdb')
 r.table('sources').run()
     .then(sources => SourceLoader.batchLoad(sources))
     .then(results => {
-        return indexer.index(results);
+        return indexer.index(results)
         //return r.table('news_items').insert(results).run(conn);
     })
     .then(() => {
-        r.getPoolMaster().drain();
+        r.getPoolMaster().drain()
     })
 .catch(err => {
-    console.error(err);
-    process.exit(1);
-});
+    console.error(err)
+    process.exit(1)
+})

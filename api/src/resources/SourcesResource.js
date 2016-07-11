@@ -1,105 +1,147 @@
-const router            = require('express').Router();
-const SourcesRepository = require('../repositories/SourcesRepository');
+'use strict'
+
+const _                 = require('lodash')
+const router            = require('express').Router()
+const Joi               = require('joi')
+const rest              = require('../lib/middlewares/restMiddleware')
+const sourceSchema      = require('../schemas/sourceSchema')
+const SourcesRepository = require('../repositories/SourcesRepository')
+const NewsItemsService  = require('../services/NewsItemsService')
 
 
 module.exports = container => {
-    const r  = container.get('rethinkdb');
-    const es = container.get('elastic');
+    const r         = container.get('rethinkdb')
+    const producer  = container.get('work_queue_producer')
 
-    const repo = SourcesRepository(container);
-
-    router.get('/', (req, res) => {
-        repo.findAllWithTopics()
-            .then(result => {
-                res.json(result);
-            })
-            .error(err => {
-                console.error(err);
-            })
-        ;
-    });
+    router.get(
+        '/',
+        rest.fields(),
+        rest.collection.sort({ allowedFields: ['type'] }),
+        rest.collection.pagination(),
+        (req, res) => {
+            SourcesRepository.findAllWithTopics()
+                .then(result => {
+                    res
+                        .set({
+                            'X-Total-Count': 10,
+                        })
+                        .json(result)
+                })
+                .error(err => {
+                    console.error(err)
+                })
+        }
+    )
 
     router.get('/:id', (req, res) => {
-        repo.findWithTopics(req.params.id)
+        SourcesRepository.findWithTopics(req.params.id)
             .then(source => {
                 if (source === null) {
-                    res.status(404).send();
+                    res.status(404).send()
                 } else {
-                    res.json(source);
+                    res.json(source)
                 }
             })
             .error(err => {
-                console.error(err);
+                console.error(err)
+                res.status(500).send()
             })
-        ;
-    });
+    })
 
-    router.get('/:id/news_items', (req, res) => {
-        es.search({
-            index: 'flambo',
-            size:  200,
-            body: {
-                query : {
-                    constant_score: {
-                        filter: {
-                            term: {
-                                sourceId: req.params.id
-                            }
-                        }
-                    }
+    router.get(
+        '/:id/news_items',
+        rest.collection.sort(),
+        rest.collection.pagination({ perPage: { key: 'limit' } }),
+        rest.collection.filters(['page', 'limit', 'sort']),
+        (req, res) => {
+            const options = req.rest
+            options.sort    = Object.keys(options.sort).map(k => ({ [k]: { order: options.sort[k] } }))
+            options.filters = Object.assign(options.filters, { sourceId: req.params.id })
+
+            NewsItemsService.search(options)
+                .then(({ total, docs }) => {
+                    res.set({
+                        'X-Total': total,
+                        'X-Limit': req.rest.pagination.limit,
+                        'X-Page':  req.rest.pagination.page,
+                    }).json(docs)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        }
+    )
+
+    /**
+     * Request source data collection.
+     * It sends a message to the worker queue.
+     */
+    router.post('/:id/collect', (req, res) => {
+        SourcesRepository.find(req.params.id)
+            .then(source => {
+                if (source === null) {
+                    res.status(404).send()
+                } else {
+                    producer.send(req.params.id)
+                        .then(() => {
+                            res.status(202).send()
+                        })
                 }
-            }
-        })
-            .then(result => {
-                const { total, hits } = result.hits;
-                res.json({
-                    docs: hits.map(({ _id, _source }) => {
-                        _source.id = _id;
+            })
+            .error(err => {
+                console.error(err)
+                res.status(500).send()
+            })
+    })
 
-                        return _source;
-                    }),
-                    total
-                });
-            })
-            .catch(err => {
-                console.error(err);
-            })
-        ;
-    });
+    router.get('/:id/logs', rest.collection.pagination(), () => {
+            
+    })
 
     router.post('/', (req, res) => {
-        const sourceData = req.body;
+        const data = req.body
 
-        sourceData.createdAt = r.now();
+        Joi.validate(data, sourceSchema, (err, value) => {
+            if (err) {
+                res.status(400).json({
+                    errors: err.details,
+                })
+            } else {
+                value.createdAt = r.now()
 
-        r.table('sources').insert(sourceData, { returnChanges: true }).run()
-            .then(result => {
-                if (result.inserted !== 1) {
-                    // @todo handle error…
-                } else {
-                    res.status(201).json(result.changes[0].new_val);
-                }
-            })
-            .error(err => {
-                console.error(err);
-            })
-        ;
-    });
+                r.table('sources').insert(value, { returnChanges: true }).run()
+                    .then(result => {
+                        if (result.inserted !== 1) {
+                            // @todo handle error…
+                        } else {
+                            res.status(201).json(result.changes[0].new_val)
+                        }
+                    })
+                    .error(err => {
+                        console.error(err)
+                        res.status(500).send()
+                    })
+            }
+        })
+    })
 
     router.put('/:id', (req, res) => {
-        const update = req.body;
+        const update = req.body
 
-        r.table('sources').get(req.params.id).update(update, {
-            returnChanges: true
+        console.log('UPDATE', _.omit(update, ['id']))
+
+        r.table('sources').get(req.params.id).update(_.omit(update, ['id']), {
+            returnChanges: true,
         })
             .then(result => {
-                res.json(result.changes[0].new_val);
+                const updatedSource = result.changes.length > 0 ? result.changes[0].new_val : update
+                res.json(updatedSource)
             })
             .error(err => {
-                console.error(err);
+                console.error(err)
+                res.status(500).send()
             })
-        ;
-    });
+    })
 
-    return router;
-};
+    return router
+}

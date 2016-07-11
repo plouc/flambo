@@ -1,22 +1,26 @@
-const dotenv = require('dotenv');
+const dotenv = require('dotenv')
 
-dotenv.config({ silent: true });
+dotenv.config({ silent: true })
 
-const container = require('./src/container');
+const container = require('./src/container')
 
-const topics  = require('./fixtures/topics');
-const users   = require('./fixtures/users');
-const sources = require('./fixtures/sources');
+const topics      = require('./fixtures/topics')
+const users       = require('./fixtures/users')
+const sources     = require('./fixtures/sources')
+const collections = require('./fixtures/collections')
 
-const r = container.get('rethinkdb');
+const r = container.get('rethinkdb')
 
-const util = require('util');
+const util = require('util')
 
-r.table('topics').delete().run()
+// Topics
+r.tableDrop('topics').run()
+    .catch(err => {})
+    .then(() => r.tableCreate('topics'))
     .then(() => {
-        console.log('loading topics');
-        return r.table('topics').insert(topics.map(topic => {
-            topic.createdAt = r.now();
+        console.log('loading topics')
+        return r.table('topics').insert(topics.topics.map(topic => {
+            topic.createdAt = r.now()
 
             return topic;
         }), { returnChanges: true }).run()
@@ -25,33 +29,52 @@ r.table('topics').delete().run()
             })
         ;
     })
-    .then(() => {
-        return r.table('users').delete().run()
-    })
-    .then(() => {
-        console.log('loading users');
-        return r.table('users').insert(users.map(user => {
-            user.createdAt = r.now();
 
-            return user;
+    // Users
+    .then(() => r.tableDrop('users').run())
+    .catch(err => {})
+    .then(() => r.tableCreate('users'))
+    .then(() => {
+        console.log('loading users')
+        return r.table('users').insert(users.users.map(user => {
+            user.createdAt = r.now()
+
+            return user
         })).run();
     })
-    .then(() => {
-        return r.table('sources').delete().run()
-    })
-    .then(() => {
-        console.log('loading sources');
-        return r.table('sources').insert(sources.map(source => {
-            source.createdAt = r.now();
 
-            return source;
-        })).run();
-    })
+    // Sources
+    .then(() => r.tableDrop('sources').run())
+    .catch(err => {})
+    .then(() => r.tableCreate('sources'))
+    .then(() => r.table('sources').indexCreate('createdAt').run())
     .then(() => {
-        r.getPoolMaster().drain();
+        console.log('loading sources')
+        return r.table('sources').insert(sources.sources.map(source => {
+            source.createdAt = r.now()
+
+            return source
+        })).run()
+    })
+
+    // Collections
+    .then(() => r.tableDrop('collections').run())
+    .catch(err => {})
+    .then(() => r.tableCreate('collections'))
+    .then(() => r.table('collections').indexCreate('createdAt').run())
+    .then(() => {
+        console.log('loading collections')
+        return r.table('collections').insert(collections.collections.map(collection => {
+            collection.createdAt = r.now()
+
+            return collection
+        })).run()
+    })
+
+    .then(() => {
+        r.getPoolMaster().drain()
     })
     .error(err => {
-        console.log(err);
-        process.exit(1);
+        console.log(err)
+        process.exit(1)
     })
-;

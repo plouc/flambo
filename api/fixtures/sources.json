@@ -1,79 +1,125 @@
-[
-  {
-    "type": "twitter",
-    "data": {
-      "user": "nodejs"
+{
+  "sources": [
+    {
+      "user": "$users:0.id",
+      "name": "Node.js twitter account",
+      "type": "twitter",
+      "data": {
+        "user": "nodejs"
+      },
+      "topics": [
+        "$topics:node.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "twitter",
-    "data": {
-      "user": "reactjs"
+    {
+      "user": "$users:0.id",
+      "name": "Reactjs twitter account",
+      "type": "twitter",
+      "data": {
+        "user": "reactjs"
+      },
+      "topics": [
+        "$topics:reactjs.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "twitter",
-    "data": {
-      "user": "ReactJSNews"
+    {
+      "user": "$users:0.id",
+      "name": "Twitter Reactjs news",
+      "type": "twitter",
+      "data": {
+        "user": "ReactJSNews"
+      },
+      "topics": [
+        "$topics:reactjs.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "twitter",
-    "data": {
-      "user": "React_Rocks"
+    {
+      "user": "$users:0.id",
+      "name": "react.rocks twitter account",
+      "type": "twitter",
+      "data": {
+        "user": "React_Rocks"
+      },
+      "topics": [
+        "$topics:reactjs.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "twitter",
-    "data": {
-      "user": "golang"
+    {
+      "user": "$users:0.id",
+      "name": "golang twitter account",
+      "type": "twitter",
+      "data": {
+        "user": "golang"
+      },
+      "topics": [
+        "$topics:go.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "twitter",
-    "data": {
-      "user": "githubstatus"
+    {
+      "user": "$users:0.id",
+      "name": "GitHub status on twitter",
+      "type": "twitter",
+      "data": {
+        "user": "githubstatus"
+      },
+      "topics": [
+        "$topics:github.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "twitter",
-    "data": {
-      "user": "climagic"
+    {
+      "user": "$users:0.id",
+      "name": "climagic twitter account",
+      "type": "twitter",
+      "data": {
+        "user": "climagic"
+      },
+      "topics": [
+        "$topics:devops.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "twitter",
-    "data": {
-      "user": "Vjeux"
+    {
+      "user": "$users:0.id",
+      "name": "Vjeux twitter account",
+      "type": "twitter",
+      "data": {
+        "user": "Vjeux"
+      },
+      "topics": [
+        "$topics:reactjs.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "twitter",
-    "data": {
-      "user": "dotGoEu"
+    {
+      "user": "$users:0.id",
+      "name": "dotGoEu twitter account",
+      "type": "twitter",
+      "data": {
+        "user": "dotGoEu"
+      },
+      "topics": [
+        "$topics:go.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "twitter",
-    "data": {
-      "user": "dailyjs"
+    {
+      "user": "$users:0.id",
+      "name": "Node.js blog",
+      "type": "rss",
+      "data": {
+        "url": "https://nodejs.org/en/feed/blog.xml"
+      },
+      "topics": [
+        "$topics:node.id"
+      ]
     },
-    "topics": []
-  },
-  {
-    "type": "rss",
-    "data": {
-      "url": "https://nodejs.org/en/feed/blog.xml"
-    },
-    "topics": []
-  }
-]
+    {
+      "user": "$users:0.id",
+      "name": "Symfony blog",
+      "type": "rss",
+      "data": {
+        "url": "http://feeds.feedburner.com/symfony/blog"
+      },
+      "topics": [
+        "$topics:php.id"
+      ]
+    }
+  ]
+}

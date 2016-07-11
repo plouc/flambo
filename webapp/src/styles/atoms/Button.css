@@ -1,0 +1,76 @@
+/*
+ Button
+
+ Standard button.
+
+ :focus - Behavior on focus.
+ .button--full - A full width button.
+ .button--bold - A bolder button.
+ .button--action - A button suitable for form submission.
+ .button--small - A smaller button.
+ .button--active - Active state.
+
+ Markup: examples/Button.hbs
+
+ Styleguide Buttons.Button
+*/
+.button {
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding: 9px 12px;
+    line-height: 1.3em;
+    text-decoration: none;
+    color: inherit;
+    font-size: inherit;
+    background: var(--white);
+    text-align: center;
+    border: 0;
+    border-radius: 2px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    box-shadow: 0 1px 2px var(--medium-grey);
+}
+.button:focus {
+    outline: 0;
+}
+.button:hover {
+    box-shadow: 0 0 0 var(--medium-grey);
+}
+.button--full {
+    display: block;
+    width: 100%;
+}
+.button--small {
+    font-size: 14px;
+    padding: 5px 9px;
+}
+.button--naked {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+.button--bold {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 900;
+    padding: 12px 20px;
+}
+.button--action {
+    background: var(--blue);
+    color: var(--white);
+}
+.button--warning {
+    background: var(--orange);
+    color: var(--white);
+}
+.button--outline:hover {
+    background: var(--dark-grey);
+    color: var(--white);
+}
+.button--active {
+    color: var(--brick-red)
+}
