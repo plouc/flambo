@@ -6,6 +6,7 @@ node_modules
 rethinkdb_data
 npm-debug*
 webapp/public
+api/public
 docs/api
 docs/webapp
 docs/styleguide
