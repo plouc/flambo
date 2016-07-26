@@ -1,0 +1,59 @@
+- name: Node.js twitter account
+  type: twitter
+  data: { user: nodejs }
+  user: admin@flambo.io
+
+- name: Reactjs twitter account
+  type: twitter
+  data: { user: reactjs }
+  user: admin@flambo.io
+
+- name: Twitter Reactjs news
+  type: twitter
+  data: { user: ReactJSNews }
+  user: admin@flambo.io
+
+- name: react.rocks twitter account
+  type: twitter
+  data: { user: React_Rocks }
+  user: admin@flambo.io
+
+- name: golang twitter account
+  type: twitter
+  data: { user: golang }
+  user: admin@flambo.io
+
+- name: GitHub status on twitter
+  type: twitter
+  data: { user: githubstatus }
+  user: admin@flambo.io
+
+- name: climagic twitter account
+  type: twitter
+  data: { user: climagic }
+  user: admin@flambo.io
+
+- name: Vjeux twitter account
+  type: twitter
+  data: { user: Vjeux }
+  user: admin@flambo.io
+
+- name: dotGoEu twitter account
+  type: twitter
+  data: { user: dotGoEu }
+  user: admin@flambo.io
+
+- name: Node.js blog
+  type: rss
+  data: { url: https://nodejs.org/en/feed/blog.xml }
+  user: admin@flambo.io
+
+- name: Symfony blog
+  type: rss
+  data: { url: http://feeds.feedburner.com/symfony/blog }
+  user: admin@flambo.io
+
+- name: Docker blog
+  type: rss
+  data: { url: https://blog.docker.com/feed/ }
+  user: admin@flambo.io

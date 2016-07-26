@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 
 
-const TopicPicture  = ({ topic }) => {
+const TopicPicture  = ({ topic, className = '' }) => {
     let picture
     if (topic.picture) {
         picture = <img src={topic.picture} />
@@ -10,7 +10,7 @@ const TopicPicture  = ({ topic }) => {
     }
 
     return (
-        <span className="topic-picture">
+        <span className={`topic-picture ${className}`}>
             {picture}
         </span>
     )

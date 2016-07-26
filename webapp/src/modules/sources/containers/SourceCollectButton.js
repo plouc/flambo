@@ -1,6 +1,6 @@
 import { connect }         from 'react-redux'
 import SourceCollectButton from '../components/SourceCollectButton'
-import { collectSource }   from '../actions/sourceActions'
+import { collectSource }   from '../actions/sourcesActions'
 
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

@@ -35,8 +35,27 @@ module.exports.findWithSources = id => r.table('topics')
     .do(topic => r.branch(
         topic,
         topic.merge(() => ({
-            sources: r.table('sources').filter(source => source('topics').contains(id)).coerceTo('array'),
+            sources: r.table('sources').filter(source => topic('sources').contains(source('id'))).coerceTo('array'),
         })),
         null
     ))
     .run()
+
+module.exports.insert = topic => {
+    if (!topic.createdAt) {
+        topic.createdAt = r.now()
+    }
+
+    return r.table('topics')
+        .insert(topic, { returnChanges: true })
+        .run()
+        .then(result => result.changes[0].new_val)
+}
+
+module.exports.update = (id, topic) => {
+    return r.table('topics')
+        .get(id)
+        .update(topic, { returnChanges: true })
+        .run()
+        .then(result => result.changes.length > 0 ? result.changes[0].new_val : topic)
+}

@@ -14,10 +14,11 @@ const BASE_URL = 'http://localhost:3000/api/v1'
  * @method
  * @returns {Promise.<Array, Error>}
  */
-export const list = () => {
+export const list = token => {
     return fetch(`${BASE_URL}/topics`, {
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
     .then(doneHandler, failureHandler)
@@ -27,13 +28,15 @@ export const list = () => {
  * Gets a topic by its id.
  *
  * @method
- * @param {string} id - The topic id
+ * @param {string} token - The topic JWT token
+ * @param {string} id    - The topic id
  * @returns {Promise.<Topic, Error>}
  */
-export const get = id => {
+export const get = (token, id) => {
     return fetch(`${BASE_URL}/topics/${id}`, {
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
     .then(doneHandler, failureHandler)
@@ -43,10 +46,11 @@ export const get = id => {
  * Lists topic news items.
  *
  * @method
- * @param {string} id - The topic id
+ * @param {string} token - The topic JWT token
+ * @param {string} id    - The topic id
  * @returns {Promise.<Array, Error>}
  */
-export const getTopicNewsItems = (id, { limit = 10, page = 1, filters = {} }) => {
+export const getTopicNewsItems = (token, id, { limit = 10, page = 1, filters = {} }) => {
     let res
 
     const query = [
@@ -62,9 +66,11 @@ export const getTopicNewsItems = (id, { limit = 10, page = 1, filters = {} }) =>
 
     return fetch(`${BASE_URL}/topics/${id}/news_items?${query.join('&')}`, {
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
+    .then(_res => res = _res)
     .then(doneHandler, failureHandler)
     .then(newsItems => ({
         newsItems,
@@ -74,38 +80,63 @@ export const getTopicNewsItems = (id, { limit = 10, page = 1, filters = {} }) =>
     }))
 }
 
-export const create = topic => {
-    const result = {
-        hasError: false,
-        errors:   [],
-        topic:    null,
+
+export const getTopicNewsItemsStats = (token, id, filters = {}) => {
+    const query = []
+    if (filters.sourceType && Array.isArray(filters.sourceType)) {
+        filters.sourceType.forEach(sourceType => {
+            query.push(`sourceType=${sourceType}`)
+        })
     }
+
+    return fetch(`${BASE_URL}/topics/${id}/news_items/stats?${query.join('&')}`, {
+        headers: {
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
+        },
+    })
+    .then(doneHandler, failureHandler)
+}
+
+
+/**
+ * Creates a topic.
+ *
+ * @param {string} token - The topic JWT token
+ * @param {Object} topic - The topic data
+ * @returns {Promise.<*>}
+ */
+export const create = (token, topic) => {
+    let res
 
     return fetch(`${BASE_URL}/topics`, {
         method:  'POST',
         headers: {
-            'Accept':       'application/json',
-            'Content-Type': 'application/json',
+            'Authorization': `JWT ${token}`,
+            'Accept':        'application/json',
+            'Content-Type':  'application/json',
         },
         body: JSON.stringify(topic),
     })
-    .then(res => {
-        result.hasError = res.status === 400
+    .then(_res => {
+        res = _res
+
         return res.json()
     })
-    .then(topic => {
-        if (topic.errors) {
-            result.errors = topic.errors
-        } else {
-            result.topic = topic
+    .then(data => {
+        if (res.status === 400) {
+            const errors = {}
+            data.errors.forEach(error => {
+                errors[error.path] = error.message
+            })
+
+            return Promise.reject(errors)
         }
 
-        return result
-    })
-    .catch(err => {
-        console.error(err)
+        return data
     })
 }
+
 
 export const uploadPicture = (id, file) => {
     console.log('uploadPicture', id, file)
@@ -119,35 +150,42 @@ export const uploadPicture = (id, file) => {
     })
 }
 
-export const update = (id, topic) => {
-    const result = {
-        hasError: false,
-        errors:   [],
-        topic:    null,
-    }
+
+/**
+ * Updates a topic.
+ *
+ * @param {string} token - The topic JWT token
+ * @param {string} id    - The topic id
+ * @param {Object} topic - The topic data
+ * @returns {Promise.<*>}
+ */
+export const update = (token, id, topic) => {
+    let res
 
     return fetch(`${BASE_URL}/topics/${id}`, {
         method:  'PUT',
         headers: {
-            'Accept':       'application/json',
-            'Content-Type': 'application/json',
+            'Authorization': `JWT ${token}`,
+            'Accept':        'application/json',
+            'Content-Type':  'application/json',
         },
         body: JSON.stringify(topic),
     })
-    .then(res => {
-        result.hasError = res.status === 400
+    .then(_res => {
+        res = _res
+
         return res.json()
     })
-    .then(topic => {
-        if (topic.errors) {
-            result.errors = topic.errors
-        } else {
-            result.topic = topic
+    .then(data => {
+        if (res.status === 400) {
+            const errors = {}
+            data.errors.forEach(error => {
+                errors[error.path] = error.message
+            })
+
+            return Promise.reject(errors)
         }
 
-        return result
-    })
-    .catch(err => {
-        console.error(err)
+        return data
     })
 }

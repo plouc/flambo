@@ -1,0 +1,8 @@
+.section {
+    margin: 30px var(--section-h-padding) 0;
+}
+@media screen and (max-width: 640px) {
+    .section._responsive {
+        margin: 30px 0;
+    }
+}

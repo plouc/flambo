@@ -1,66 +1,36 @@
+'use strict'
+
 import React, { Component, PropTypes } from 'react'
 import { FormattedMessage }            from 'react-intl'
 import SourceForm                      from './SourceForm'
 import Loader                          from '../../core/components/Loader'
+import { updateSource }                from '../actions/sourcesActions'
 
 
 class EditSource extends Component {
-    constructor(props) {
-        super(props)
-
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-
-        this.state = { source: props.source }
-    }
-
     componentWillMount() {
-        const { fetchSourceIfNeeded, fetchTopicsIfNeeded } = this.props
-        const { id } = this.props.params
+        const { fetchSourceIfNeeded } = this.props
+        const { id }                  = this.props.params
 
         fetchSourceIfNeeded(id)
-        fetchTopicsIfNeeded()
-    }
-
-    componentWillReceiveProps({ source }) {
-        this.setState({ source })
-    }
-
-    handleChange(source) {
-        this.setState({ source })
-    }
-
-    handleSubmit() {
-        const { updateSource } = this.props
-        const { source }       = this.state
-
-        updateSource(source.id, {
-            ...source,
-            topics: source.topics.map(topic => topic.id),
-        })
     }
 
     render() {
-        const { isFetching, topics } = this.props
-        const { source }             = this.state
+        const { loading, source } = this.props
 
         return (
-            <div>
-                <div className="content-header">
-                    {!isFetching && (
-                        <h1>
-                            <FormattedMessage id="source.edit" />
-                        </h1>
-                    )}
+            <div className="content">
+                <div className="fixed-header content-header">
+                    <h1>
+                        <FormattedMessage id="source.edit" />
+                    </h1>
                 </div>
-                <div className="content-wrapper">
-                    <Loader loading={isFetching} />
-                    {!isFetching && (
+                <div className="content-with-fixed-header">
+                    <Loader loading={loading} />
+                    {!loading && (
                         <SourceForm
-                            source={source}
-                            topics={topics}
-                            onChange={this.handleChange}
-                            onSubmit={this.handleSubmit}
+                            initialValues={source}
+                            onSubmit={updateSource}
                             cancelPath={`/sources/${source.id}`}
                         />
                     )}
@@ -72,14 +42,8 @@ class EditSource extends Component {
 
 EditSource.propTypes = {
     fetchSourceIfNeeded: PropTypes.func.isRequired,
-    fetchTopicsIfNeeded: PropTypes.func.isRequired,
-    updateSource:        PropTypes.func.isRequired,
     source:              PropTypes.object,
-    isFetching:          PropTypes.bool.isRequired,
-}
-
-EditSource.defaultProps = {
-    isFetching: true,
+    loading:             PropTypes.bool.isRequired,
 }
 
 

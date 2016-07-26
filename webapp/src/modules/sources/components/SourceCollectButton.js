@@ -8,8 +8,10 @@ const stopPropagation = handler => event => {
     handler(event)
 }
 
+
 const SourceCollectButton = ({ sourceId, className = '', onClick }) => (
     <span className={classNames('button', className)} onClick={stopPropagation(onClick)}>
+        <span className="icon icon--magnet-pull icon--push-right" />
         <FormattedMessage id="source.collect" />
     </span>
 )

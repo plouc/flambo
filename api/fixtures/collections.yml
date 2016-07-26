@@ -1,0 +1,34 @@
+- name:        My collection
+  description: A sample collection.
+  news_items:  []
+  user:        admin@flambo.io
+
+- name:        Awesome collection
+  description: Another sample collection.
+  news_items:  []
+  user:        admin@flambo.io
+
+- name:        JS collection
+  description: A sample collection for javascript stuff
+  news_items:  []
+  user:        admin@flambo.io
+
+- name:        Louis collection 1
+  description: Louis sample collection 1.
+  news_items:  []
+  user:        user2@flambo.io
+
+- name:        Louis collection 2
+  description: Louis sample collection 2.
+  news_items:  []
+  user:        user2@flambo.io
+
+- name:        Louis collection 3
+  description: Louis sample collection E.
+  news_items:  []
+  user:        user2@flambo.io
+
+- name:        Louis collection 4
+  description: Louis sample collection 4.
+  news_items:  []
+  user:        user2@flambo.io

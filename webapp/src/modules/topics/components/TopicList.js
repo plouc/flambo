@@ -5,7 +5,7 @@ import TopicListItem                   from './TopicListItem'
 
 
 const TopicList = ({ topics }) => (
-    <ul className="grid">
+    <div className="grid section _responsive">
         <Link to="/topics/new" className="grid-item">
             <span className="grid-item__banner">
                 <span className="topic-picture">
@@ -19,7 +19,7 @@ const TopicList = ({ topics }) => (
         {topics.map(topic => (
             <TopicListItem key={topic.id} topic={topic} />
         ))}
-    </ul>
+    </div>
 )
 
 TopicList.propTypes = {

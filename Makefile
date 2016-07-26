@@ -13,8 +13,8 @@ doc-webapp: ## builds webapp documentation (Node.js required)
 	cd webapp && npm run doc
 
 run-dev: ## launch docker containers and starts webapp dev server
-	NODE_ENV=development docker-compose up -d --build
-	cd webapp && npm start
+	NODE_ENV=development docker-compose up --build --remove-orphans
+	#cd webapp && npm start
 
 logs-api: ## outputs logs from api
 	docker-compose logs -f api
@@ -22,18 +22,18 @@ logs-api: ## outputs logs from api
 test: test-api-bdd ## runs all tests (api & webapp)
 
 test-api-bdd: ## runs api functional tests
-	docker-compose exec api /bin/bash -c "cd flambo && npm run bdd --loglevel warn"
+	docker-compose exec api /bin/ash -c "cd /flambo/api && npm run bdd --loglevel warn"
 
 data-reset: ## reset rethinkdb and elasticsearch data
-	docker-compose exec api /bin/bash -c "cd flambo && npm run reset"
+	docker-compose exec api /bin/ash -c "cd /flambo/api && npm run reset"
 
 build-webapp: ## builds webapp inside a docker container
-	@docker run --rm=true --volume=$(shell pwd)/webapp:/webapp node:6 /bin/bash -c "cd /webapp && npm i && npm run build"
+	@docker run --rm=true --volume=$(shell pwd)/webapp:/webapp mhart/alpine-node:6.3 /bin/ash -c "cd /webapp && npm i && npm run build"
 	@cp -r webapp/public/ api/public/
 
 run: build-webapp ## run flambo
-	NODE_ENV=production docker-compose up -d --build
+	NODE_ENV=production docker-compose up
 
-kill:
+kill: ## kill all running services and remove associated containers/volumes
 	NODE_ENV=production docker-compose kill
-	NODE_ENV=production docker-compose rm -f
+	NODE_ENV=production docker-compose rm -f -v

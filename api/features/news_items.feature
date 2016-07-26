@@ -4,7 +4,13 @@ Feature: News items
   I want to be able to manipulate news items
 
   @list
+  Scenario: Trying to list news items without being authenticated
+    When I GET /api/v1/news_items
+    Then http status code should be 401
+
+  @list
   Scenario: Listing news items
+    Given I am authenticated as admin@flambo.io admin
     When  I GET /api/v1/news_items
     Then  http status code should be 200
     And   X-Total header should exist
@@ -13,6 +19,7 @@ Feature: News items
 
   @list
   Scenario: Sorting news items on invalid field
-    Given I set query parameter sort to invalid
+    Given I am authenticated as admin@flambo.io admin
+    And   I set query parameter sort to invalid
     When  I GET /api/v1/news_items
     Then  http status code should be 400

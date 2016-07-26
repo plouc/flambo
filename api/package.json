@@ -4,8 +4,8 @@
   "description": "",
   "main": "api.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "bdd": "npm run reset && cucumber-js",
+    "test": "npm run bdd",
+    "bdd": "cucumber-js",
     "eslint": "eslint .",
     "load-data": "node loadData.js",
     "collect": "node collect.js",
@@ -13,7 +13,7 @@
     "reset": "npm run index-init && npm run load-data && npm run collect",
     "doc": "jsdoc src api-tester --configure .jsdoc.json --readme ../docs/README.md"
   },
-  "author": "Raphaël Benitte <benitteraphael+npm@gmail.com> (http://www.rbenitte.com/)",
+  "author": "Raphaël Benitte",
   "license": "ISC",
   "dependencies": {
     "amqplib": "0.4.2",
@@ -25,17 +25,22 @@
     "elasticsearch": "11.0.1",
     "express": "4.13.4",
     "feedparser": "1.1.4",
+    "fs-extra": "0.30.0",
     "gravatar": "1.5.2",
     "jimple": "1.4.2",
     "joi": "8.1.1",
+    "js-yaml": "3.6.1",
+    "jwt-simple": "0.5.0",
     "lodash": "4.13.1",
     "mime": "1.3.4",
     "moment": "2.13.0",
     "multer": "1.1.0",
+    "passport": "0.3.2",
+    "passport-jwt": "2.1.0",
     "request": "2.72.0",
     "rethinkdbdash": "2.3.6",
-    "twit": "2.2.4",
-    "uws": "0.4.1"
+    "socket.io": "1.4.8",
+    "twit": "2.2.4"
   },
   "devDependencies": {
     "chai": "3.5.0",

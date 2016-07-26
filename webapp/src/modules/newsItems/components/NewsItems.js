@@ -1,65 +1,84 @@
+'use strict'
+
 import React, { Component, PropTypes } from 'react'
+import { Link }                        from 'react-router'
 import { FormattedMessage }            from 'react-intl'
-import NewsItemsFilters                from './NewsItemsFilters'
+import classNames                      from 'classnames'
+import NewsItemsListControls           from './NewsItemsListControls'
 import NewsItemsList                   from './NewsItemsList'
+import NewsItemsMonthStats             from './NewsItemsMonthStats'
+import NewsItemsSourceTypeStats        from './NewsItemsSourceTypeStats'
+import UserBadge                       from '../../users/containers/UserBadgeContainer'
 import Loader                          from '../../core/components/Loader'
-import Pager                           from '../../core/components/Pager'
 
 
 class NewsItems extends Component {
-    constructor(props) {
-        super(props)
-
-        this.handlerPagerUpdate  = this.handlerPagerUpdate.bind(this)
-        this.handleFiltersUpdate = this.handleFiltersUpdate.bind(this)
-    }
-
     componentWillMount() {
-        const { fetchNewsItemsIfNeeded, page, limit, filters } = this.props
+        const { fetchNewsItemsIfNeeded, fetchNewsItemsStats, page, limit, filters } = this.props
         fetchNewsItemsIfNeeded(page, limit, filters)
-    }
-
-    handlerPagerUpdate(page, limit) {
-        const { fetchNewsItemsIfNeeded, filters } = this.props
-        fetchNewsItemsIfNeeded(page, limit, filters)
-    }
-
-    handleFiltersUpdate(filters) {
-        const { fetchNewsItemsIfNeeded, page, limit } = this.props
-        fetchNewsItemsIfNeeded(page, limit, filters)
+        fetchNewsItemsStats(filters)
     }
 
     render() {
         const {
-            newsItems,
-            total,
-            page,
-            limit,
+            location: { query },
+            page, limit, filters,
             isFetching,
-            filters
+            newsItems, total,
+            onPageChange, onFiltersChange,
+            monthsStats, sourceTypesStats,
         } = this.props
+
+        const showExtraPane = query.stats && query.stats === 'on'
 
         return (
             <div>
-                <div className="content-header">
-                    <h1>
-                        <FormattedMessage id="news_items" />
-                    </h1>
-                    <Pager
-                        page={page}
-                        limit={limit}
-                        count={newsItems.length}
-                        total={total}
-                        onChange={this.handlerPagerUpdate}
-                    />
-                    <Loader loading={isFetching} />
+                <div className={classNames('content')}>
+                    <div className="fixed-header content-header">
+                        <h1>
+                            <FormattedMessage id="news_items" />
+                        </h1>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Link
+                                to={{ pathname: '/news_items', query: { stats: 'on' } }}
+                                className="button button--small button--action"
+                            >
+                                <span className="icon icon--pie-chart icon--push-right" />
+                                <FormattedMessage id="news_items.stats" />
+                            </Link>
+                            <UserBadge />
+                        </div>
+                    </div>
+                    <div className="content-with-fixed-header">
+                        <NewsItemsListControls
+                            page={page} limit={limit} filters={filters}
+                            isFetching={isFetching}
+                            newsItems={newsItems} total={total}
+                            onFiltersChange={onFiltersChange}
+                            onPageChange={onPageChange}
+                        />
+                        <NewsItemsList loading={isFetching} newsItems={newsItems}/>
+                    </div>
                 </div>
-                <div className="content-wrapper">
-                    <NewsItemsFilters
-                        filters={filters}
-                        onChange={this.handleFiltersUpdate}
-                    />
-                    <NewsItemsList newsItems={newsItems}/>
+                {showExtraPane && (<Link className="overlay" to="/news_items" />)}
+                <div className={classNames('extra-pane', { 'extra-pane--opened': showExtraPane })}>
+                    <div className="fixed-header extra-pane__header">
+                        <h2>
+                            <FormattedMessage id="news_items.stats" />
+                        </h2>
+                    </div>
+                    <div className="content-with-fixed-header">
+                        <NewsItemsMonthStats
+                            buckets={monthsStats}
+                            filters={filters}
+                            onChange={onFiltersChange}
+                        />
+                        <NewsItemsSourceTypeStats
+                            buckets={sourceTypesStats}
+                            filters={filters}
+                            onChange={onFiltersChange}
+                        />
+                    </div>
                 </div>
             </div>
         )
@@ -67,12 +86,18 @@ class NewsItems extends Component {
 }
 
 NewsItems.propTypes = {
-    newsItems:  PropTypes.array.isRequired,
-    total:      PropTypes.number.isRequired,
-    page:       PropTypes.number.isRequired,
-    limit:      PropTypes.number.isRequired,
-    filters:    PropTypes.object.isRequired,
-    isFetching: PropTypes.bool.isRequired,
+    fetchNewsItemsIfNeeded: PropTypes.func.isRequired,
+    fetchNewsItemsStats:    PropTypes.func.isRequired,
+    newsItems:              PropTypes.array.isRequired,
+    total:                  PropTypes.number.isRequired,
+    page:                   PropTypes.number.isRequired,
+    limit:                  PropTypes.number.isRequired,
+    filters:                PropTypes.object.isRequired,
+    isFetching:             PropTypes.bool.isRequired,
+    monthsStats:            PropTypes.array.isRequired,
+    sourceTypesStats:       PropTypes.array.isRequired,
+    onPageChange:           PropTypes.func.isRequired,
+    onFiltersChange:        PropTypes.func.isRequired,
 }
 
 

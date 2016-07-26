@@ -1,0 +1,23 @@
+.user-menu {
+    padding: 12px 0 7px 0;
+    width: 240px;
+}
+.user-menu__name {
+    padding: 0 20px;
+    display: block;
+    white-space: nowrap;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+.user-menu__item {
+    display: block;
+    padding: 10px 20px;
+    white-space: nowrap;
+    cursor: pointer;
+    color: #666;
+    min-height: 48px;
+}
+.user-menu__item:hover {
+    color: #000;
+    background-color: #eee;
+}

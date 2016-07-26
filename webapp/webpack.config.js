@@ -7,48 +7,47 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 
-const BUILD_DIR = path.resolve(__dirname, 'public')
+const DOC_MODE  = !!process.env.DOC_MODE
+const BUILD_DIR = DOC_MODE ? path.resolve(__dirname, '..', 'docs', 'build') : path.resolve(__dirname, 'public')
 const APP_DIR   = path.resolve(__dirname, 'src')
 
+
 const config = {
-    devtool: 'eval',
-    entry: [
-        'webpack-dev-server/client?http://localhost:8081',
-        'webpack/hot/only-dev-server',
-        `${APP_DIR}/app`,
-    ],
     output: {
         path:     BUILD_DIR,
         filename: '[name]-[hash:8].js',
     },
     modulesDirectories: ['node_modules'],
     resolve: {
+        fallback: [
+            APP_DIR,
+        ],
         modulesDirectories: ['node_modules'],
     },
     module : {
         loaders: [
             {
                 test:    /\.js$/,
-                loaders: ['react-hot', 'babel?cacheDirectory'],
                 exclude: /node_modules/,
                 include: APP_DIR,
             },
             {
-                test:   /\.css$/,
-                loader: process.env.NODE_ENV == 'production' ?
-                    ExtractTextPlugin.extract('style-loader!css-loader!postcss-loader') :
-                    'style-loader!css-loader!postcss-loader',
+                test:     /\.css$/,
+            },
+            {
+                test:   /\.(png|svg)$/,
+                loader: 'url?limit=100000',
+            },
+            {
+                test:   /\.(jpg|gif)$/,
+                loader: 'file',
             },
         ]
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
             template: 'src/index.html',
             title:    'flambo',
-        }),
-        new ExtractTextPlugin('[name]-[id]-[contenthash:8].css', {
-            allChunks: true,
         }),
     ],
     postcss: webpack => [
@@ -60,5 +59,32 @@ const config = {
     ],
 }
 
+if (process.env.NODE_ENV === 'production') {
+    config.devtool = 'cheap-module-source-map'
+    config.entry = [
+        `${APP_DIR}/app`,
+    ]
+    config.module.loaders[0].loaders = ['babel']
+    config.module.loaders[1].loader  = ExtractTextPlugin.extract('style-loader', 'css-loader', 'postcss-loader', 'resolve-url')
+    config.plugins.push(new ExtractTextPlugin(
+        DOC_MODE ? '[name].css' : '[name]-[id]-[contenthash:8].css',
+        { allChunks: true }
+    ))
+    config.plugins.push(new webpack.DefinePlugin({
+        'process.env': {
+            'NODE_ENV': JSON.stringify('production'),
+        },
+    }))
+} else {
+    config.devtool = 'eval'
+    config.entry = [
+        'webpack-dev-server/client?http://localhost:8081',
+        'webpack/hot/only-dev-server',
+        `${APP_DIR}/app`,
+    ]
+    config.module.loaders[0].loaders = ['react-hot', 'babel?cacheDirectory']
+    config.module.loaders[1].loaders = ['style', 'css', 'resolve-url', 'postcss']
+    config.plugins.unshift(new webpack.HotModuleReplacementPlugin())
+}
 
 module.exports = config

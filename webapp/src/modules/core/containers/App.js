@@ -57,11 +57,7 @@ class App extends Component {
                         </div>
                         <LocaleSwitch />
                     </div>
-                    <div className="content">
-                        {this.props.children}
-                    </div>
-                    <div className="extra-pane">
-                    </div>
+                    {this.props.children}
                 </div>
             </IntlProvider>
         )

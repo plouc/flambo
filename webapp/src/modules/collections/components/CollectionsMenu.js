@@ -1,6 +1,9 @@
+'use strict'
+
 import React, { Component, PropTypes } from 'react'
 import { Link }                        from 'react-router'
 import { FormattedMessage }            from 'react-intl'
+import Loader                          from '../../core/components/Loader'
 
 
 class CollectionsMenu extends Component {
@@ -19,22 +22,23 @@ class CollectionsMenu extends Component {
                     <Link
                         key={collection.id}
                         to={`/collections/${collection.id}`}
-                        className="menu-item"
-                        activeClassName="menu-item--active"
+                        className="f-menu__item"
+                        activeClassName="_active"
                     >
                         {collection.name}
                     </Link>
                 ))
             )
         } else {
-            menuItems = <li className="menu-item">An error occurred.</li>
+            menuItems = <li className="f-menu__item">An error occurred.</li>
         }
 
         return (
-            <nav className="menu">
-                <h3 className="menu-title">
+            <nav className="f-menu">
+                <h3 className="f-menu__title">
                     <FormattedMessage id="collections" />
                 </h3>
+                <Loader loading={isFetching} />
                 {menuItems}
             </nav>
         )

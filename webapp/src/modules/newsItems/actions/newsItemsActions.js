@@ -8,6 +8,9 @@ import {
     REQUEST_NEWS_ITEMS,
     RECEIVE_NEWS_ITEMS,
     INVALIDATE_NEWS_ITEMS,
+    REQUEST_NEWS_ITEMS_STATS,
+    RECEIVE_NEWS_ITEMS_STATS,
+    INVALIDATE_NEWS_ITEMS_STATS,
 } from '../constants/newsItemsActionTypes'
 
 
@@ -24,6 +27,7 @@ const requestNewsItems = (page, limit, filters) => ({
     filters,
 })
 
+
 /**
  * Creates a RECEIVE_NEWS_ITEMS action.
  *
@@ -38,14 +42,18 @@ const receiveNewsItems = (newsItems, total, limit, page) => ({
     total,
 })
 
-const fetchNewsItems = (page, limit, filters) => dispatch => {
+
+const fetchNewsItems = (page, limit, filters) => (dispatch, getState) => {
     dispatch(requestNewsItems(page, limit, filters))
 
-    NewsItemsApi.list({ limit, page, filters })
+    const { auth: { token } } = getState()
+
+    NewsItemsApi.list(token, { limit, page, filters })
         .then(({ newsItems, total, limit, page }) => {
             dispatch(receiveNewsItems(newsItems, total, limit, page))
         })
 }
+
 
 /**
  * Check if news items should be fetched.
@@ -65,6 +73,7 @@ const shouldFetchNewsItems = (state, page, limit, filters) => {
     }
 }
 
+
 /**
  * Fetch news items if they have been invalidated.
  *
@@ -78,12 +87,30 @@ export function fetchNewsItemsIfNeeded(page, limit, filters) {
     }
 }
 
-/**
- * Creates an action to invalidate current news items.
- *
- * @method
- * @returns {Object}
- */
+
 export const invalidateNewsItems = () => ({
     type: INVALIDATE_NEWS_ITEMS,
 })
+
+
+const requestNewsItemsStats = filters => ({
+    type: REQUEST_NEWS_ITEMS_STATS,
+    filters,
+})
+
+
+const receiveNewsItemsStats = stats => ({
+    type: RECEIVE_NEWS_ITEMS_STATS,
+    stats,
+})
+
+export const fetchNewsItemsStats = filters => (dispatch, getState) => {
+    dispatch(requestNewsItemsStats(filters))
+
+    const { auth: { token } } = getState()
+
+    NewsItemsApi.getStats(token, filters)
+        .then(stats => {
+            dispatch(receiveNewsItemsStats(stats))
+        })
+}

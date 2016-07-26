@@ -1,6 +1,6 @@
-FROM node:6
+FROM mhart/alpine-node:6.3
 
-EXPOSE 3000
+RUN apk --no-cache add curl
 
 RUN npm i -g nodemon
 

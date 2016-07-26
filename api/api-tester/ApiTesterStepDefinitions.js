@@ -1,3 +1,6 @@
+'use strict'
+
+const _          = require('lodash')
 const { expect } = require('chai')
 
 module.exports = runner => {
@@ -18,8 +21,8 @@ module.exports = runner => {
     // WHEN
     // ——————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-    runner.When(/^I GET (.*)$/, (path, callback) => {
-        runner.api.get(path)
+    runner.When(/^I (GET|POST|PUT|DELETE) ([^ ]+)$/, (method, path, callback) => {
+        runner.api[method.toLowerCase()](path)
             .then(() => {
                 callback()
             })
@@ -28,8 +31,10 @@ module.exports = runner => {
             })
     })
 
-    runner.When(/^I POST (.*)$/, (path, callback) => {
-        runner.api.post(path)
+    runner.When(/^I (GET|POST|PUT|DELETE) ([^ ]+) (\d+) times$/, (method, path, callCount, callback) => {
+        Promise.all(_.range(callCount).map(() => {
+            return runner.api[method.toLowerCase()](path)
+        }))
             .then(() => {
                 callback()
             })
@@ -90,4 +95,30 @@ module.exports = runner => {
             }
         }
     )
+
+    runner.Then(/^I pick (.*) from response body as (.*)$/, (path, id) => {
+        const body = runner.api.getBody()
+
+        expect(body, 'response body is null').to.exist
+        expect(_.has(body, path), `path "${path}" does not exist in response body`).to.be.true
+
+        runner.api.store(id, _.get(body, path))
+    })
+
+    runner.Then(/^response body should contain path (.*)$/, path => {
+        const body = runner.api.getBody()
+
+        expect(body, 'response body is null').to.exist
+        expect(_.has(body, path), `path "${path}" does not exist in response body`).to.be.true
+    })
+
+    runner.Then(/^response body value of (.*) should be (.*)$/, (path, expectedValue) => {
+        const body = runner.api.getBody()
+
+        expect(body, 'response body is null').to.exist
+        expect(_.has(body, path), `path "${path}" does not exist in response body`).to.be.true
+
+        const value = _.get(body, path)
+        expect(value).to.equal(expectedValue)
+    })
 }

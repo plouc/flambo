@@ -38,10 +38,12 @@ const collectionsFetchError = status => ({
     status,
 })
 
-const fetchCollections = () => dispatch => {
+const fetchCollections = () => (dispatch, getState) => {
     dispatch(requestCollections())
 
-    CollectionsApi.list()
+    const { auth: { token } } = getState()
+
+    CollectionsApi.list(token)
         .then(collections => {
             dispatch(receiveCollections(collections))
         })

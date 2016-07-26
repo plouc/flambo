@@ -11,7 +11,7 @@ import {
     INVALIDATE_SOURCE,
     REQUEST_SOURCE_COLLECTION,
     RECEIVE_SOURCE_COLLECTION_STATUS,
-} from '../constants/sourcesActionTypes'
+} from '../actions/sourcesActions'
 
 
 const source = (state = {

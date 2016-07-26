@@ -10,7 +10,7 @@ const twitterSchema = Joi.object().keys({
 })
 
 const rssSchema = Joi.object().keys({
-    url: Joi.string().required(),
+    url: Joi.string().uri().required(),
 });
 
 const meetupSchema = Joi.object().keys({

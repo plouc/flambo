@@ -1,0 +1,210 @@
+/*
+ Button
+
+ Standard button.
+
+ :focus - Behavior on focus.
+ .button--full - A full width button.
+ .button--bold - A bolder button.
+ .button--naked - A naked button.
+ .button--action - A button suitable for form submission.
+ .button--warning - A button suitable for sensible actions.
+ .button--small - A smaller button.
+ .button--active - Active state.
+
+ Markup: examples/Button.hbs
+
+ Styleguide Buttons.Button
+*/
+.button {
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding: 9px 12px;
+    line-height: 1.3em;
+    text-decoration: none;
+    color: inherit;
+    font-size: inherit;
+    background: var(--white);
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--medium-grey);
+    border-radius: 2px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.button:focus {
+    outline: 0;
+}
+.button:hover {
+    box-shadow: 0 0 0 var(--medium-grey);
+}
+.button--full {
+    display: block;
+    width: 100%;
+}
+.button--small {
+    font-size: 14px;
+    padding: 5px 9px;
+}
+.button--naked {
+    background: transparent;
+    box-shadow: none;
+    border-width: 0;
+}
+.button--bold {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 900;
+    padding: 12px 20px;
+}
+.button--action {
+    background: var(--blue);
+    color: var(--white);
+    border-color: var(--medium-blue);
+}
+.button--warning {
+    background: var(--orange);
+    color: var(--white);
+    border-color: var(--medium-orange);
+}
+.button--icon {
+    padding: 5px;
+}
+.button--disabled {
+    background: #eee;
+    color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+
+}
+.button--outline:hover {
+    background: var(--dark-grey);
+    color: var(--white);
+}
+
+
+/*
+ ButtonGroup
+
+ Grouping buttons.
+
+ Markup: examples/ButtonGroup.hbs
+
+ Styleguide Buttons.ButtonGroup
+*/
+.button-group {
+    display: flex;
+    align-items: stretch;
+}
+.button-group .button,
+.button-group .button--action {
+    border-radius: 0;
+    border-left-width: 0;
+    box-shadow: none;
+}
+.button-group .button:first-child,
+.button-group .button--action:first-child {
+    border-radius: 2px 0 0 2px;
+    border-left-width: 1px;
+}
+.button-group .button:last-child {
+    border-radius: 0 2px 2px 0;
+}
+
+
+/*
+ ButtonWithLoader
+
+ A button with a loading indicator.
+
+ .button--with-loader--slide-up - Slide up animation.
+ .button--with-loader--slide-down - Slide down animation.
+ .button--with-loader--slide-left - Slide left animation.
+ .button--with-loader--slide-right - Slide right animation.
+
+ Markup: examples/ButtonWithLoader.hbs
+
+ Styleguide Buttons.ButtonWithLoader
+*/
+
+:root {
+    --button-with-loader-transition-duration: 200ms;
+}
+.button--with-loader {
+    position: relative;
+    overflow: hidden;
+}
+.button__label {
+    position: relative;
+    top:  0;
+    left: 0;
+    opacity: 1;
+    transition: all var(--button-with-loader-transition-duration);
+    z-index: 3;
+}
+.button__loader {
+    position: absolute;
+    width:  100%;
+    height: 100%;
+    top:  0;
+    left: 0;
+    opacity: 0.4;
+    transform: translate3d(0, 0, 0);
+    transition: all var(--button-with-loader-transition-duration);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.button--with-loader._loading > .button__loader {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+}
+.button--with-loader._loading > .button__label {
+    opacity: 0.4;
+}
+
+/*
+ * slide-up
+ */
+.button--with-loader--slide-up > .button__loader {
+    transform: translate3d(0, 100%, 0);
+}
+.button--with-loader--slide-up._loading > .button__label {
+    top: -2em;
+}
+
+/*
+ * slide-down
+ */
+.button--with-loader--slide-down > .button__loader {
+    transform: translate3d(0, -100%, 0);
+}
+.button--with-loader--slide-down._loading > .button__label {
+    top: 2em;
+}
+
+/*
+ * slide-left
+ */
+.button--with-loader--slide-left > .button__loader {
+    transform: translate3d(-100%, 0, 0);
+}
+.button--with-loader--slide-left._loading > .button__label {
+    left: 120%;
+}
+
+/*
+ * slide-right
+ */
+.button--with-loader--slide-right > .button__loader {
+    transform: translate3d(100%, 0, 0);
+}
+.button--with-loader--slide-right._loading > .button__label {
+    left: -120%;
+}

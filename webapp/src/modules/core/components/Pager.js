@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import classNames                      from 'classnames'
 
 
 class Pager extends Component {
@@ -11,12 +12,16 @@ class Pager extends Component {
 
     handlePreviousClick() {
         const { onChange, page, limit } = this.props
-        onChange(page - 1, limit)
+        if (page > 1) {
+            onChange(page - 1, limit)
+        }
     }
 
     handleNextClick() {
-        const { onChange, page, limit } = this.props
-        onChange(page + 1, limit)
+        const { onChange, page, limit, total } = this.props
+        if (page < Math.ceil(total / limit)) {
+            onChange(page + 1, limit)
+        }
     }
 
     render() {
@@ -39,16 +44,22 @@ class Pager extends Component {
                 <span className="pager__end">{end}</span>
                 &nbsp;of&nbsp;
                 <span className="pager__total">{total}</span>
-                <span className="button-group">
-                    <span
-                        className="button button--action button--small"
-                        onClick={this.handlePreviousClick}
-                    >&lt;</span>
-                    <span
-                        className="button button--action button--small"
-                        onClick={this.handleNextClick}
-                    >&gt;</span>
-                </span>
+                <div style={{ display: 'inline-block' }}>
+                    <span className="button-group">
+                        <span
+                            className={classNames('button button--action button--small', {
+                                'button--disabled': !hasPrevious,
+                            })}
+                            onClick={this.handlePreviousClick}
+                        >&lt;</span>
+                        <span
+                            className={classNames('button button--action button--small', {
+                                'button--disabled': !hasNext,
+                            })}
+                            onClick={this.handleNextClick}
+                        >&gt;</span>
+                    </span>
+                </div>
             </div>
         )
     }

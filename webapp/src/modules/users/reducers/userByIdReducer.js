@@ -3,6 +3,7 @@
  */
 'use strict'
 
+import { LOGOUT_SUCCESS }  from '../../auth/actions/authActions'
 import {
     REQUEST_USER,
     RECEIVE_USER,
@@ -54,6 +55,9 @@ export default function userById(state = {}, action) {
                 ...state,
                 [action.userId]: user(state[action.userId], action),
             }
+
+        case LOGOUT_SUCCESS:
+            return {}
 
         default:
             return state

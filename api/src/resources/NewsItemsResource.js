@@ -3,10 +3,13 @@
 const router           = require('express').Router()
 const NewsItemsService = require('../services/NewsItemsService')
 const rest             = require('../lib/middlewares/restMiddleware')
+const container        = require('../container')
+const auth             = container.get('auth')
 
 
 router.get(
     '/',
+    auth.authenticate(),
     rest.collection.sort({ allowedFields: ['createdAt'] }),
     rest.collection.pagination({ perPage: { key: 'limit' } }),
     rest.collection.filters(['page', 'limit', 'sort']),
@@ -26,9 +29,22 @@ router.get(
 )
 
 
-router.get('/:id', () => {
+router.get(
+    '/stats',
+    auth.authenticate(),
+    rest.collection.filters(['page', 'limit', 'sort']),
+    (req, res) => {
+        const options = { filters: req.rest.filters }
 
-})
+        NewsItemsService.dateHistogram(options)
+            .then(aggs => {
+                res.json(aggs)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }
+)
 
 
 module.exports = router

@@ -4,6 +4,10 @@
       "type" : "string",
       "index" : "not_analyzed"
     },
+    "sourceType": {
+      "type": "string",
+      "index": "not_analyzed"
+    },
     "externalId": {
       "type": "string",
       "index": "not_analyzed"

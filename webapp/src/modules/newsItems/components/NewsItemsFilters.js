@@ -21,7 +21,7 @@ class NewsItemsFilters extends Component {
     }
 
     render() {
-        const { filters } = this.props
+        const { filters, withSourceType } = this.props
 
         const options = [
             { value: 'twitter', label: 'Twitter' },
@@ -32,13 +32,15 @@ class NewsItemsFilters extends Component {
         return (
             <div>
                 <div>
-                    <Select
-                        name="newsItemsSourceTYpe"
-                        value={filters.sourceType || ''}
-                        options={options}
-                        onChange={this.handleTypeUpdate}
-                        multi={true}
-                    />
+                    {withSourceType && (
+                        <Select
+                            name="newsItemsSourceType"
+                            value={filters.sourceType || ''}
+                            options={options}
+                            onChange={this.handleTypeUpdate}
+                            multi={true}
+                        />
+                    )}
                 </div>
             </div>
         )
@@ -46,7 +48,13 @@ class NewsItemsFilters extends Component {
 }
 
 NewsItemsFilters.propTypes = {
-    filters: PropTypes.object.isRequired,
+    filters:        PropTypes.object.isRequired,
+    onChange:       PropTypes.func.isRequired,
+    withSourceType: PropTypes.bool.isRequired,
+}
+
+NewsItemsFilters.defaultProps = {
+    withSourceType: true,
 }
 
 

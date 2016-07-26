@@ -25,10 +25,12 @@ const usersFetchError = status => ({
     status,
 })
 
-const fetchUsers = () => dispatch => {
+const fetchUsers = () => (dispatch, getState) => {
     dispatch(requestUsers())
 
-    UsersApi.list()
+    const { auth: { token } } = getState()
+
+    UsersApi.list(token)
         .then(users => {
             dispatch(receiveUsers(users))
         })

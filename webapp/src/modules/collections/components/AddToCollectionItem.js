@@ -23,14 +23,18 @@ class AddToCollectionItem extends Component {
         const { collection, newsItem } = this.props
 
         const newsItemAlreadyAdded = collection.news_items.includes(newsItem.id)
-        const classes = classNames('add-to-collection__item', {
-            'add-to-collection__item--added': newsItemAlreadyAdded,
+        const iconClasses = classNames('icon', {
+            //'icon--small':      true,
+            'icon--push-right':  true,
+            'icon--check-blue':  newsItemAlreadyAdded,
+            'icon--circle-grey': !newsItemAlreadyAdded,
         })
 
         return (
-            <li className={classes} onClick={this.handleClick}>
+            <div className="list-item nowrap compact" onClick={this.handleClick}>
+                <span className={iconClasses} />
                 {collection.name}
-            </li>
+            </div>
         )
     }
 }

@@ -2,6 +2,7 @@ import React, { Component, PropTypes }         from 'react'
 import { Link }                                from 'react-router'
 import { FormattedMessage, FormattedRelative } from 'react-intl'
 import TopicList                               from './TopicList'
+import UserBadge                               from '../../users/containers/UserBadgeContainer'
 import Loader                                  from '../../core/components/Loader'
 import InternalError                           from '../../core/components/InternalError'
 
@@ -13,21 +14,24 @@ class Topics extends Component {
     }
 
     render() {
-        const { topics, isFetching, status } = this.props
+        const { topics, loading, error } = this.props
 
-        if (status !== 0) {
+        if (error) {
             return <InternalError />
         }
 
         return (
-            <div>
-                <div className="content-header">
+            <div className="content">
+                <div className="fixed-header content-header">
                     <h1>
                         <FormattedMessage id="topics" />
                     </h1>
-                    <Loader loading={isFetching} />
+                    <div>
+                        <UserBadge />
+                    </div>
+                    <Loader loading={loading} />
                 </div>
-                <div className="content-wrapper">
+                <div className="content-with-fixed-header">
                     <TopicList topics={topics} />
                 </div>
             </div>
@@ -38,8 +42,7 @@ class Topics extends Component {
 Topics.propTypes = {
     fetchTopicsIfNeeded: PropTypes.func.isRequired,
     topics:              PropTypes.array.isRequired,
-    isFetching:          PropTypes.bool.isRequired,
-    status:              PropTypes.number.isRequired,
+    loading:             PropTypes.bool.isRequired,
 }
 
 

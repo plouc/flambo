@@ -1,38 +1,23 @@
+'use strict'
+
 import React, { Component, PropTypes } from 'react'
 import { FormattedMessage }            from 'react-intl'
-import TopicForm                       from './TopicForm'
+import TopicForm                       from '../containers/TopicFormContainer'
+import Loader                          from '../../core/components/Loader'
+import { updateTopic }                 from '../actions/topicsActions'
 
 
 class EditTopic extends Component {
     constructor(props) {
         super(props)
 
-        this.handleChange     = this.handleChange.bind(this)
-        this.handleSubmit     = this.handleSubmit.bind(this)
         this.handleFileUpload = this.handleFileUpload.bind(this)
-
-        this.state = { topic: props.topic }
     }
 
     componentWillMount() {
         const { fetchTopicIfNeeded } = this.props
         const { id }                 = this.props.params
         fetchTopicIfNeeded(id)
-    }
-
-    componentWillReceiveProps({ topic }) {
-        this.setState({ topic })
-    }
-
-    handleChange(topic) {
-        this.setState({ topic })
-    }
-
-    handleSubmit() {
-        const { updateTopic } = this.props
-        const { topic }       = this.state
-
-        updateTopic(topic.id, topic)
     }
 
     handleFileUpload(file) {
@@ -42,36 +27,32 @@ class EditTopic extends Component {
     }
 
     render() {
-        const { isFetching } = this.props
-        const { topic }      = this.state
+        const { topicId, topic, sources, loading } = this.props
 
-        if (isFetching) {
-            return (
-                <div>
-                    <div className="content-header">
-                        <h1>loading…</h1>
-                    </div>
-                </div>
+        let form = null
+        if (!loading) {
+            form = (
+                <TopicForm
+                    onSubmit={updateTopic}
+                    sources={sources}
+                    withFileUpload={true}
+                    onFileUpload={this.handleFileUpload}
+                    cancelPath={`/topics/${topicId}`}
+                    initialValues={Object.assign({}, topic, { sources: topic.sources.map(({ id }) => id) })}
+                />
             )
         }
 
         return (
-            <div>
-                <div className="content-header">
+            <div className="content">
+                <div className="fixed-header content-header">
                     <h1>
-                        <FormattedMessage id="topic.edit" />
+                        <FormattedMessage id="topic.settings" />
                     </h1>
+                    <Loader loading={loading}/>
                 </div>
-                <div className="content-wrapper">
-                    <TopicForm
-                        topic={topic}
-                        errors={[]}
-                        onChange={this.handleChange}
-                        onSubmit={this.handleSubmit}
-                        withFileUpload={true}
-                        onFileUpload={this.handleFileUpload}
-                        cancelPath={`/topics/${topic.id}`}
-                    />
+                <div className="content-with-fixed-header">
+                    {form}
                 </div>
             </div>
         )
@@ -80,14 +61,9 @@ class EditTopic extends Component {
 
 EditTopic.propTypes = {
     fetchTopicIfNeeded: PropTypes.func.isRequired,
-    updateTopic:        PropTypes.func.isRequired,
     uploadTopicPicture: PropTypes.func.isRequired,
     topic:              PropTypes.object,
-    isFetching:         PropTypes.bool.isRequired,
-}
-
-EditTopic.defaultProps = {
-    isFetching: true,
+    loading:            PropTypes.bool.isRequired,
 }
 
 

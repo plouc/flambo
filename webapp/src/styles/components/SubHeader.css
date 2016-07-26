@@ -1,0 +1,8 @@
+.sub-header {
+    position: relative;
+    min-height: 82px;
+}
+
+.sub-header--topic {
+    padding-left: 110px;
+}

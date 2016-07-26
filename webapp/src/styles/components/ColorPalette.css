@@ -1,0 +1,61 @@
+/*
+ Colors
+
+ Color palette.
+
+ Markup: examples/ColorPalette.hbs
+
+ Styleguide Config.ColorPalette
+*/
+:root {
+    --light-grey: #eee;
+    --medium-grey: #ddd;
+    --dark-grey: #333;
+    --brick-red: #b34c2c;
+    --orange: #d5a65f;
+    --medium-orange: #bc764b;
+    --dark-orange: #a76b2a;
+    --white: #fff;
+    --blue: #6db0d4;
+    --medium-blue: #4d80bc;
+    --dark-blue: #4571a6;
+    --darker-blue: #435f92;
+}
+
+.color-demo {
+    display: inline-block;
+    width: 33.33%;
+    height: 60px;
+    white-space: nowrap;
+    text-align: center;
+    border: 1px solid #000;
+}
+.color-demo-name {
+    display: block;
+    height: 24px;
+    line-height: 24px;
+    border-bottom: 1px solid #000;
+    background: #fff;
+}
+
+.bg-light-grey {
+    background: var(--light-grey);
+}
+.bg-medium-grey {
+    background: var(--medium-grey);
+}
+.bg-dark-grey {
+    background: var(--dark-grey);
+}
+.bg-brick-red {
+    background: var(--brick-red);
+}
+.bg-white {
+    background: var(--white);
+}
+.bg-blue {
+    background: var(--blue);
+}
+.bg-dark-blue {
+    background: var(--dark-blue);
+}

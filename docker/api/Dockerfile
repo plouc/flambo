@@ -1,4 +1,6 @@
-FROM node:6
+FROM mhart/alpine-node:6.3
+
+RUN apk --no-cache add curl
 
 EXPOSE 3000
 

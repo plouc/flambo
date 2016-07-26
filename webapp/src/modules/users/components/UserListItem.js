@@ -8,15 +8,29 @@ const clickHandler    = id => () => hashHistory.push(`/users/${id}`)
 
 
 const UserListItem = ({ user }) => (
-    <li className="list-item list-item--user" onClick={clickHandler(user.id)}>
+    <div className="list-item list-item--user" onClick={clickHandler(user.id)}>
         <span className="avatar avatar--list">
             <img src={user.gravatarUrl} />
         </span>
         <span className="item-title">{user.name}</span>
         <span className="item-date">
-            <FormattedRelative value={user.createdAt} updateInterval={60000} />
+            <FormattedMessage
+                id="user.created_at"
+                values={{
+                    createdAt: <FormattedRelative value={user.createdAt} updateInterval={60000} />,
+                }}
+            />
+            &nbsp;|&nbsp;
+            {user.lastLogin && (
+                <FormattedMessage
+                    id="user.last_login"
+                    values={{
+                        loginDate: <FormattedRelative value={user.lastLogin} updateInterval={60000} />,
+                    }}
+                />
+            )}
         </span>
-    </li>
+    </div>
 )
 
 UserListItem.propTypes = {

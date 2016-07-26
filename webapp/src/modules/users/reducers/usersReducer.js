@@ -3,6 +3,7 @@
  */
 'use strict'
 
+import { LOGOUT_SUCCESS }  from '../../auth/actions/authActions'
 import {
     REQUEST_USERS,
     RECEIVE_USERS,
@@ -43,6 +44,13 @@ export default function sources(state = {
         case INVALIDATE_USERS:
             return {
                 ...state,
+                didInvalidate: true,
+            }
+
+        case LOGOUT_SUCCESS:
+            return {
+                ...state,
+                users:         [],
                 didInvalidate: true,
             }
 

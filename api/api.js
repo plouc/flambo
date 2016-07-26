@@ -1,10 +1,12 @@
+'use strict'
+
 const express         = require('express')
+const http            = require('http')
 const bodyParser      = require('body-parser')
 const cors            = require('cors')
 const compress        = require('compression')
-const app             = express()
 const dotenv          = require('dotenv')
-const WebSocketServer = require('uws').Server
+const Io              = require('socket.io')
 const workQueue       = require('./src/lib/work-queue')
 const Users           = require('./src/resources/UsersResource')
 const Topics          = require('./src/resources/TopicsResource')
@@ -13,9 +15,8 @@ const Sources         = require('./src/resources/SourcesResource')
 const Collections     = require('./src/resources/CollectionsResource')
 dotenv.config({ silent: true })
 const container       = require('./src/container')
-
-
-console.log(process.env.NODE_ENV)
+const auth            = container.get('auth')
+const app             = express()
 
 
 Promise.all([
@@ -30,24 +31,34 @@ Promise.all([
         exposedHeaders: ['X-Total', 'X-Limit', 'X-Page'],
     }))
 
+    app.use(auth.initialize())
+
     app.use('/uploads', express.static('uploads'))
     if (process.env.NODE_ENV === 'production') {
         app.use(express.static('public'))
     }
 
     // add some delay for UI testing purpose
-    //app.use((req, res, next) => { setTimeout(next, 1000) })
+    app.use((req, res, next) => { setTimeout(next, 500) })
 
-    app.use('/api/v1/users',       Users(container))
-    app.use('/api/v1/topics',      Topics(container))
-    app.use('/api/v1/sources',     Sources(container))
+    app.use('/api/v1/users',       Users)
+    app.use('/api/v1/topics',      Topics)
+    app.use('/api/v1/sources',     Sources)
     app.use('/api/v1/news_items',  NewsItems)
     app.use('/api/v1/collections', Collections)
 
-    const server = app.listen(container.get('app_port'), () => {
+    const server = http.Server(app)
+
+    const io = Io(server)
+    io.on('connection', socket => {
+        console.log('a user connected')
+    })
+
+    server.listen(container.get('app_port'), () => {
         console.log(`app listening on port: ${container.get('app_port')}`)
     })
 
+    /*
     const wss = new WebSocketServer({
         server,
         path: '/watch',
@@ -77,7 +88,6 @@ Promise.all([
                 console.error(err)
             })
 
-        /*
          ws.on('message', message => {
          console.log('message', message);
          //mozaik.bus.clientSubscription(clientId, JSON.parse(request));
@@ -87,6 +97,6 @@ Promise.all([
          console.log('bye');
          //mozaik.bus.removeClient(clientId);
          });
-         */
     })
+    */
 })

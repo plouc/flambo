@@ -9,12 +9,12 @@ const clickHandler    = id => () => hashHistory.push(`/topics/${id}`)
 
 
 const TopicListItem = ({ topic }) => (
-    <li className="grid-item" onClick={clickHandler(topic.id)}>
+    <div className="grid-item" onClick={clickHandler(topic.id)}>
         <div className="grid-item__banner">
             <TopicPicture topic={topic} />
         </div>
         <span className="grid-item__title">{topic.name}</span>
-    </li>
+    </div>
 )
 
 TopicListItem.propTypes = {

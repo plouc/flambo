@@ -9,7 +9,7 @@ import {
     RECEIVE_SOURCES,
     SOURCES_FETCH_ERROR,
     INVALIDATE_SOURCES,
-} from '../constants/sourcesActionTypes'
+} from '../actions/sourcesActions'
 
 
 export default function sources(state = {

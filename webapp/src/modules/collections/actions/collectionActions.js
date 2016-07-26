@@ -3,9 +3,10 @@
  */
 'use strict'
 
-import { hashHistory }        from 'react-router'
-import * as CollectionsApi    from '../api/CollectionsApi'
-import newsItemsActionFactory from '../../../lib/itemNewsItemsActionFactory'
+import { hashHistory }             from 'react-router'
+import * as CollectionsApi         from '../api/CollectionsApi'
+import newsItemsActionFactory      from '../../../lib/newsItemsActionFactory'
+import newsItemsStatsActionFactory from '../../../lib/newsItemsStatsActionFactory'
 import {
     invalidateCollections,
     fetchCollectionsIfNeeded,
@@ -17,8 +18,6 @@ import {
     INVALIDATE_COLLECTION,
     REQUEST_COLLECTION_NEWS_ITEM_ADDITION,
     REQUEST_COLLECTION_NEWS_ITEM_REMOVAL,
-    REQUEST_COLLECTION_NEWS_ITEMS,
-    RECEIVE_COLLECTION_NEWS_ITEMS,
 } from '../constants/collectionsActionTypes'
 
 
@@ -39,10 +38,12 @@ const collectionFetchError = (collectionId, status) => ({
     status,
 })
 
-const fetchCollection = id => dispatch => {
+const fetchCollection = id => (dispatch, getState) => {
     dispatch(requestCollection(id))
 
-    CollectionsApi.get(id)
+    const { auth: { token } } = getState()
+
+    CollectionsApi.get(token, id)
         .then(collection => {
             dispatch(receiveCollection(collection))
         })
@@ -94,6 +95,9 @@ export const invalidateCollection = collectionId => ({
     collectionId,
 })
 
+export const fetchCollectionNewsItems      = newsItemsActionFactory('collections', CollectionsApi.getCollectionNewsItems)
+export const fetchCollectionNewsItemsStats = newsItemsStatsActionFactory('collections', CollectionsApi.getCollectionNewsItemsStats)
+
 const requestCollectionNewsItemAddition = (collectionId, newsItemId) => ({
     type: REQUEST_COLLECTION_NEWS_ITEM_ADDITION,
     collectionId,
@@ -109,6 +113,7 @@ export function addNewsItemToCollection(id, newsItemId) {
                 dispatch(invalidateCollection(id))
                 dispatch(invalidateCollections())
                 dispatch(fetchCollectionsIfNeeded())
+                dispatch(fetchCollectionNewsItems(id))
             })
     }
 }
@@ -128,16 +133,7 @@ export function removeNewsItemFromCollection(id, newsItemId) {
                 dispatch(invalidateCollection(id))
                 dispatch(invalidateCollections())
                 dispatch(fetchCollectionsIfNeeded())
+                dispatch(fetchCollectionNewsItems(id))
             })
     }
 }
-
-/**
- * Creates actions to fetch source news items for given id.
- */
-export const fetchCollectionNewsItems = newsItemsActionFactory(
-    REQUEST_COLLECTION_NEWS_ITEMS,
-    RECEIVE_COLLECTION_NEWS_ITEMS,
-    'collectionId',
-    CollectionsApi.getCollectionNewsItems
-)

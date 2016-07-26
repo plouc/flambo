@@ -16,6 +16,12 @@ module.exports.findAll = () => r.table('collections')
     .orderBy(r.desc('createdAt'))
     .run()
 
+
+module.exports.findByUserId = userId => r.table('collections')
+    .filter({ user_id: userId })
+    .orderBy(r.desc('createdAt'))
+    .run()
+
 /**
  * Find a topic by its id.
  *

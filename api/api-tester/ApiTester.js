@@ -5,6 +5,7 @@
 const _       = require('lodash')
 const request = require('request').defaults({ json: true })
 
+let store       = {}
 let baseUrl     = ''
 let headers     = {}
 let queryString = {}
@@ -13,6 +14,13 @@ let response
 
 exports.setBaseUrl = base => {
     baseUrl = base
+}
+
+exports.getBaseUrl = () => baseUrl
+
+
+exports.store = (id, value) => {
+    store[id] = value
 }
 
 /**
@@ -25,6 +33,10 @@ exports.setBaseUrl = base => {
  */
 exports.setHeader = (headerKey, headerValue) => {
     headers[headerKey] = headerValue
+}
+
+exports.removeHeader = headerKey => {
+    delete headers[headerKey]
 }
 
 /**
@@ -59,10 +71,22 @@ exports.setJson = json => {
  * @returns {undefined}
  */
 exports.reset = () => {
+    store       = {}
     headers     = {}
     queryString = {}
     body        = undefined
     response    = undefined
+}
+
+const bindUriParams = uri => {
+    return uri.replace(/\/:[0-9a-z]+/gi, part => {
+        const param = part.slice(2)
+        if (!store.hasOwnProperty(param)) {
+            return '/NOT_FOUND'
+        }
+
+        return `/${store[param]}`
+    })
 }
 
 /**
@@ -75,7 +99,7 @@ exports.reset = () => {
 exports.get = uri => new Promise((resolve, reject) => {
     const options = {
         baseUrl,
-        uri,
+        uri:    bindUriParams(uri),
         method: 'GET',
         qs:     queryString,
         headers,
@@ -101,8 +125,31 @@ exports.get = uri => new Promise((resolve, reject) => {
 exports.post = uri => new Promise((resolve, reject) => {
     const options = {
         baseUrl,
-        uri,
+        uri:    bindUriParams(uri),
         method: 'POST',
+        qs:     queryString,
+        headers,
+    };
+
+    if (body) {
+        options.body = body
+    }
+
+    request(options, (err, res) => {
+        if (err) {
+            reject(err)
+        } else {
+            response = res
+            resolve(res)
+        }
+    })
+})
+
+exports.delete = uri => new Promise((resolve, reject) => {
+    const options = {
+        baseUrl,
+        uri:    bindUriParams(uri),
+        method: 'DELETE',
         qs:     queryString,
         headers,
     };

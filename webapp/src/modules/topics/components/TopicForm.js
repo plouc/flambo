@@ -1,28 +1,24 @@
+'use strict'
+
 import React, { Component, PropTypes } from 'react'
 import { Link }                        from 'react-router'
 import { FormattedMessage }            from 'react-intl'
 import Dropzone                        from 'react-dropzone'
-import FormErrors                      from '../../core/components/FormErrors'
+import classNames                      from 'classnames'
+import FormFieldError                  from '../../core/components/FormFieldError'
+import ButtonWithLoader                from '../../core/components/ButtonWithLoader'
 
 
 class TopicForm extends Component {
     constructor(props) {
         super(props)
 
-        this.handleNameChange        = this.handleNameChange.bind(this)
-        this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
-        this.handleSubmit            = this.handleSubmit.bind(this)
-        this.handlePictureDrop       = this.handlePictureDrop.bind(this)
+        this.handlePictureDrop = this.handlePictureDrop.bind(this)
     }
 
-    handleNameChange(e) {
-        const { topic, onChange } = this.props
-        onChange({ ...topic, name: e.target.value })
-    }
-
-    handleDescriptionChange(e) {
-        const { topic, onChange } = this.props
-        onChange({ ...topic, description: e.target.value })
+    componentWillMount() {
+        const { fetchSourcesIfNeeded } = this.props
+        fetchSourcesIfNeeded()
     }
 
     handlePictureDrop(files) {
@@ -30,51 +26,62 @@ class TopicForm extends Component {
         onFileUpload(files[0])
     }
 
-    handleSubmit(e) {
-        e.preventDefault()
-
-        const { onSubmit } = this.props
-
-        onSubmit()
-    }
-
     render() {
-        const { topic, errors, withFileUpload } = this.props
+        const {
+            fields: { name, description, sources },
+            handleSubmit,
+            resetForm,
+            submitting,
+            withFileUpload,
+        } = this.props
 
         return (
-            <form className="form" onSubmit={this.handleSubmit}>
-                <FormErrors errors={errors}/>
-                <div>
+            <form className="section" onSubmit={handleSubmit}>
+                <div className="f-form__row">
                     <label htmlFor="topicName">name</label><br/>
                     <input
                         id="topicName"
                         type="text"
-                        className="form-control form-control--full"
-                        value={topic.name}
-                        onChange={this.handleNameChange}
+                        className={classNames('form-control form-control--full', {
+                            error: name.touched && name.error,
+                        })}
+                        {...name}
                     />
+                    <FormFieldError {...name} />
                 </div>
-                <div>
+                <div className="f-form__row">
                     <label htmlFor="topicDescription">description</label><br/>
                     <textarea
                         id="topicDescription"
-                        value={topic.description}
-                        className="form-control form-control--full"
-                        onChange={this.handleDescriptionChange}
+                        className={classNames('form-control form-control--full', {
+                            error: description.touched && description.error,
+                        })}
+                        {...description}
                     />
+                    <FormFieldError {...description} />
+                </div>
+                <div>
+                    <label htmlFor="topicSources">sources</label><br/>
+                    <select multiple {...sources}>
+                        {this.props.sources.map(source => (
+                            <option key={source.id} value={source.id}>{source.name}</option>
+                        ))}
+                    </select>
+                    <FormFieldError {...sources} />
                 </div>
                 {withFileUpload && (
                     <Dropzone onDrop={this.handlePictureDrop} multiple={false}>
                         <div>Try dropping some files here, or click to select files to upload.</div>
                     </Dropzone>
                 )}
-                <div className="form-actions">
-                    <button
-                        className="button button--bold button--action"
+                <div className="f-form__actions">
+                    <ButtonWithLoader
+                        elementType="button"
                         type="submit"
-                    >
-                        <FormattedMessage id="form.submit"/>
-                    </button>
+                        className="button--bold button--action"
+                        label={<FormattedMessage id="form.submit"/>}
+                        loading={submitting}
+                    />
                     <Link to="/topics" className="button button--bold button--warning">
                         <FormattedMessage id="form.cancel"/>
                     </Link>
@@ -85,14 +92,17 @@ class TopicForm extends Component {
 }
 
 TopicForm.propTypes = {
-    topic:          PropTypes.shape({
-        name: PropTypes.string.isRequired,
+    fetchSourcesIfNeeded: PropTypes.func.isRequired,
+    sources:              PropTypes.array.isRequired,
+    fields:               PropTypes.shape({
+        name:        PropTypes.object.isRequired,
+        description: PropTypes.object.isRequired,
+        sources:     PropTypes.object.isRequired,
     }).isRequired,
-    errors:         PropTypes.array.isRequired,
-    onChange:       PropTypes.func.isRequired,
-    onSubmit:       PropTypes.func.isRequired,
-    withFileUpload: PropTypes.bool.isRequired,
-    onFileUpload:   PropTypes.func.isRequired,
+    handleSubmit:         PropTypes.func.isRequired,
+    submitting:           PropTypes.bool.isRequired,
+    withFileUpload:       PropTypes.bool.isRequired,
+    onFileUpload:         PropTypes.func,
 }
 
 

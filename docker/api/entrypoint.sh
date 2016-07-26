@@ -1,9 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ash
 
-cd /flambo
-
-echo "installing node modules"
-npm install
+cd /flambo/api
 
 echo "waiting for rethinkdb..."
 until curl -s "$RETHINKDB_HOST:8080" > /dev/null; do

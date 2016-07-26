@@ -1,53 +1,29 @@
+'use strict'
+
 import React, { Component, PropTypes } from 'react'
 import { FormattedMessage }            from 'react-intl'
-import TopicForm                       from './TopicForm'
-
-
-const defaultTopic = {
-    name: '',
-}
+import TopicForm                       from '../containers/TopicFormContainer'
+import { createTopic }                 from '../actions/topicsActions'
+import UserBadge                       from '../../users/containers/UserBadgeContainer'
 
 
 class CreateTopic extends Component {
-    constructor(props) {
-        super(props)
-
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-
-        this.state = {
-            topic:  defaultTopic,
-            errors: [],
-        }
-    }
-
-    handleChange(topic) {
-        this.setState({ topic })
-    }
-
-    handleSubmit() {
-        const { createTopic } = this.props
-        const { topic }       = this.state
-        createTopic(topic)
-    }
-
     render() {
-        const { topic, errors } = this.state
-
         return (
-            <div>
-                <div className="content-header">
+            <div className="content">
+                <div className="fixed-header content-header">
                     <h1>
                         <FormattedMessage id="topic.create" />
                     </h1>
+                    <UserBadge />
                 </div>
-                <div className="content-wrapper">
+                <div className="content-with-fixed-header">
                     <TopicForm
-                        topic={topic}
-                        errors={errors}
-                        onChange={this.handleChange}
-                        onSubmit={this.handleSubmit}
+                        onSubmit={createTopic}
                         withFileUpload={false}
+                        initialValues={{
+                            sources: [],
+                        }}
                     />
                 </div>
             </div>
@@ -56,7 +32,6 @@ class CreateTopic extends Component {
 }
 
 CreateTopic.propTypes = {
-    createTopic: PropTypes.func.isRequired,
 }
 
 

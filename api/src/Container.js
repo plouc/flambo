@@ -5,8 +5,16 @@ const amqp          = require('amqplib')
 const multer        = require('multer')
 const crypto        = require('crypto')
 const mime          = require('mime')
+const Auth          = require('./lib/auth')
 
 const container = new Jimple()
+
+
+container.set('app_port', process.env.APP_PORT)
+
+container.set('jwt_secret', process.env.JWT_SECRET)
+
+container.set('auth', c => Auth(c.get('jwt_secret')))
 
 container.set('upload', c => {
     const storage = multer.diskStorage({
@@ -20,8 +28,6 @@ container.set('upload', c => {
 
     return multer({ storage })
 })
-
-container.set('app_port', process.env.APP_PORT)
 
 
 container.set('elastic_host', process.env.ELASTIC_HOST)

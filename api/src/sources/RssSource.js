@@ -40,9 +40,9 @@ module.exports = () => {
                         //console.log(item);
                         const publishedAt = new Date(item.pubDate);
 
-                        console.log(publishedAt);
+                        //console.log(publishedAt);
 
-                        console.log(`[RSS] collected item ${item.title} [${item.guid}]`);
+                        //console.log(`[RSS] collected item ${item.title} [${item.guid}]`);
 
                         items.push({
                             content:    item.title,

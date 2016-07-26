@@ -1,0 +1,29 @@
+.f-form__row {
+    margin-bottom: 20px;
+}
+.f-form__error {
+    margin-top: 10px;
+    color: #900;
+}
+
+/*
+ FormActions
+
+ Form actions.
+
+ Markup: examples/FormActions.hbs
+
+ Styleguide Form.FormActions
+*/
+.f-form__actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+.f-form__actions .button {
+    flex-grow: 1;
+    margin-left: 15px;
+}
+.f-form__actions .button:first-child {
+    margin-left: 0;
+}

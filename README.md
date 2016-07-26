@@ -16,14 +16,24 @@
 - docker-compose
 - Node 6 (only for development)
 
-## Stack
+## Stack/Tools/Libs
 
 - Rethinkdb
 - elasticsearch
 - rabbitmq
 - Node.js
+- Express
+- Cucumber
+- Reactjs
+- Redux
+- Postcss
+- webpack
+- …
 
 ## Run it
+
+First, you'll have to provide twitter API tokens in order to be able to use the twitter source.
+Simply copy `.env.sample` (inside `api/`directory and rename it to `.env`, and replace the required properties. 
 
 ```sh
 make run

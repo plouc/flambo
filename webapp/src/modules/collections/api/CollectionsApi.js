@@ -7,45 +7,53 @@ import { doneHandler, failureHandler } from '../../../lib/api/apiHandlers'
 
 const BASE_URL = 'http://localhost:3000/api/v1'
 
+
 /**
  * Lists collections.
  *
  * @method
+ * @param {string} token - The JWT token
  * @returns {Promise.<Array, Error>}
  */
-export const list = () => {
+export const list = token => {
     return fetch(`${BASE_URL}/collections`, {
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
     .then(doneHandler, failureHandler)
 }
+
 
 /**
  * Gets a collection by its id.
  *
  * @method
- * @param {string} id - The collection id
+ * @param {string} token - The JWT token
+ * @param {string} id    - The collection id
  * @returns {Promise.<Collection, Error>}
  */
-export const get = id => {
+export const get = (token, id) => {
     return fetch(`${BASE_URL}/collections/${id}`, {
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
     .then(doneHandler, failureHandler)
 }
 
+
 /**
  * Lists collection news items.
  *
  * @method
- * @param {string} id - The collection id
+ * @param {string} token - The JWT token
+ * @param {string} id    - The collection id
  * @returns {Promise.<Array, Error>}
  */
-export const getCollectionNewsItems = (id, { limit = 10, page = 1, filters = {} }) => {
+export const getCollectionNewsItems = (token, id, { limit = 10, page = 1, filters = {} }) => {
     let res
 
     const query = [
@@ -61,9 +69,11 @@ export const getCollectionNewsItems = (id, { limit = 10, page = 1, filters = {} 
 
     return fetch(`${BASE_URL}/collections/${id}/news_items?${query.join('&')}`, {
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
+    .then(_res => res = _res)
     .then(doneHandler, failureHandler)
     .then(newsItems => ({
         newsItems,
@@ -72,6 +82,25 @@ export const getCollectionNewsItems = (id, { limit = 10, page = 1, filters = {} 
         page:  parseInt(res.headers.get('X-Page',   10)),
     }))
 }
+
+
+export const getCollectionNewsItemsStats = (token, id, filters = {}) => {
+    const query = []
+    if (filters.sourceType && Array.isArray(filters.sourceType)) {
+        filters.sourceType.forEach(sourceType => {
+            query.push(`sourceType=${sourceType}`)
+        })
+    }
+
+    return fetch(`${BASE_URL}/collections/${id}/news_items/stats?${query.join('&')}`, {
+        headers: {
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
+        },
+    })
+    .then(doneHandler, failureHandler)
+}
+
 
 export const addNewsItem = (id, newsItemId) => {
     return fetch(`${BASE_URL}/collections/${id}/add/${newsItemId}`, {
@@ -82,6 +111,7 @@ export const addNewsItem = (id, newsItemId) => {
     })
     .then(doneHandler, failureHandler)
 }
+
 
 export const removeNewsItem = (id, newsItemId) => {
     return fetch(`${BASE_URL}/collections/${id}/remove/${newsItemId}`, {

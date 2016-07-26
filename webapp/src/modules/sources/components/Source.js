@@ -3,58 +3,46 @@
 import React, { Component, PropTypes } from 'react'
 import { Link }                        from 'react-router'
 import { FormattedMessage }            from 'react-intl'
-import SourceTopics                    from './SourceTopics'
+import classNames                      from 'classnames'
 import SourceNotFound                  from './SourceNotFound'
+import SourceSubHeader                 from './SourceSubHeader'
 import SourceCollectButton             from '../containers/SourceCollectButton'
-import sourceTitle                     from '../../../lib/sourceTitle'
 import NewsItemsList                   from '../../newsItems/components/NewsItemsList'
-import NewsItemsFilters                from '../../newsItems/components/NewsItemsFilters'
+import NewsItemsListControls           from '../../newsItems/components/NewsItemsListControls'
+import NewsItemsMonthStats             from '../../newsItems/components/NewsItemsMonthStats'
 import Loader                          from '../../core/components/Loader'
-import Pager                           from '../../core/components/Pager'
 import InternalError                   from '../../core/components/InternalError'
 import { FETCH_STATUS_FAILURE }        from '../../core/constants/fetchStatuses'
 
 
 class Source extends Component {
-    constructor(props) {
-        super(props)
-
-        this.handlerPagerUpdate  = this.handlerPagerUpdate.bind(this)
-        this.handleFiltersUpdate = this.handleFiltersUpdate.bind(this)
-    }
-
     componentWillMount() {
-        const { fetchSourceIfNeeded, fetchSourceNewsItems } = this.props
+        const { fetchSourceIfNeeded, fetchNewsItems, fetchNewsItemsStats } = this.props
         const { id } = this.props.params
 
         fetchSourceIfNeeded(id)
-        fetchSourceNewsItems(id)
+        fetchNewsItems(id)
+        fetchNewsItemsStats(id)
     }
 
-    componentWillReceiveProps({ sourceId, fetchSourceIfNeeded, fetchSourceNewsItems }) {
+    componentWillReceiveProps({ sourceId, fetchSourceIfNeeded, fetchNewsItems, fetchNewsItemsStats }) {
         if (sourceId !== this.props.sourceId) {
             fetchSourceIfNeeded(sourceId)
-            fetchSourceNewsItems(sourceId)
+            fetchNewsItems(sourceId)
+            fetchNewsItemsStats(sourceId)
         }
     }
 
-    handlerPagerUpdate(page, limit) {
-        const { fetchSourceNewsItems, filters } = this.props
-        const { id } = this.props.params
-
-        fetchSourceNewsItems(id, page, limit, filters)
-    }
-
-    handleFiltersUpdate(filters) {
-        const { fetchSourceNewsItems, page, limit } = this.props
-        const { id } = this.props.params
-
-        fetchSourceNewsItems(id, page, limit, filters)
-    }
-
     render() {
-        const { sourceId, source, sourceStatus, sourceIsFetching }            = this.props
-        const { page, limit, filters, newsItems, total, newsItemsIsFetching } = this.props
+        const {
+            location: { query },
+            sourceId, source, sourceStatus, sourceIsFetching,
+            page, limit, filters, newsItems, total, newsItemsIsFetching,
+            monthsStats,
+            onPageChange, onFiltersChange,
+        } = this.props
+
+        const showExtraPane = query.stats && query.stats === 'on'
 
         if (sourceStatus === 404) {
             return <SourceNotFound id={sourceId} />
@@ -64,46 +52,56 @@ class Source extends Component {
 
         return (
             <div>
-                <div className="content-header">
-                    <h1>{sourceIsFetching ? '' : source.name}</h1>
-                    <span className="button-group">
-                        <Link
-                            to={`/sources/${sourceId}/edit`}
-                            className="button button--action button--small"
-                        >
-                            <FormattedMessage id="edit" />
-                        </Link>
-                        <SourceCollectButton
-                            sourceId={sourceId}
-                            className="button--action button--small"
+                <div className="content">
+                    <div className="fixed-header content-header">
+                        <h1>{sourceIsFetching ? '' : source.name}</h1>
+                        <span className="button-group">
+                            <Link
+                                to={`/sources/${sourceId}/edit`}
+                                className="button button--action"
+                            >
+                                <FormattedMessage id="source.settings" />
+                            </Link>
+                            <SourceCollectButton
+                                sourceId={sourceId}
+                                className="button--action button--small"
+                            />
+                            <Link
+                                to={{ pathname: `/sources/${sourceId}`, query: { stats: 'on' } }}
+                                className="button button--small button--action"
+                            >
+                                <span className="icon icon--pie-chart icon--push-right" />
+                                <FormattedMessage id="news_items.stats" />
+                            </Link>
+                        </span>
+                        <Loader loading={sourceIsFetching} />
+                    </div>
+                    <div className="content-with-fixed-header">
+                        <SourceSubHeader isFetching={sourceIsFetching} source={source} />
+                        <NewsItemsListControls
+                            page={page} limit={limit} filters={filters}
+                            isFetching={newsItemsIsFetching}
+                            newsItems={newsItems} total={total}
+                            onFiltersChange={onFiltersChange}
+                            onPageChange={onPageChange}
                         />
-                    </span>
-                    <Loader loading={sourceIsFetching || newsItemsIsFetching} />
+                        <NewsItemsList loading={newsItemsIsFetching} newsItems={newsItems} />
+                    </div>
                 </div>
-                <div className="content-wrapper">
-                    {!sourceIsFetching && (
-                        <section className="section">
-                            <h3>{sourceTitle(source)}</h3>
-                            <p>
-                                topics:&nbsp;
-                                <SourceTopics source={source} topics={source.topics}/>
-                            </p>
-                        </section>
-                    )}
-                    <section className="section list-controls">
-                        <NewsItemsFilters
+                {showExtraPane && (<Link className="overlay" to={`/sources/${sourceId}`} />)}
+                <div className={classNames('extra-pane', { 'extra-pane--opened': showExtraPane })}>
+                    <div className="fixed-header extra-pane__header">
+                        <h2>
+                            <FormattedMessage id="news_items.stats" />
+                        </h2>
+                    </div>
+                    <div className="content-with-fixed-header">
+                        <NewsItemsMonthStats
+                            buckets={monthsStats}
+                            onChange={onFiltersChange}
                             filters={filters}
-                            onChange={this.handleFiltersUpdate}
                         />
-                        <Pager
-                            page={page}
-                            limit={limit}
-                            count={newsItems.length}
-                            total={total}
-                            onChange={this.handlerPagerUpdate}
-                        />
-                    </section>
-                    <NewsItemsList newsItems={newsItems} />
+                    </div>
                 </div>
             </div>
         )
@@ -111,20 +109,20 @@ class Source extends Component {
 }
 
 Source.propTypes = {
-    fetchSourceIfNeeded:  PropTypes.func.isRequired,
-    fetchSourceNewsItems: PropTypes.func.isRequired,
-    source:               PropTypes.object,
-    sourceStatus:         PropTypes.number.isRequired,
-    sourceIsFetching:     PropTypes.bool.isRequired,
-    newsItems:            PropTypes.array.isRequired,
-    total:                PropTypes.number.isRequired,
-    page:                 PropTypes.number.isRequired,
-    limit:                PropTypes.number.isRequired,
-    newsItemsIsFetching:  PropTypes.bool.isRequired,
-}
-
-Source.defaultProps = {
-    isFetching: true,
+    fetchSourceIfNeeded: PropTypes.func.isRequired,
+    fetchNewsItems:      PropTypes.func.isRequired,
+    fetchNewsItemsStats: PropTypes.func.isRequired,
+    source:              PropTypes.object,
+    sourceStatus:        PropTypes.number.isRequired,
+    sourceIsFetching:    PropTypes.bool.isRequired,
+    newsItems:           PropTypes.array.isRequired,
+    total:               PropTypes.number.isRequired,
+    page:                PropTypes.number.isRequired,
+    limit:               PropTypes.number.isRequired,
+    newsItemsIsFetching: PropTypes.bool.isRequired,
+    monthsStats:         PropTypes.array.isRequired,
+    onPageChange:        PropTypes.func.isRequired,
+    onFiltersChange:     PropTypes.func.isRequired,
 }
 
 

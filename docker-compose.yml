@@ -1,10 +1,16 @@
 version: '2'
 services:
+  modules:
+    build:
+      context: .
+      dockerfile: ./docker/modules/Dockerfile
+    volumes:
+      - /flambo/node_modules
+
   rethink:
-    image: rethinkdb
+    image: rethinkdb:2.3.4
     ports:
       - "8080:8080"
-      - "28015:28015"
 
   elastic:
     image: elasticsearch
@@ -17,28 +23,10 @@ services:
     ports:
       - "15672:15672"
 
-  worker:
-    build: ./docker/worker
-    depends_on:
-      - rethink
-      - elastic
-      - rabbit
-    environment:
-      NODE_ENV:           ${NODE_ENV}
-      APP_PORT:           3000
-      ELASTIC_HOST:       elastic
-      ELASTIC_PORT:       9200
-      RABBITMQ_HOST:      rabbit
-      RETHINKDB_HOST:     rethink
-      RETHINKDB_PORT:     28015
-      RETHINKDB_AUTH_KEY: ""
-      RETHINKDB_DB:       flambo
-    volumes :
-      - ./api:/flambo
-
   api:
     build: ./docker/api
     depends_on:
+      - modules
       - rethink
       - elastic
       - rabbit
@@ -54,5 +42,29 @@ services:
       RETHINKDB_PORT:     28015
       RETHINKDB_AUTH_KEY: ""
       RETHINKDB_DB:       flambo
-    volumes :
-      - ./api:/flambo
+      JWT_SECRET:         s0S3Kr33tZ
+    volumes:
+      - ./api:/flambo/api
+    volumes_from:
+      - modules
+
+  worker:
+    build: ./docker/worker
+    depends_on:
+      - modules
+      - rethink
+      - elastic
+      - rabbit
+    environment:
+      NODE_ENV:           ${NODE_ENV}
+      ELASTIC_HOST:       elastic
+      ELASTIC_PORT:       9200
+      RABBITMQ_HOST:      rabbit
+      RETHINKDB_HOST:     rethink
+      RETHINKDB_PORT:     28015
+      RETHINKDB_AUTH_KEY: ""
+      RETHINKDB_DB:       flambo
+    volumes:
+      - ./api:/flambo/worker
+    volumes_from:
+      - modules

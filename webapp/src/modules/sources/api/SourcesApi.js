@@ -3,6 +3,7 @@
  */
 'use strict'
 
+import _                               from 'lodash'
 import { doneHandler, failureHandler } from '../../../lib/api/apiHandlers'
 
 const BASE_URL = 'http://localhost:3000/api/v1'
@@ -12,51 +13,60 @@ const BASE_URL = 'http://localhost:3000/api/v1'
  * Lists sources.
  *
  * @method
+ * @param {string} token - The JWT token
  * @returns {Promise.<Array, Error>}
  */
-export const list = () => {
+export const list = token => {
     return fetch(`${BASE_URL}/sources`, {
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
     .then(doneHandler, failureHandler)
 }
+
 
 /**
  * Gets a source by its id.
  *
  * @method
- * @param {string} id - The source id
+ * @param {string} token - The JWT token
+ * @param {string} id    - The source id
  * @returns {Promise.<Source, Error>}
  */
-export const get = id => {
+export const get = (token, id) => {
     return fetch(`${BASE_URL}/sources/${id}`, {
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
     .then(doneHandler, failureHandler)
 }
 
-export const collect = id => {
+
+export const collect = (token, id) => {
     return fetch(`${BASE_URL}/sources/${id}/collect`, {
         method:  'POST',
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
     .then(doneHandler, failureHandler)
 }
+
 
 /**
  * Lists source news items.
  *
  * @method
- * @param {string} id - The source id
+ * @param {string} token - The JWT token
+ * @param {string} id    - The source id
  * @returns {Promise.<Array, Error>}
  */
-export const getSourceNewsItems = (id, { limit = 10, page = 1, filters = {} }) => {
+export const getSourceNewsItems = (token, id, { limit = 10, page = 1, filters = {} }) => {
     let res
 
     const query = [
@@ -72,9 +82,11 @@ export const getSourceNewsItems = (id, { limit = 10, page = 1, filters = {} }) =
 
     return fetch(`${BASE_URL}/sources/${id}/news_items?${query.join('&')}`, {
         headers: {
-            'Accept': 'application/json',
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
         },
     })
+    .then(_res => res = _res)
     .then(doneHandler, failureHandler)
     .then(newsItems => ({
         newsItems,
@@ -84,35 +96,99 @@ export const getSourceNewsItems = (id, { limit = 10, page = 1, filters = {} }) =
     }))
 }
 
-export const update = (id, source) => {
-    const result = {
-        hasError: false,
-        errors:   [],
-        source:   null,
+
+export const getSourceNewsItemsStats = (token, id, filters = {}) => {
+    const query = []
+    if (filters.sourceType && Array.isArray(filters.sourceType)) {
+        filters.sourceType.forEach(sourceType => {
+            query.push(`sourceType=${sourceType}`)
+        })
     }
+
+    return fetch(`${BASE_URL}/sources/${id}/news_items/stats?${query.join('&')}`, {
+        headers: {
+            'Accept':        'application/json',
+            'Authorization': `JWT ${token}`,
+        },
+    })
+    .then(doneHandler, failureHandler)
+}
+
+
+/**
+ * Creates a source.
+ *
+ * @param {string} token  - The topic JWT token
+ * @param {Object} source - The source data
+ * @returns {Promise.<*>}
+ */
+export const create = (token, source) => {
+    let res
+
+    return fetch(`${BASE_URL}/sources`, {
+        method:  'POST',
+        headers: {
+            'Authorization': `JWT ${token}`,
+            'Accept':        'application/json',
+            'Content-Type':  'application/json',
+        },
+        body: JSON.stringify(source),
+    })
+    .then(_res => {
+        res = _res
+
+        return res.json()
+    })
+    .then(data => {
+        if (res.status === 400) {
+            const errors = { data: {} }
+            data.errors.forEach(error => {
+                _.set(errors, error.path, error.message)
+            })
+
+            return Promise.reject(errors)
+        }
+
+        return data
+    })
+}
+
+
+/**
+ *
+ * @method
+ * @param {string} token - The JWT token
+ * @param {string} id    - The source id
+ * @param {Object} source
+ * @returns {Promise.<Object, Error>}
+ */
+export const update = (token, id, source) => {
+    let res
 
     return fetch(`${BASE_URL}/sources/${id}`, {
         method:  'PUT',
         headers: {
-            'Accept':       'application/json',
-            'Content-Type': 'application/json',
+            'Authorization': `JWT ${token}`,
+            'Accept':        'application/json',
+            'Content-Type':  'application/json',
         },
         body: JSON.stringify(source),
     })
-    .then(res => {
-        result.hasError = res.status === 400
+    .then(_res => {
+        res = _res
+
         return res.json()
     })
-    .then(source => {
-        if (source.errors) {
-            result.errors = source.errors
-        } else {
-            result.source = source
+    .then(data => {
+        if (res.status === 400) {
+            const errors = { data: {} }
+            data.errors.forEach(error => {
+                _.set(errors, error.path, error.message)
+            })
+
+            return Promise.reject(errors)
         }
 
-        return result
-    })
-    .catch(err => {
-        console.error(err)
+        return data
     })
 }

@@ -1,6 +1,10 @@
+'use strict'
+
 import React, { Component, PropTypes } from 'react'
 import { FormattedMessage }            from 'react-intl'
+import DropDown                        from '../../core/components/DropDown'
 import AddToCollectionItem             from './AddToCollectionItem'
+import Loader                          from '../../core/components/Loader'
 
 
 class AddToCollection extends Component {
@@ -13,30 +17,31 @@ class AddToCollection extends Component {
         const {
             collections,
             newsItem,
+            isFetching,
             addNewsItemToCollection,
             removeNewsItemFromCollection
         } = this.props
 
         return (
-            <div className="add-to-collection">
-                <span className="button button--small button--action">
-                    +
-                </span>
-                <ul className="add-to-collection__content">
-                    <li className="add-to-collection__title">
-                        <FormattedMessage id="collections" />
-                    </li>
-                    {collections.map(collection => (
-                        <AddToCollectionItem
-                            key={collection.id}
-                            collection={collection}
-                            newsItem={newsItem}
-                            onAdd={addNewsItemToCollection}
-                            onRemove={removeNewsItemFromCollection}
-                        />
-                    ))}
-                </ul>
-            </div>
+            <DropDown
+                buttonClassName="button button--action button--small"
+                buttonContent="+"
+                panelPosition="right"
+            >
+                <div className="add-to-collection__title">
+                    <FormattedMessage id="collections" />
+                </div>
+                <Loader loading={isFetching} />
+                {collections.map(collection => (
+                    <AddToCollectionItem
+                        key={collection.id}
+                        collection={collection}
+                        newsItem={newsItem}
+                        onAdd={addNewsItemToCollection}
+                        onRemove={removeNewsItemFromCollection}
+                    />
+                ))}
+            </DropDown>
         )
     }
 }
@@ -46,6 +51,7 @@ AddToCollection.propTypes = {
     addNewsItemToCollection:      PropTypes.func.isRequired,
     removeNewsItemFromCollection: PropTypes.func.isRequired,
     collections:                  PropTypes.array.isRequired,
+    isFetching:                   PropTypes.bool.isRequired,
     newsItem:                     PropTypes.object.isRequired,
 }
 

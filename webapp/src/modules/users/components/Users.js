@@ -1,8 +1,10 @@
+'use strict'
+
 import React, { Component, PropTypes } from 'react'
 import { Link }                        from 'react-router'
 import { FormattedMessage }            from 'react-intl'
 import UserList                        from './UserList'
-import Loader                          from '../../core/components/Loader'
+import UserBadge                       from '../../users/containers/UserBadgeContainer'
 import InternalError                   from '../../core/components/InternalError'
 
 
@@ -20,15 +22,15 @@ class Users extends Component {
         }
 
         return (
-            <div>
-                <div className="content-header">
+            <div className="content">
+                <div className="fixed-header content-header">
                     <h1>
                         <FormattedMessage id="users" />
                     </h1>
-                    <Loader loading={isFetching} />
+                    <UserBadge />
                 </div>
-                <div className="content-wrapper">
-                    <UserList users={users} />
+                <div className="content-with-fixed-header">
+                    <UserList loading={isFetching} users={users} />
                 </div>
             </div>
         )

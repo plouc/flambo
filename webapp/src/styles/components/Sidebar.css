@@ -1,0 +1,19 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    height: 100%;
+    background: var(--dark-blue);
+    z-index: 1000;
+}
+
+.sidebar-wrapper {
+    position: absolute;
+    top: var(--header-height);
+    bottom: var(--footer-height);
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

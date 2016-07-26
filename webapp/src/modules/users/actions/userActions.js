@@ -16,9 +16,9 @@ const requestUser = userId => ({
     userId,
 })
 
-const receiveUser = user => ({
-    type:   RECEIVE_USER,
-    userId: user.id,
+const receiveUser = (userId, user) => ({
+    type: RECEIVE_USER,
+    userId,
     user,
 })
 
@@ -29,12 +29,14 @@ const userFetchError = (userId, status) => ({
 })
 
 
-const fetchUser = id => dispatch => {
+const fetchUser = id => (dispatch, getState) => {
     dispatch(requestUser(id))
 
-    UsersApi.get(id)
+    const { auth: { token } } = getState()
+
+    UsersApi.get(token, id)
         .then(user => {
-            dispatch(receiveUser(user))
+            dispatch(receiveUser(id, user))
         })
         .catch(status => {
             dispatch(userFetchError(id, status))

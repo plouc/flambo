@@ -24,31 +24,20 @@ const allowedFilters = [
     'sourceId',
 ]
 
-module.exports.search = (params = defaultParams) => {
-
-    const mergedParams = Object.assign({}, defaultParams, params)
-
-    console.log('NewsItemsService mergedParams')
-    console.log(util.inspect(mergedParams, { depth: null, colors: true }))
-
-    const { page, offset, limit } = mergedParams.pagination
-
-    let { sort } = mergedParams
-    if (!sort || _.isEmpty(sort)) {
-        sort = [ { createdAt: { order: 'desc' }}]
-    }
-
+const buildQueryFromFilters = filters => {
     let query = {
         match_all: {},
     }
 
-    const filterKeys = Object.keys(mergedParams.filters).filter(k => allowedFilters.includes(k))
+    const filterKeys = Object.keys(filters).filter(k => allowedFilters.includes(k))
 
-    console.log(filterKeys)
+    console.log('filterKeys', filterKeys)
+
     if (filterKeys.length > 0) {
         const boolQueries = []
+
         filterKeys.forEach(filterKey => {
-            const filterValue = mergedParams.filters[filterKey]
+            const filterValue = filters[filterKey]
             if (filterKey === 'ids') {
                 boolQueries.push({ ids: {
                     values: Array.isArray(filterValue) ? filterValue : [filterValue],
@@ -69,6 +58,57 @@ module.exports.search = (params = defaultParams) => {
 
     console.log(util.inspect(query, { depth: null, colors: true }))
 
+    return query
+}
+
+module.exports.dateHistogram = (params = defaultParams) => {
+    const mergedParams = Object.assign({}, defaultParams, params)
+
+    const query = buildQueryFromFilters(mergedParams.filters)
+
+    const aggs = {
+        months: {
+            date_histogram: {
+                field:    'createdAt',
+                interval: 'month',
+            },
+        },
+        sourceTypes: {
+            terms: {
+                field: 'sourceType'
+            },
+        },
+    }
+
+    return container.get('elastic').search({
+        index: 'flambo',
+        size:  0,
+        body:  {
+            query,
+            aggs,
+        },
+    })
+    .then(({ aggregations: { months, sourceTypes }}) => ({
+        months:      months.buckets,
+        sourceTypes: sourceTypes.buckets,
+    }))
+}
+
+module.exports.search = (params = defaultParams) => {
+    const mergedParams = Object.assign({}, defaultParams, params)
+
+    console.log('NewsItemsService.search() mergedParams')
+    console.log(util.inspect(mergedParams, { depth: null, colors: true }))
+
+    const { page, offset, limit } = mergedParams.pagination
+
+    let { sort } = mergedParams
+    if (!sort || _.isEmpty(sort)) {
+        sort = [ { createdAt: { order: 'desc' }}]
+    }
+
+    const query = buildQueryFromFilters(mergedParams.filters)
+
     return container.get('elastic').search({
         index: 'flambo',
         size:  limit,
@@ -76,7 +116,7 @@ module.exports.search = (params = defaultParams) => {
         body:  {
             sort,
             query,
-        }
+        },
     })
     .then(result => {
         const { total, hits } = result.hits

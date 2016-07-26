@@ -14,7 +14,7 @@ const r         = container.get('rethinkdb')
 module.exports.findAll = () => r.table(TABLE_NAME).run()
 
 module.exports.findAllWithTopics = () => r.table('sources')
-    .outerJoin(r.table('topics'), (source, topic) => source('topics').default([]).contains(topic('id')))
+    .outerJoin(r.table('topics'), (source, topic) => topic('sources').default([]).contains(source('id')))
     .group(row => row('left')('id'))
     .ungroup()
     .map(group => {
@@ -48,7 +48,27 @@ module.exports.findWithTopics = id => r.table('sources')
     .do(source => r.branch(
         source,
         source.merge(source => ({
-            topics: r.table('topics').filter(theme => source('topics').contains(theme('id'))).coerceTo('array'),
+            topics: r.table('topics').filter(topic => topic('sources').contains(source('id'))).coerceTo('array'),
         })),
         null
     ))
+    .run()
+
+module.exports.insert = source => {
+    if (!source.createdAt) {
+        source.createdAt = r.now()
+    }
+
+    return r.table('sources')
+        .insert(source, { returnChanges: true })
+        .run()
+        .then(result => result.changes[0].new_val)
+}
+
+module.exports.update = (id, source) => {
+    return r.table('sources')
+        .get(id)
+        .update(source, { returnChanges: true })
+        .run()
+        .then(result => result.changes.length > 0 ? result.changes[0].new_val : source)
+}

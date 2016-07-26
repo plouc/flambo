@@ -37,14 +37,13 @@ class NewsItemsListItem extends Component {
         const { newsItem } = this.props
 
         return (
-            <li className="list-item">
+            <div className={`list-item list-item--news-item list-item--${newsItem.sourceType}`}>
                 {renderContent(newsItem)}
-                <span>{newsItem.sourceType}</span><br/>
                 <FormattedRelative value={newsItem.createdAt} />
                 <div className="list-item__controls">
                     <AddToCollection newsItem={newsItem} />
                 </div>
-            </li>
+            </div>
         )
     }
 }

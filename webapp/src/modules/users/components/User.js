@@ -22,8 +22,8 @@ class User extends Component {
         }
 
         return (
-            <div>
-                <div className="content-header">
+            <div className="content">
+                <div className="fixed-header content-header">
                     {!isFetching && (
                         <h1>
                             <img className="avatar avatar--small" src={user.gravatarUrl} /> {user.name}
@@ -31,7 +31,14 @@ class User extends Component {
                     )}
                     <Loader loading={isFetching} />
                 </div>
-                <div className="content-wrapper">
+                <div className="content-with-fixed-header">
+                    <div className="sub-header">
+                        {!isFetching && (
+                            <div>
+                                {user.createdAt}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         )

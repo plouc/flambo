@@ -1,7 +1,8 @@
+'use strict'
+
 import React, { Component, PropTypes }         from 'react'
 import { Link, hashHistory }                   from 'react-router'
 import { FormattedMessage, FormattedRelative } from 'react-intl'
-import SourceTopics                            from './SourceTopics'
 import SourceCollectButton                     from '../containers/SourceCollectButton'
 
 
@@ -9,28 +10,30 @@ const stopPropagation = e => e.stopPropagation()
 const clickHandler    = id => () => hashHistory.push(`/sources/${id}`)
 
 const SourceListItem = ({ source }) => (
-    <li className="list-item" onClick={clickHandler(source.id)}>
+    <div
+        className={`list-item list-item--source list-item--${source.type}`}
+        onClick={clickHandler(source.id)}
+    >
         <span className="item-title" to={`/sources/${source.id}`}>
-            [{source.type}] {source.name}
+            {source.name}
         </span>
-        <SourceTopics source={source} topics={source.topics}/>
         <span className="item-date">
             <FormattedRelative value={source.createdAt} updateInterval={60000} />
         </span>
-        <div className="list-item__controls">
+        <div className="list-item__controls button-group">
             <Link
                 to={`/sources/${source.id}/edit`}
-                className="button button--outline button--small"
+                className="button button--action button--small"
                 onClick={stopPropagation}
             >
                 <FormattedMessage id="edit" />
             </Link>
             <SourceCollectButton
                 sourceId={source.id}
-                className="button--outline button--small"
+                className="button button--action button--small"
             />
         </div>
-    </li>
+    </div>
 )
 
 SourceListItem.propTypes = {

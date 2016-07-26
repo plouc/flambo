@@ -3,100 +3,103 @@
 import React, { Component, PropTypes } from 'react'
 import { Link }                        from 'react-router'
 import { FormattedMessage }            from 'react-intl'
-import TopicSources                    from './TopicSources'
+import classNames                      from 'classnames'
 import TopicNotFound                   from './TopicNotFound'
+import TopicSubHeader                  from './TopicSubHeader'
 import NewsItemsList                   from '../../newsItems/components/NewsItemsList'
-import NewsItemsFilters                from '../../newsItems/components/NewsItemsFilters'
+import NewsItemsListControls           from '../../newsItems/components/NewsItemsListControls'
+import NewsItemsMonthStats             from '../../newsItems/components/NewsItemsMonthStats'
+import NewsItemsSourceTypeStats        from '../../newsItems/components/NewsItemsSourceTypeStats'
 import Loader                          from '../../core/components/Loader'
-import Pager                           from '../../core/components/Pager'
 import InternalError                   from '../../core/components/InternalError'
 import { FETCH_STATUS_FAILURE }        from '../../core/constants/fetchStatuses'
+import UserBadge                       from '../../users/containers/UserBadgeContainer'
 
 
 class Topic extends Component {
-    constructor(props) {
-        super(props)
-
-        this.handlerPagerUpdate  = this.handlerPagerUpdate.bind(this)
-        this.handleFiltersUpdate = this.handleFiltersUpdate.bind(this)
-    }
-
     componentWillMount() {
-        const { fetchTopicIfNeeded, fetchTopicNewsItems } = this.props
-        const { id }                                      = this.props.params
+        const { fetchTopicIfNeeded, fetchNewsItems, fetchNewsItemsStats } = this.props
+        const { id }                                                      = this.props.params
 
         fetchTopicIfNeeded(id)
-        fetchTopicNewsItems(id)
+        fetchNewsItems(id)
+        fetchNewsItemsStats(id)
     }
 
-    componentWillReceiveProps({ topicId, fetchTopicIfNeeded, fetchTopicNewsItems }) {
+    componentWillReceiveProps({ topicId, fetchTopicIfNeeded, fetchNewsItems, fetchNewsItemsStats }) {
         if (topicId !== this.props.topicId) {
             fetchTopicIfNeeded(topicId)
-            fetchTopicNewsItems(topicId)
+            fetchNewsItems(topicId)
+            fetchNewsItemsStats(topicId)
         }
     }
 
-    handlerPagerUpdate(page, limit) {
-        const { fetchTopicNewsItems, filters } = this.props
-        const { id } = this.props.params
-
-        fetchTopicNewsItems(id, page, limit, filters)
-    }
-
-    handleFiltersUpdate(filters) {
-        const { fetchTopicNewsItems, page, limit } = this.props
-        const { id } = this.props.params
-
-        fetchTopicNewsItems(id, page, limit, filters)
-    }
-
     render() {
-        const { topicId, topic, topicStatus, topicIsFetching }                = this.props
-        const { newsItems, total, page, limit, filters, newsItemsIsFetching } = this.props
+        const {
+            location: { query },
+            topicId, topic, topicError, topicLoading,
+            newsItems, total, page, limit, filters, newsItemsIsFetching,
+            onPageChange, onFiltersChange,
+            monthsStats, sourceTypesStats
+        } = this.props
 
-        console.log('RENDER', this.props)
+        const showExtraPane = query.stats && query.stats === 'on'
 
-        if (topicStatus === 404) {
+        if (topicError === 404) {
             return <TopicNotFound id={topicId} />
-        } else if (topicStatus === FETCH_STATUS_FAILURE) {
+        } else if (topicError === FETCH_STATUS_FAILURE) {
             return <InternalError />
         }
 
         return (
             <div>
-                <div className="content-header">
-                    <h1>{topicIsFetching ? '' : topic.name}</h1>
-                    <Link
-                        to={`/topics/${topicId}/edit`}
-                        className="button button--action button--small"
-                    >
-                        <FormattedMessage id="edit" />
-                    </Link>
-                    <Loader loading={topicIsFetching || newsItemsIsFetching} />
+                <div className="content">
+                    <div className="fixed-header content-header">
+                        <h1>{topicLoading ? '' : topic.name}</h1>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <span className="button-group">
+                                <Link to={`/topics/${topicId}/edit`} className="button button--action">
+                                    <FormattedMessage id="topic.settings" />
+                                </Link>
+                                <Link
+                                    to={{ pathname: `/topics/${topicId}`, query: { stats: 'on' } }}
+                                    className="button button--small button--action"
+                                >
+                                    <span className="icon icon--pie-chart icon--push-right" />
+                                    <FormattedMessage id="news_items.stats" />
+                                </Link>
+                            </span>
+                            <UserBadge />
+                        </div>
+                        <Loader loading={topicLoading} />
+                    </div>
+                    <div className="content-with-fixed-header">
+                        <TopicSubHeader loading={topicLoading} topic={topic} />
+                        <NewsItemsListControls
+                            page={page} limit={limit} filters={filters}
+                            isFetching={newsItemsIsFetching}
+                            newsItems={newsItems} total={total}
+                            onFiltersChange={onFiltersChange}
+                            onPageChange={onPageChange}
+                        />
+                        <NewsItemsList loading={newsItemsIsFetching} newsItems={newsItems} />
+                    </div>
                 </div>
-                <div className="content-wrapper">
-                    {!topicIsFetching && (
-                        <section className="section">
-                            <p>{topic.description}</p>
-                            <TopicSources sources={topic.sources}/>
-                        </section>
-                    )}
-                    <section className="section list-controls">
-                        <NewsItemsFilters
+                {showExtraPane && (<Link className="overlay" to={`/topics/${topicId}`} />)}
+                <div className={classNames('extra-pane', { 'extra-pane--opened': showExtraPane })}>
+                    <div className="fixed-header extra-pane__header">
+                        <h2>
+                            <FormattedMessage id="news_items.stats" />
+                        </h2>
+                    </div>
+                    <div className="content-with-fixed-header">
+                        <NewsItemsMonthStats buckets={monthsStats} />
+                        <NewsItemsSourceTypeStats
+                            buckets={sourceTypesStats}
+                            onChange={onFiltersChange}
                             filters={filters}
-                            onChange={this.handleFiltersUpdate}
                         />
-                        <Pager
-                            page={page}
-                            limit={limit}
-                            count={newsItems.length}
-                            total={total}
-                            onChange={this.handlerPagerUpdate}
-                        />
-                    </section>
-                    {!newsItemsIsFetching && (
-                        <NewsItemsList newsItems={newsItems} />
-                    )}
+                    </div>
                 </div>
             </div>
         )
@@ -105,20 +108,20 @@ class Topic extends Component {
 
 Topic.propTypes = {
     fetchTopicIfNeeded:  PropTypes.func.isRequired,
-    fetchTopicNewsItems: PropTypes.func.isRequired,
+    fetchNewsItems:      PropTypes.func.isRequired,
+    fetchNewsItemsStats: PropTypes.func.isRequired,
     topic:               PropTypes.object,
-    topicStatus:         PropTypes.number.isRequired,
-    topicIsFetching:     PropTypes.bool.isRequired,
+    topicError:          PropTypes.any,
+    topicLoading:        PropTypes.bool.isRequired,
     newsItems:           PropTypes.array.isRequired,
     total:               PropTypes.number.isRequired,
     page:                PropTypes.number.isRequired,
     limit:               PropTypes.number.isRequired,
     newsItemsIsFetching: PropTypes.bool.isRequired,
-}
-
-Topic.defaultProps = {
-    topicIsFetching:     true,
-    newsItemsIsFetching: true,
+    monthsStats:         PropTypes.array.isRequired,
+    sourceTypesStats:    PropTypes.array.isRequired,
+    onPageChange:        PropTypes.func.isRequired,
+    onFiltersChange:     PropTypes.func.isRequired,
 }
 
 
