@@ -25,4 +25,4 @@ before_install:
 script:
     - docker version
     - docker-compose version
-    - docker-compose up -d --build
+    - docker-compose up -d --build -f docker-compose-ci.yml
