@@ -25,4 +25,5 @@ before_install:
 script:
     - docker version
     - docker-compose version
-    - docker-compose up -d --build -f docker-compose-ci.yml
+    - docker-compose -f docker-compose-ci.yml up -d --build
+    - docker-compose -f docker-compose-ci.yml exec api /bin/ash -c "cd /flambo/api && ../node_modules/.bin/cucumberjs"
