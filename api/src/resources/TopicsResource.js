@@ -63,7 +63,7 @@ router.get('/:id', auth.authenticate(), (req, res) => {
     .then(([user, topic]) => {
         if (topic === null) {
             res.status(404).json({
-                message: `No topic found for id ${id}`,
+                message: `No topic found for id ${topicId}`,
             })
         } else {
             res.json(Object.assign({}, fixPicturePath(topic), {

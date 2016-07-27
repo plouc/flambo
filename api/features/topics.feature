@@ -43,6 +43,7 @@ Feature: Topics
     And   I set request json to
       | name        | test topic             |
       | description | test topic description |
+      | sources     | []                     |
     When  I POST /api/v1/topics
     Then  http status code should be 403
 
@@ -52,6 +53,7 @@ Feature: Topics
     And   I set request json to
       | name        | test topic             |
       | description | test topic description |
+      | sources     | []                     |
     When  I POST /api/v1/topics
     Then  http status code should be 201
 
@@ -81,6 +83,7 @@ Feature: Topics
     And   I set request json to
       | name        | test topic             |
       | description | test topic description |
+      | sources     | []                     |
     And   I POST /api/v1/topics
     And   I pick id from response body as topicId
     And   I am authenticated as user1@flambo.io user
