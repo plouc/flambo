@@ -38,7 +38,9 @@ class TopicForm extends Component {
         return (
             <form className="section" onSubmit={handleSubmit}>
                 <div className="f-form__row">
-                    <label htmlFor="topicName">name</label><br/>
+                    <label htmlFor="topicName">
+                        <FormattedMessage id="topic.form.name" />
+                    </label><br/>
                     <input
                         id="topicName"
                         type="text"
@@ -50,7 +52,9 @@ class TopicForm extends Component {
                     <FormFieldError {...name} />
                 </div>
                 <div className="f-form__row">
-                    <label htmlFor="topicDescription">description</label><br/>
+                    <label htmlFor="topicDescription">
+                        <FormattedMessage id="topic.form.description" />
+                    </label><br/>
                     <textarea
                         id="topicDescription"
                         className={classNames('form-control form-control--full', {
@@ -61,7 +65,9 @@ class TopicForm extends Component {
                     <FormFieldError {...description} />
                 </div>
                 <div>
-                    <label htmlFor="topicSources">sources</label><br/>
+                    <label htmlFor="topicSources">
+                        <FormattedMessage id="topic.form.sources" />
+                    </label><br/>
                     <select multiple {...sources}>
                         {this.props.sources.map(source => (
                             <option key={source.id} value={source.id}>{source.name}</option>
