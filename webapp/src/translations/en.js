@@ -15,6 +15,9 @@ export default {
     'topic.settings': 'settings',
     'topic.subscribe': 'subscribe',
     'topic.unsubscribe': 'unsubscribe',
+    'topic.delete.title': 'Delete this topic',
+    'topic.delete.warning': 'Once you delete this topic, there is no going back.',
+    'topic.delete.button': 'I\'m certain, delete this topic',
 
     'news_items': 'News items',
     'news_items.stats': 'statistics',

@@ -72,6 +72,11 @@
     color: var(--white);
     border-color: var(--medium-orange);
 }
+.button--error {
+    background: #bf4e3b;
+    color: var(--white);
+    border-color: #872a1e;
+}
 .button--icon {
     padding: 5px;
 }

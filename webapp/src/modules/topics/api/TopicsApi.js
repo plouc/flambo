@@ -21,7 +21,7 @@ export const list = token => {
             'Authorization': `JWT ${token}`,
         },
     })
-    .then(doneHandler, failureHandler)
+        .then(doneHandler, failureHandler)
 }
 
 /**
@@ -39,7 +39,7 @@ export const get = (token, id) => {
             'Authorization': `JWT ${token}`,
         },
     })
-    .then(doneHandler, failureHandler)
+        .then(doneHandler, failureHandler)
 }
 
 /**
@@ -70,14 +70,14 @@ export const getTopicNewsItems = (token, id, { limit = 10, page = 1, filters = {
             'Authorization': `JWT ${token}`,
         },
     })
-    .then(_res => res = _res)
-    .then(doneHandler, failureHandler)
-    .then(newsItems => ({
-        newsItems,
-        total: parseInt(res.headers.get('X-Total'), 10),
-        limit: parseInt(res.headers.get('X-Limit',  10)),
-        page:  parseInt(res.headers.get('X-Page',   10)),
-    }))
+        .then(_res => res = _res)
+        .then(doneHandler, failureHandler)
+        .then(newsItems => ({
+            newsItems,
+            total: parseInt(res.headers.get('X-Total'), 10),
+            limit: parseInt(res.headers.get('X-Limit',  10)),
+            page:  parseInt(res.headers.get('X-Page',   10)),
+        }))
 }
 
 
@@ -95,7 +95,7 @@ export const getTopicNewsItemsStats = (token, id, filters = {}) => {
             'Authorization': `JWT ${token}`,
         },
     })
-    .then(doneHandler, failureHandler)
+        .then(doneHandler, failureHandler)
 }
 
 
@@ -118,23 +118,23 @@ export const create = (token, topic) => {
         },
         body: JSON.stringify(topic),
     })
-    .then(_res => {
-        res = _res
+        .then(_res => {
+            res = _res
 
-        return res.json()
-    })
-    .then(data => {
-        if (res.status === 400) {
-            const errors = {}
-            data.errors.forEach(error => {
-                errors[error.path] = error.message
-            })
+            return res.json()
+        })
+        .then(data => {
+            if (res.status === 400) {
+                const errors = {}
+                data.errors.forEach(error => {
+                    errors[error.path] = error.message
+                })
 
-            return Promise.reject(errors)
-        }
+                return Promise.reject(errors)
+            }
 
-        return data
-    })
+            return data
+        })
 }
 
 
@@ -154,7 +154,7 @@ export const subscribe = (token, id) => {
             'Content-Type':  'application/json',
         },
     })
-    .then(doneHandler, failureHandler)
+        .then(doneHandler, failureHandler)
 }
 
 /**
@@ -173,13 +173,11 @@ export const unsubscribe = (token, id) => {
             'Content-Type':  'application/json',
         },
     })
-    .then(doneHandler, failureHandler)
+        .then(doneHandler, failureHandler)
 }
 
 
 export const uploadPicture = (id, file) => {
-    console.log('uploadPicture', id, file)
-
     const data = new FormData()
     data.append('picture', file)
 
@@ -210,21 +208,41 @@ export const update = (token, id, topic) => {
         },
         body: JSON.stringify(topic),
     })
-    .then(_res => {
-        res = _res
+        .then(_res => {
+            res = _res
 
-        return res.json()
+            return res.json()
+        })
+        .then(data => {
+            if (res.status === 400) {
+                const errors = {}
+                data.errors.forEach(error => {
+                    errors[error.path] = error.message
+                })
+
+                return Promise.reject(errors)
+            }
+
+            return data
+        })
+}
+
+
+/**
+ * Deletes a topic.
+ *
+ * @param {string} token - The topic JWT token
+ * @param {string} id    - The topic id
+ * @returns {Promise.<*>}
+ */
+export const deleteTopic = (token, id) => {
+    return fetch(`${BASE_URL}/topics/${id}`, {
+        method:  'DELETE',
+        headers: {
+            'Authorization': `JWT ${token}`,
+            'Accept':        'application/json',
+            'Content-Type':  'application/json',
+        },
     })
-    .then(data => {
-        if (res.status === 400) {
-            const errors = {}
-            data.errors.forEach(error => {
-                errors[error.path] = error.message
-            })
-
-            return Promise.reject(errors)
-        }
-
-        return data
-    })
+        .then(doneHandler, failureHandler)
 }

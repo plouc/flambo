@@ -5,6 +5,7 @@ import EditTopic   from '../components/EditTopic'
 import {
     fetchTopicIfNeeded,
     uploadTopicPicture,
+    deleteTopic,
 } from '../actions/topicsActions'
 
 const mapStateToProps = ({ topics: { byId }, sources, locale }, props) => {
@@ -26,6 +27,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     uploadTopicPicture: (id, file) => {
         dispatch(uploadTopicPicture(id, file))
+    },
+    deleteTopic: id => {
+        dispatch(deleteTopic(id))
     },
 })
 
