@@ -39,7 +39,7 @@ Simply copy `.env.sample` (inside `api/`directory and rename it to `.env`, and r
 make run
 ```
 
-Now you can acces the app at http://localhost:3000/
+Now you can acces the app at [http://localhost:3000/](http://localhost:3000/)
 
 ## Development mode
 
@@ -49,18 +49,17 @@ Launch rethinkdb, elasticsearch and the api and start the webapp dev server.
 make run-dev
 ```
 
-You should now be able to access the api at http://localhost:3000/ and the webapp at http://localhost:8081
+You should now be able to access the api at [http://localhost:3000/](http://localhost:3000/) and the webapp at [http://localhost:8081/](http://localhost:8081/)
 
 ## Accessing services
 
-- **rethinkdb ui** http://localhost:8080/
-- **elasticsearch** http://localhost:9200/, I strongly encourage you to install the [sense chrome extension](https://chrome.google.com/webstore/detail/sense-beta/lhjgkmllcaadmopgmanpapmpjgmfcfig)
-- **rabbitmq management console** http://localhost:15672/ 
+- **rethinkdb ui** [http://localhost:8080/](http://localhost:8080/)
+- **elasticsearch** [http://localhost:9200/](http://localhost:9200/), I strongly encourage you to install the [sense chrome extension](https://chrome.google.com/webstore/detail/sense-beta/lhjgkmllcaadmopgmanpapmpjgmfcfig)
+- **rabbitmq management console** [http://localhost:15672/](http://localhost:15672/) 
 
-## Postman
+## Swagger
 
-This repository provides a postman collection to play with the API.
-To run it simply import `flamb.postman_collection.json` into postman.
+This repository provides a swagger file to play with the API, `flambo-api.yml`.
 
 
 ## Operations
@@ -74,7 +73,7 @@ make data-reset
 Collecting and indexing from existing sources
 
 ```sh
-docker-compose exec api /bin/bash -c "cd flambo && node collect.js"
+docker-compose exec api /bin/ash -c "cd /flambo/api && node collect.js"
 ```
 
 Running api functional tests
