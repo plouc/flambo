@@ -53,22 +53,28 @@ router.get(
  * Note than unlike the / endpoint, it returns embedded sources.
  */
 router.get('/:id', auth.authenticate(), (req, res) => {
-    const { id } = req.params
+    const userId  = req.user.id
+    const topicId = req.params.id
 
-    TopicsRepository.findWithSources(id)
-        .then(topic => {
-            if (topic === null) {
-                res.status(404).json({
-                    message: `No topic found for id ${id}`,
-                })
-            } else {
-                res.json(fixPicturePath(topic))
-            }
-        })
-        .error(err => {
-            console.error(err)
-            res.status(500).send()
-        })
+    Promise.all([
+        UsersRepository.find(userId),
+        TopicsRepository.findWithSources(topicId),
+    ])
+    .then(([user, topic]) => {
+        if (topic === null) {
+            res.status(404).json({
+                message: `No topic found for id ${id}`,
+            })
+        } else {
+            res.json(Object.assign({}, fixPicturePath(topic), {
+                subscribed: user.subscriptions.includes(topic.id)
+            }))
+        }
+    })
+    .catch(err => {
+        console.error(err)
+        res.status(500).send()
+    })
 })
 
 router.get(

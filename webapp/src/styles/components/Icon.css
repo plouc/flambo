@@ -71,3 +71,9 @@
 .icon--user-cog-blue {
     background-image: url('../../assets/icon-user-cog-blue.png');
 }
+.icon--star {
+    background-image: url('../../assets/icon-star.png');
+}
+.icon--star-plain {
+    background-image: url('../../assets/icon-star-plain.png');
+}

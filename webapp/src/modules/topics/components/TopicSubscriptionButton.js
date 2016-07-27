@@ -1,11 +1,9 @@
 'use strict'
 
 import React, { PropTypes } from 'react'
-import { FormattedMessage } from 'react-intl'
-import classNames           from 'classnames'
 
 
-const TopicSubscriptionButton = ({ topic, className = '', onSubscribe, onUnsubscribe }) => {
+const TopicSubscriptionButton = ({ topic, children, className = '', onSubscribe, onUnsubscribe }) => {
     const clickHandler = e => {
         e.stopPropagation()
         if (topic.subscribed) {
@@ -16,13 +14,8 @@ const TopicSubscriptionButton = ({ topic, className = '', onSubscribe, onUnsubsc
     }
 
     return (
-        <span
-            className={classNames('button', className)}
-            onClick={clickHandler}
-        >
-            <FormattedMessage
-                id={`topic.${topic.subscribed ? 'unsubscribe' : 'subscribe'}`}
-            />
+        <span onClick={clickHandler} className={className}>
+            {children}
         </span>
     )
 }

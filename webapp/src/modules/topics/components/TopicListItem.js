@@ -1,6 +1,9 @@
+'use strict'
+
 import React, { Component, PropTypes }         from 'react'
 import { Link, hashHistory }                   from 'react-router'
 import { FormattedMessage, FormattedRelative } from 'react-intl'
+import classNames                              from 'classnames'
 import TopicPicture                            from './TopicPicture'
 import TopicSubscriptionButton                 from '../containers/TopicSubscriptionButtonContainer'
 
@@ -14,7 +17,21 @@ const TopicListItem = ({ topic, onSubscribe }) => (
             <TopicPicture topic={topic} />
         </div>
         <span className="grid-item__title">{topic.name}</span>
-        <TopicSubscriptionButton topic={topic} />
+        <TopicSubscriptionButton topic={topic}>
+            <span
+                className={classNames('icon', {
+                    'icon--star':       !topic.subscribed,
+                    'icon--star-plain': topic.subscribed,
+                })}
+                style={{
+                    position: 'absolute',
+                    top:    '12px',
+                    right:  '12px',
+                    width:  '20px',
+                    height: '20px',
+                }}
+            />
+        </TopicSubscriptionButton>
     </div>
 )
 

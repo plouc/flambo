@@ -70,7 +70,13 @@ class Topic extends Component {
                                     <span className="icon icon--pie-chart icon--push-right" />
                                     <FormattedMessage id="news_items.stats" />
                                 </Link>
-                                {topic && <TopicSubscriptionButton topic={topic} />}
+                                {!topicLoading && (
+                                    <TopicSubscriptionButton topic={topic} className="button button--action">
+                                        <FormattedMessage
+                                            id={`topic.${topic.subscribed ? 'unsubscribe' : 'subscribe'}`}
+                                        />
+                                    </TopicSubscriptionButton>
+                                )}
                             </span>
                             <UserBadge />
                         </div>

@@ -3,7 +3,6 @@
  */
 'use strict'
 
-import _ from 'lodash'
 import {
     FETCH_TOPICS, FETCH_TOPICS_SUCCESS, FETCH_TOPICS_FAILURE, INVALIDATE_TOPICS,
     FETCH_TOPIC, FETCH_TOPIC_SUCCESS, FETCH_TOPIC_ERROR, INVALIDATE_TOPIC,
@@ -155,6 +154,14 @@ export default function topics(state = {
 
         case TOPIC_SUBSCRIPTION_SUCCESS:
         case TOPIC_UNSUBSCRIPTION_SUCCESS:
+            let topicsById = state.byId
+            if (topicsById[action.topicId]) {
+                topicsById = {
+                    ...topicsById,
+                    [action.topicId]: topic(topicsById[action.topicId], action),
+                }
+            }
+
             return {
                 ...state,
                 list: {
@@ -170,10 +177,7 @@ export default function topics(state = {
                         return topic
                     })
                 },
-                byId: {
-                    ...state.byId,
-                    [action.topicId]: topic(state.byId[action.topicId], action),
-                }
+                byId: topicsById,
             }
 
         default:
