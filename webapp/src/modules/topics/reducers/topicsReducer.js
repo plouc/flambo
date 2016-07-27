@@ -3,13 +3,14 @@
  */
 'use strict'
 
-import _ from 'lodash'
 import {
     FETCH_TOPICS, FETCH_TOPICS_SUCCESS, FETCH_TOPICS_FAILURE, INVALIDATE_TOPICS,
     FETCH_TOPIC, FETCH_TOPIC_SUCCESS, FETCH_TOPIC_ERROR, INVALIDATE_TOPIC,
     CREATE_TOPIC, CREATE_TOPIC_SUCCESS, CREATE_TOPIC_FAILURE,
     UPDATE_TOPIC, UPDATE_TOPIC_SUCCESS, UPDATE_TOPIC_FAILURE,
     DELETE_TOPIC, DELETE_TOPIC_SUCCESS, DELETE_TOPIC_FAILURE,
+    TOPIC_SUBSCRIPTION_SUCCESS,
+    TOPIC_UNSUBSCRIPTION_SUCCESS,
 } from '../actions/topicsActions'
 
 
@@ -54,6 +55,18 @@ const topic = (state = {
                 loading: false,
                 stale:   false,
                 error:   action.status,
+            }
+
+        case TOPIC_SUBSCRIPTION_SUCCESS:
+            return {
+                ...state,
+                topic: { ...state.topic, subscribed: true }
+            }
+
+        case TOPIC_UNSUBSCRIPTION_SUCCESS:
+            return {
+                ...state,
+                topic: { ...state.topic, subscribed: false }
             }
 
         default:
@@ -135,8 +148,36 @@ export default function topics(state = {
                 ...state,
                 byId: {
                     ...state.byId,
-                    [action.topicId]: topic(state[action.topicId], action),
+                    [action.topicId]: topic(state.byId[action.topicId], action),
                 }
+            }
+
+        case TOPIC_SUBSCRIPTION_SUCCESS:
+        case TOPIC_UNSUBSCRIPTION_SUCCESS:
+            let topicsById = state.byId
+            if (topicsById[action.topicId]) {
+                topicsById = {
+                    ...topicsById,
+                    [action.topicId]: topic(topicsById[action.topicId], action),
+                }
+            }
+
+            return {
+                ...state,
+                list: {
+                    ...state.list,
+                    items: state.list.items.map(topic => {
+                        if (topic.id === action.topicId) {
+                            return {
+                                ...topic,
+                                subscribed: action.type === TOPIC_SUBSCRIPTION_SUCCESS,
+                            }
+                        }
+
+                        return topic
+                    })
+                },
+                byId: topicsById,
             }
 
         default:

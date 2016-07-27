@@ -33,6 +33,20 @@ module.exports.findByEmail = email => {
         .then(([user = null]) => user)
 }
 
+module.exports.addSubscription = (id, topicId) => {
+    return r.table('users')
+        .get(id)
+        .update({ subscriptions: r.row('subscriptions').append(topicId) })
+        .run()
+}
+
+module.exports.removeSubscription = (id, topicId) => {
+    return r.table('users')
+        .get(id)
+        .update({ subscriptions: r.row('subscriptions').filter(id => id.ne(topicId)) })
+        .run()
+}
+
 module.exports.incrementLoginAttempts = id => {
     return r.table('users')
         .get(id)

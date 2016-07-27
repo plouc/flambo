@@ -6,6 +6,7 @@ const rest             = require('../lib/middlewares/restMiddleware')
 const validation       = require('../lib/middlewares/validationMiddleware')
 const schemas          = require('../schemas')
 const TopicsRepository = require('../repositories/TopicsRepository')
+const UsersRepository  = require('../repositories/UsersRepository')
 const NewsItemsService = require('../services/NewsItemsService')
 const container        = require('../container')
 const r                = container.get('rethinkdb')
@@ -29,13 +30,21 @@ router.get(
     rest.collection.sort({ allowedFields: ['name'] }),
     rest.collection.pagination(),
     (req, res) => {
-        TopicsRepository.findAll()
-            .then(topics => {
-                res.json(topics.map(fixPicturePath))
-            })
-            .error(err => {
-                console.error(err)
-            })
+        const userId = req.user.id
+
+        Promise.all([
+            UsersRepository.find(userId),
+            TopicsRepository.findAll(),
+        ])
+        .then(([user, topics]) => {
+            res.json(topics.map(fixPicturePath).map(topic => Object.assign({}, topic, {
+                subscribed: user.subscriptions.includes(topic.id),
+            })))
+        })
+        .catch(err => {
+            console.error(err)
+            res.status(500).send()
+        })
     }
 )
 
@@ -44,22 +53,28 @@ router.get(
  * Note than unlike the / endpoint, it returns embedded sources.
  */
 router.get('/:id', auth.authenticate(), (req, res) => {
-    const { id } = req.params
+    const userId  = req.user.id
+    const topicId = req.params.id
 
-    TopicsRepository.findWithSources(id)
-        .then(topic => {
-            if (topic === null) {
-                res.status(404).json({
-                    message: `No topic found for id ${id}`,
-                })
-            } else {
-                res.json(fixPicturePath(topic))
-            }
-        })
-        .error(err => {
-            console.error(err)
-            res.status(500).send()
-        })
+    Promise.all([
+        UsersRepository.find(userId),
+        TopicsRepository.findWithSources(topicId),
+    ])
+    .then(([user, topic]) => {
+        if (topic === null) {
+            res.status(404).json({
+                message: `No topic found for id ${id}`,
+            })
+        } else {
+            res.json(Object.assign({}, fixPicturePath(topic), {
+                subscribed: user.subscriptions.includes(topic.id)
+            }))
+        }
+    })
+    .catch(err => {
+        console.error(err)
+        res.status(500).send()
+    })
 })
 
 router.get(
@@ -137,6 +152,60 @@ router.get(
             })
     }
 )
+
+/**
+ * Subscribe to topic.
+ */
+router.post('/:id/subscribe', auth.authenticate(), (req, res) => {
+    const userId  = req.user.id
+    const topicId = req.params.id
+
+    Promise.all([
+        UsersRepository.find(userId),
+        TopicsRepository.find(topicId),
+    ])
+    .then(([user, topic]) => {
+        if (user === null || topic === null) {
+            res.status(404).send()
+        } else {
+            return UsersRepository.addSubscription(userId, topicId)
+            .then(() => {
+                res.json({ subscribed: true })
+            })
+        }
+    })
+    .catch(err => {
+        console.error(err)
+        res.status(500).send()
+    })
+})
+
+/**
+ * Unsubscribe to topic.
+ */
+router.post('/:id/unsubscribe', auth.authenticate(), (req, res) => {
+    const userId  = req.user.id
+    const topicId = req.params.id
+
+    Promise.all([
+        UsersRepository.find(userId),
+        TopicsRepository.find(topicId),
+    ])
+        .then(([user, topic]) => {
+            if (user === null || topic === null) {
+                res.status(404).send()
+            } else {
+                return UsersRepository.removeSubscription(userId, topicId)
+                .then(() => {
+                    res.json({ subscribed: false })
+                })
+            }
+        })
+        .catch(err => {
+            console.error(err)
+            res.status(500).send()
+        })
+})
 
 /**
  * Upload a picture for the topic.
