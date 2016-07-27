@@ -1,5 +1,7 @@
 # flambo
 
+[![Travis CI][travis-image]][travis-url]
+
 ## Features
 
 - Collect data from several data sources:
@@ -96,3 +98,7 @@ You can generate several documentations (Node.js required on the host):
 - **webapp** `make doc-webapp`
 
 If you want to build all docs at once `make doc`
+
+
+[travis-image]: https://img.shields.io/travis/plouc/flambo.svg?style=flat-square
+[travis-url]: https://travis-ci.org/plouc/flambo

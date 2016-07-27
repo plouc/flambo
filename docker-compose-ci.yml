@@ -9,29 +9,12 @@ services:
 
   rethink:
     image: rethinkdb:2.3.4
-    ports:
-      - "8080:8080"
 
   elastic:
     image: elasticsearch
-    ports:
-      - "9200:9200"
-      - "9300:9300"
 
   rabbit:
-    image: rabbitmq:3-management
-    ports:
-      - "15672:15672"
-
-#  prometheus:
-#    image: prom/prometheus
-#    ports:
-#      - "9090:9090"
-
-#  grafana:
-#    image: grafana/grafana
-#    ports:
-#      - "4000:3000"
+    image: rabbitmq:3
 
   api:
     build: ./docker/api

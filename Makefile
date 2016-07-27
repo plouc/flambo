@@ -22,7 +22,7 @@ logs-api: ## outputs logs from api
 test: test-api-bdd ## runs all tests (api & webapp)
 
 test-api-bdd: ## runs api functional tests
-	docker-compose exec api /bin/ash -c "cd /flambo/api && npm run bdd --loglevel warn"
+	docker-compose exec api /bin/ash -c "cd /flambo/api && ../node_modules/.bin/cucumberjs"
 
 data-reset: ## reset rethinkdb and elasticsearch data
 	docker-compose exec api /bin/ash -c "cd /flambo/api && npm run reset"
