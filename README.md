@@ -41,6 +41,11 @@ make run
 
 Now you can acces the app at [http://localhost:3000/](http://localhost:3000/)
 
+```
+login: admin@flambo.io
+password: admin
+```
+
 ## Development mode
 
 Launch rethinkdb, elasticsearch and the api and start the webapp dev server.
