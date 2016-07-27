@@ -47,6 +47,13 @@ module.exports.removeSubscription = (id, topicId) => {
         .run()
 }
 
+module.exports.removeSubscriptionsByTopicId = topicId => {
+    return r.table('users')
+        .filter(r.row('subscriptions').contains(topicId))
+        .update({ subscriptions: r.row('subscriptions').filter(id => id.ne(topicId)) })
+        .run()
+}
+
 module.exports.incrementLoginAttempts = id => {
     return r.table('users')
         .get(id)

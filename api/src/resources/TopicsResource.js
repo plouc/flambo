@@ -258,14 +258,14 @@ router.put('/:id', auth.authenticate(), validation.validate(schemas.topic, { omi
         return res.status(403).json({ message: 'unauthorized' })
     }
 
-    const { id } = req.params
-    const topic  = req.payload
+    const topicId = req.params.id
+    const topic   = req.payload
 
-    TopicsRepository.update(id, topic)
+    TopicsRepository.update(topicId, topic)
         .then(updatedTopic => {
             res.json(updatedTopic)
         })
-        .error(err => {
+        .catch(err => {
             console.error(err)
             res.status(500).send()
         })
@@ -278,6 +278,20 @@ router.delete('/:id', auth.authenticate(), (req, res) => {
     if (!req.user.roles.includes('administrator')) {
         return res.status(403).json({ message: 'unauthorized' })
     }
+
+    const topicId = req.params.id
+
+    Promise.all([
+        TopicsRepository.delete(topicId),
+        UsersRepository.removeSubscriptionsByTopicId(topicId),
+    ])
+        .then(() => {
+            res.status(200).json({ removed: true })
+        })
+        .catch(err => {
+            console.error(err)
+            res.status(500).send()
+        })
 })
 
 module.exports = router

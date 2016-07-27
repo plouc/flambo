@@ -59,3 +59,10 @@ module.exports.update = (id, topic) => {
         .run()
         .then(result => result.changes.length > 0 ? result.changes[0].new_val : topic)
 }
+
+module.exports.delete = id => {
+    return r.table('topics')
+        .get(id)
+        .delete()
+        .run()
+}

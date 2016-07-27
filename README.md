@@ -89,6 +89,21 @@ Running api functional tests
 make test-api-bdd
 ```
 
+You can also manually run it from api container
+
+```sh
+docker-compose exec api /bin/ash
+cd /flambo/api
+../node_modules/.bin/cucumberjs
+
+# if you only want to run tests having given tags
+../node_modules/.bin/cucumberjs --tags @topics --tags @delete
+
+# enabling debug while running tests
+DEBUG=* ../node_modules/.bin/cucumberjs
+```
+
+
 ## Documentation
 
 You can generate several documentations (Node.js required on the host):
