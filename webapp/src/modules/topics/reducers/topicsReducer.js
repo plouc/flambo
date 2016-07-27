@@ -149,7 +149,7 @@ export default function topics(state = {
                 ...state,
                 byId: {
                     ...state.byId,
-                    [action.topicId]: topic(state[action.topicId], action),
+                    [action.topicId]: topic(state.byId[action.topicId], action),
                 }
             }
 
@@ -172,7 +172,7 @@ export default function topics(state = {
                 },
                 byId: {
                     ...state.byId,
-                    [action.topicId]: topic(state[action.topicId], action),
+                    [action.topicId]: topic(state.byId[action.topicId], action),
                 }
             }
 
