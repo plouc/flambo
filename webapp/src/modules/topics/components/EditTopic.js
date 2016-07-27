@@ -27,7 +27,7 @@ class EditTopic extends Component {
     }
 
     render() {
-        const { topicId, topic, sources, loading } = this.props
+        const { topicId, topic, sources, loading, deleteTopic } = this.props
 
         let form = null
         if (!loading) {
@@ -53,6 +53,20 @@ class EditTopic extends Component {
                 </div>
                 <div className="content-with-fixed-header">
                     {form}
+                    <div className="section">
+                        <h3>
+                            <FormattedMessage id="topic.delete.title" />
+                        </h3>
+                        <p>
+                            <FormattedMessage id="topic.delete.warning" />
+                        </p>
+                        <span
+                            className="button button--error"
+                            onClick={() => { deleteTopic(topicId) }}
+                        >
+                            <FormattedMessage id="topic.delete.button" />
+                        </span>
+                    </div>
                 </div>
             </div>
         )
@@ -62,6 +76,7 @@ class EditTopic extends Component {
 EditTopic.propTypes = {
     fetchTopicIfNeeded: PropTypes.func.isRequired,
     uploadTopicPicture: PropTypes.func.isRequired,
+    deleteTopic:        PropTypes.func.isRequired,
     topic:              PropTypes.object,
     loading:            PropTypes.bool.isRequired,
 }

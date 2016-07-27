@@ -326,7 +326,7 @@ const deleteTopicSuccess = topicId => ({
 })
 
 const deleteTopicFailure = (topicId, error) => ({
-    type: CREATE_TOPIC_FAILURE,
+    type: DELETE_TOPIC_FAILURE,
     topicId,
     error,
 })
@@ -334,13 +334,14 @@ const deleteTopicFailure = (topicId, error) => ({
 export const deleteTopic = id => (dispatch, getState) => {
     dispatch(deleteTopicInit(id))
 
-    const { auth: { token } } = this.state
+    const { auth: { token } } = getState()
 
-    TopicsApi.delete(token, id)
+    TopicsApi.deleteTopic(token, id)
         .then(() => {
             dispatch(deleteTopicSuccess(id))
             dispatch(invalidateTopic(id))
             dispatch(invalidateTopics())
+            hashHistory.push('/topics')
         })
         .catch(error => {
             dispatch(deleteTopicFailure(id, error))

@@ -4,6 +4,7 @@
 
 const _       = require('lodash')
 const request = require('request').defaults({ json: true })
+const debug   = require('debug')('api-tester')
 
 let store       = {}
 let baseUrl     = ''
@@ -82,10 +83,43 @@ const bindUriParams = uri => {
     return uri.replace(/\/:[0-9a-z]+/gi, part => {
         const param = part.slice(2)
         if (!store.hasOwnProperty(param)) {
+            debug(`parameter "${param}" not found`)
+
             return '/NOT_FOUND'
         }
 
+        debug(`replaced "${param}" with "${store[param]}"`)
+
         return `/${store[param]}`
+    })
+}
+
+const doRequest = (method, uri) => {
+    return new Promise((resolve, reject) => {
+        const options = {
+            baseUrl,
+            uri: bindUriParams(uri),
+            method,
+            qs:  queryString,
+            headers,
+        }
+
+        if (['POST', 'PUT'].includes(method) && body) {
+            options.body = body
+        }
+
+        debug(`${method} ${options.uri}`)
+
+        request(options, (err, res) => {
+            if (err) {
+                reject(err)
+            } else {
+                debug(`${method} ${options.uri} —> ${res.statusCode}`)
+                debug(`Headers:\n${Object.keys(res.headers).map(header => `    ${header}   ${res.headers[header]}`).join('\n')}`)
+                response = res
+                resolve(res)
+            }
+        })
     })
 }
 
@@ -96,24 +130,7 @@ const bindUriParams = uri => {
  *
  * @returns {Promise}
  */
-exports.get = uri => new Promise((resolve, reject) => {
-    const options = {
-        baseUrl,
-        uri:    bindUriParams(uri),
-        method: 'GET',
-        qs:     queryString,
-        headers,
-    }
-
-    request(options, (err, res) => {
-        if (err) {
-            reject(err)
-        } else {
-            response = res
-            resolve(res)
-        }
-    })
-})
+exports.get = uri => doRequest('GET', uri)
 
 /**
  * Performs a POST operation on given uri.
@@ -122,51 +139,25 @@ exports.get = uri => new Promise((resolve, reject) => {
  *
  * @returns {Promise.<Object, Error>}
  */
-exports.post = uri => new Promise((resolve, reject) => {
-    const options = {
-        baseUrl,
-        uri:    bindUriParams(uri),
-        method: 'POST',
-        qs:     queryString,
-        headers,
-    };
+exports.post = uri => doRequest('POST', uri)
 
-    if (body) {
-        options.body = body
-    }
+/**
+ * Performs a PUT operation on given uri.
+ *
+ * @param {string} uri - The uri on which you want to perform the post operation
+ *
+ * @returns {Promise.<Object, Error>}
+ */
+exports.put = uri => doRequest('PUT', uri)
 
-    request(options, (err, res) => {
-        if (err) {
-            reject(err)
-        } else {
-            response = res
-            resolve(res)
-        }
-    })
-})
-
-exports.delete = uri => new Promise((resolve, reject) => {
-    const options = {
-        baseUrl,
-        uri:    bindUriParams(uri),
-        method: 'DELETE',
-        qs:     queryString,
-        headers,
-    };
-
-    if (body) {
-        options.body = body
-    }
-
-    request(options, (err, res) => {
-        if (err) {
-            reject(err)
-        } else {
-            response = res
-            resolve(res)
-        }
-    })
-})
+/**
+ * Performs a DELETE operation on given uri.
+ *
+ * @param {string} uri - The uri on which you want to perform the get operation
+ *
+ * @returns {Promise}
+ */
+exports.delete = uri => doRequest('DELETE', uri)
 
 /**
  * Returns last response http status code.

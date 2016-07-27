@@ -9,12 +9,15 @@ export default {
     'source.form.data.twitter.user': 'utilisateur twitter',
     'source.form.data.rss.url': 'url du flux',
 
-    'topics': 'Thèmes',
-    'topic.create': 'Nouveau thème',
-    'topic.edit': 'Edit topic',
+    'topics': 'Thématiques',
+    'topic.create': 'Nouvelle thématique',
+    'topic.edit': 'Editer la thématique',
     'topic.settings': 'configuration',
     'topic.subscribe': 's\'abonner',
     'topic.unsubscribe': 'se désabonner',
+    'topic.delete.title': 'Supprimer cette thématique',
+    'topic.delete.warning': 'Une fois supprimée, il n\'y a pas de retour en arrière possible.',
+    'topic.delete.button': 'j\'ai compris, supprimer cette thématique',
 
     'news_items': 'Brèves',
     'news_items.stats': 'Statistiques',

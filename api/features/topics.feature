@@ -89,3 +89,20 @@ Feature: Topics
     And   I am authenticated as user1@flambo.io user
     When  I DELETE /api/v1/topics/:topicId
     Then  http status code should be 403
+
+  @delete
+  Scenario: Deleting a topic
+    Given I am authenticated as admin@flambo.io admin
+    And   I set request json to
+      | name        | test topic             |
+      | description | test topic description |
+      | sources     | []                     |
+    And   I POST /api/v1/topics
+    And   I pick id from response body as topicId
+    When  I GET /api/v1/topics/:topicId
+    Then  http status code should be 200
+    When  I DELETE /api/v1/topics/:topicId
+    Then  http status code should be 200
+    When  I GET /api/v1/topics/:topicId
+    Then  http status code should be 404
+
