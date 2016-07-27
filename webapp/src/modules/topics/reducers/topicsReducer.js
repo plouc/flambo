@@ -10,6 +10,8 @@ import {
     CREATE_TOPIC, CREATE_TOPIC_SUCCESS, CREATE_TOPIC_FAILURE,
     UPDATE_TOPIC, UPDATE_TOPIC_SUCCESS, UPDATE_TOPIC_FAILURE,
     DELETE_TOPIC, DELETE_TOPIC_SUCCESS, DELETE_TOPIC_FAILURE,
+    TOPIC_SUBSCRIPTION_SUCCESS,
+    TOPIC_UNSUBSCRIPTION_SUCCESS,
 } from '../actions/topicsActions'
 
 
@@ -54,6 +56,18 @@ const topic = (state = {
                 loading: false,
                 stale:   false,
                 error:   action.status,
+            }
+
+        case TOPIC_SUBSCRIPTION_SUCCESS:
+            return {
+                ...state,
+                topic: { ...state.topic, subscribed: true }
+            }
+
+        case TOPIC_UNSUBSCRIPTION_SUCCESS:
+            return {
+                ...state,
+                topic: { ...state.topic, subscribed: false }
             }
 
         default:
@@ -133,6 +147,29 @@ export default function topics(state = {
         case INVALIDATE_TOPIC:
             return {
                 ...state,
+                byId: {
+                    ...state.byId,
+                    [action.topicId]: topic(state[action.topicId], action),
+                }
+            }
+
+        case TOPIC_SUBSCRIPTION_SUCCESS:
+        case TOPIC_UNSUBSCRIPTION_SUCCESS:
+            return {
+                ...state,
+                list: {
+                    ...state.list,
+                    items: state.list.items.map(topic => {
+                        if (topic.id === action.topicId) {
+                            return {
+                                ...topic,
+                                subscribed: action.type === TOPIC_SUBSCRIPTION_SUCCESS,
+                            }
+                        }
+
+                        return topic
+                    })
+                },
                 byId: {
                     ...state.byId,
                     [action.topicId]: topic(state[action.topicId], action),

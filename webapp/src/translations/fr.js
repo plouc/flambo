@@ -13,6 +13,8 @@ export default {
     'topic.create': 'Nouveau thème',
     'topic.edit': 'Edit topic',
     'topic.settings': 'configuration',
+    'topic.subscribe': 's\'abonner',
+    'topic.unsubscribe': 'se désabonner',
 
     'news_items': 'Brèves',
     'news_items.stats': 'Statistiques',

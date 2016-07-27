@@ -13,6 +13,8 @@ export default {
     'topic.create': 'New topic',
     'topic.edit': 'Edit topic',
     'topic.settings': 'settings',
+    'topic.subscribe': 'subscribe',
+    'topic.unsubscribe': 'unsubscribe',
 
     'news_items': 'News items',
     'news_items.stats': 'statistics',

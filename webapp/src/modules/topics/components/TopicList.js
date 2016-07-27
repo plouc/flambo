@@ -4,7 +4,7 @@ import { FormattedMessage }            from 'react-intl'
 import TopicListItem                   from './TopicListItem'
 
 
-const TopicList = ({ topics }) => (
+const TopicList = ({ topics, onSubscribe }) => (
     <div className="grid section _responsive">
         <Link to="/topics/new" className="grid-item">
             <span className="grid-item__banner">

@@ -39,7 +39,7 @@ Promise.all([
     }
 
     // add some delay for UI testing purpose
-    app.use((req, res, next) => { setTimeout(next, 500) })
+    //app.use((req, res, next) => { setTimeout(next, 500) })
 
     app.use('/api/v1/users',       Users)
     app.use('/api/v1/topics',      Topics)

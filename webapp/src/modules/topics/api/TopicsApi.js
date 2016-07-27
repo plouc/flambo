@@ -138,6 +138,45 @@ export const create = (token, topic) => {
 }
 
 
+/**
+ * Subscribe to topic.
+ *
+ * @param {string} token - The topic JWT token
+ * @param {string} id    - The topic id
+ * @returns {Promise.<*>}
+ */
+export const subscribe = (token, id) => {
+    return fetch(`${BASE_URL}/topics/${id}/subscribe`, {
+        method:  'POST',
+        headers: {
+            'Authorization': `JWT ${token}`,
+            'Accept':        'application/json',
+            'Content-Type':  'application/json',
+        },
+    })
+    .then(doneHandler, failureHandler)
+}
+
+/**
+ * Unsubscribe to topic.
+ *
+ * @param {string} token - The topic JWT token
+ * @param {string} id    - The topic id
+ * @returns {Promise.<*>}
+ */
+export const unsubscribe = (token, id) => {
+    return fetch(`${BASE_URL}/topics/${id}/unsubscribe`, {
+        method:  'POST',
+        headers: {
+            'Authorization': `JWT ${token}`,
+            'Accept':        'application/json',
+            'Content-Type':  'application/json',
+        },
+    })
+    .then(doneHandler, failureHandler)
+}
+
+
 export const uploadPicture = (id, file) => {
     console.log('uploadPicture', id, file)
 

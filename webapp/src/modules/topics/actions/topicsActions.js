@@ -33,8 +33,13 @@ export const DELETE_TOPIC                 = 'DELETE_TOPIC'
 export const DELETE_TOPIC_SUCCESS         = 'DELETE_TOPIC_SUCCESS'
 export const DELETE_TOPIC_FAILURE         = 'DELETE_TOPIC_FAILURE'
 
+export const TOPIC_SUBSCRIPTION           = 'TOPIC_SUBSCRIPTION'
+export const TOPIC_SUBSCRIPTION_SUCCESS   = 'TOPIC_SUBSCRIPTION_SUCCESS'
+export const TOPIC_SUBSCRIPTION_FAILURE   = 'TOPIC_SUBSCRIPTION_FAILURE'
 
-
+export const TOPIC_UNSUBSCRIPTION         = 'TOPIC_UNSUBSCRIPTION'
+export const TOPIC_UNSUBSCRIPTION_SUCCESS = 'TOPIC_UNSUBSCRIPTION_SUCCESS'
+export const TOPIC_UNSUBSCRIPTION_FAILURE = 'TOPIC_UNSUBSCRIPTION_FAILURE'
 
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -227,6 +232,78 @@ export const uploadTopicPicture = (id, file) => dispatch => {
         .then(() => {
             dispatch(topicPictureUploadSuccess(id, file))
         })
+}
+
+
+
+
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+//
+// TOPIC SUBSCRIPTION
+//
+// —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+const topicSubscriptionSuccess = topicId => ({
+    type: TOPIC_SUBSCRIPTION_SUCCESS,
+    topicId,
+})
+
+const topicSubscriptionFailure = (topicId, error) => ({
+    type: TOPIC_SUBSCRIPTION_FAILURE,
+    topicId,
+    error,
+})
+
+export const subscribeToTopic = id => {
+    return (dispatch, getState) => {
+        dispatch({
+            type:    TOPIC_SUBSCRIPTION,
+            topicId: id,
+        })
+
+        const { auth: { token } } = getState()
+
+        TopicsApi.subscribe(token, id)
+        .then(() => {
+            dispatch(topicSubscriptionSuccess(id))
+        })
+    }
+}
+
+
+
+
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+//
+// TOPIC UNSUBSCRIPTION
+//
+// —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+const topicUnsubscriptionSuccess = topicId => ({
+    type: TOPIC_UNSUBSCRIPTION_SUCCESS,
+    topicId,
+})
+
+const topicUnsubscriptionFailure = (topicId, error) => ({
+    type: TOPIC_UNSUBSCRIPTION_FAILURE,
+    topicId,
+    error,
+})
+
+export const unsubscribeToTopic = id => {
+    return (dispatch, getState) => {
+        dispatch({
+            type:    TOPIC_UNSUBSCRIPTION,
+            topicId: id,
+        })
+
+        const { auth: { token } } = getState()
+
+        TopicsApi.unsubscribe(token, id)
+        .then(() => {
+            dispatch(topicUnsubscriptionSuccess(id))
+        })
+    }
 }
 
 

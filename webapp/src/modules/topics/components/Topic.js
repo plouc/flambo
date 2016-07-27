@@ -14,6 +14,8 @@ import Loader                          from '../../core/components/Loader'
 import InternalError                   from '../../core/components/InternalError'
 import { FETCH_STATUS_FAILURE }        from '../../core/constants/fetchStatuses'
 import UserBadge                       from '../../users/containers/UserBadgeContainer'
+import TopicSubscriptionButton         from '../containers/TopicSubscriptionButtonContainer'
+
 
 
 class Topic extends Component {
@@ -40,7 +42,7 @@ class Topic extends Component {
             topicId, topic, topicError, topicLoading,
             newsItems, total, page, limit, filters, newsItemsIsFetching,
             onPageChange, onFiltersChange,
-            monthsStats, sourceTypesStats
+            monthsStats, sourceTypesStats,
         } = this.props
 
         const showExtraPane = query.stats && query.stats === 'on'
@@ -68,6 +70,7 @@ class Topic extends Component {
                                     <span className="icon icon--pie-chart icon--push-right" />
                                     <FormattedMessage id="news_items.stats" />
                                 </Link>
+                                {topic && <TopicSubscriptionButton topic={topic} />}
                             </span>
                             <UserBadge />
                         </div>
