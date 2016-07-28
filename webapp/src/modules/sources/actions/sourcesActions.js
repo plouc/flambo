@@ -8,6 +8,10 @@ import * as SourcesApi             from '../api/SourcesApi'
 import { logout }                  from '../../auth/actions/authActions'
 import newsItemsActionFactory      from '../../../lib/newsItemsActionFactory'
 import newsItemsStatsActionFactory from '../../../lib/newsItemsStatsActionFactory'
+import { notify }                  from '../../notifications/actions/notificationsActions'
+import {
+    NOTIFICATION_TYPE_SOURCE_CREATED,
+} from '../../notifications/constants/notificationTypes'
 
 
 export const REQUEST_SOURCES                  = 'REQUEST_SOURCES'
@@ -255,9 +259,10 @@ export const createSource = (token, source, dispatch) => {
     dispatch(createSourceInit(source))
 
     return SourcesApi.create(token, source)
-        .then(source => {
-            dispatch(createSourceSuccess(source))
+        .then(createdSource => {
+            dispatch(createSourceSuccess(createdSource))
             dispatch(invalidateSources())
+            dispatch(notify(NOTIFICATION_TYPE_SOURCE_CREATED, createdSource))
             hashHistory.push('/sources')
         })
         .catch(error => {

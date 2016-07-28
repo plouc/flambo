@@ -44,4 +44,5 @@ export default {
 
     'notification.topic_deleted': 'La thématique a bien été supprimée.',
     'notification.topic_created': 'La thématique {name} a bien été créée.',
+    'notification.source_created': 'La source {name} a bien été créée.',
 }

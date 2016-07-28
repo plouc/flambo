@@ -44,4 +44,5 @@ export default {
 
     'notification.topic_deleted': 'Topic has been successfully deleted.',
     'notification.topic_created': 'Topic {name} has been successfully created.',
+    'notification.source_created': 'Source {name} has been successfully created.',
 }
