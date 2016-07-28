@@ -344,8 +344,6 @@ export const deleteTopic = id => (dispatch, getState) => {
     TopicsApi.deleteTopic(token, id)
         .then(() => {
             dispatch(deleteTopicSuccess(id))
-            dispatch(invalidateTopic(id))
-            dispatch(invalidateTopics())
             dispatch(notify(NOTIFICATION_TYPE_TOPIC_DELETED, { id }))
             hashHistory.push('/topics')
         })
