@@ -9,6 +9,7 @@ import newsItemsActionFactory      from '../../../lib/newsItemsActionFactory'
 import newsItemsStatsActionFactory from '../../../lib/newsItemsStatsActionFactory'
 import { notify }                  from '../../notifications/actions/notificationsActions'
 import {
+    NOTIFICATION_TYPE_TOPIC_CREATED,
     NOTIFICATION_TYPE_TOPIC_DELETED,
 } from '../../notifications/constants/notificationTypes'
 
@@ -202,9 +203,10 @@ export const createTopic = (token, topic, dispatch) => {
     dispatch(createTopicInit(topic))
 
     return TopicsApi.create(token, topic)
-        .then(topic => {
-            dispatch(createTopicSuccess(topic))
+        .then(createdTopic => {
+            dispatch(createTopicSuccess(createdTopic))
             dispatch(invalidateTopics())
+            dispatch(notify(NOTIFICATION_TYPE_TOPIC_CREATED, createdTopic))
             hashHistory.push('/topics')
         })
         .catch(error => {

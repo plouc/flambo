@@ -43,4 +43,5 @@ export default {
     'internal_error.message': 'An error occurred, please try to refresh the page or contact an administrator if the problem persists.',
 
     'notification.topic_deleted': 'Topic has been successfully deleted.',
+    'notification.topic_created': 'Topic "{name}" has been successfully created.',
 }
