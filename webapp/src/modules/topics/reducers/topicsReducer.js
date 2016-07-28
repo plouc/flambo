@@ -88,7 +88,9 @@ export default function topics(state = {
         stale:   true,
         error:   null,
         items:   [],
-        filters: {},
+        filters: {
+            subscribed: true,
+        },
     },
     byId:     {},
     creation: {
