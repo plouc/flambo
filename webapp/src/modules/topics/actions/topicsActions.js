@@ -7,6 +7,11 @@ import { hashHistory }             from 'react-router'
 import * as TopicsApi              from '../api/TopicsApi'
 import newsItemsActionFactory      from '../../../lib/newsItemsActionFactory'
 import newsItemsStatsActionFactory from '../../../lib/newsItemsStatsActionFactory'
+import { notify }                  from '../../notifications/actions/notificationsActions'
+import {
+    NOTIFICATION_TYPE_TOPIC_DELETED,
+} from '../../notifications/constants/notificationTypes'
+
 
 export const FETCH_TOPICS                 = 'FETCH_TOPICS'
 export const FETCH_TOPICS_SUCCESS         = 'FETCH_TOPICS_SUCCESS'
@@ -341,6 +346,7 @@ export const deleteTopic = id => (dispatch, getState) => {
             dispatch(deleteTopicSuccess(id))
             dispatch(invalidateTopic(id))
             dispatch(invalidateTopics())
+            dispatch(notify(NOTIFICATION_TYPE_TOPIC_DELETED, { id }))
             hashHistory.push('/topics')
         })
         .catch(error => {

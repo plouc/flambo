@@ -7,7 +7,7 @@ import fr                                                from 'react-intl/locale
 import es                                                from 'react-intl/locale-data/es'
 import translations                                      from '../../../translations'
 import { Link, hashHistory }                             from 'react-router'
-import Events                                            from '../components/Events'
+import Notifications                                     from '../../notifications/containers/NotificationsContainer'
 import LocaleSwitch                                      from '../containers/LocaleSwitch'
 import Menu                                              from '../components/Menu'
 import CollectionsMenu                                   from '../../collections/containers/CollectionsMenu'
@@ -58,6 +58,7 @@ class App extends Component {
                         <LocaleSwitch />
                     </div>
                     {this.props.children}
+                    <Notifications />
                 </div>
             </IntlProvider>
         )

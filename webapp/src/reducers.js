@@ -16,6 +16,8 @@ import newsItemsByEntityId        from './modules/newsItems/reducers/newsItemsBy
 import newsItemsStatsByEntityId   from './modules/newsItems/reducers/newsItemsStatsByEntityIdReducer'
 import collections                from './modules/collections/reducers/collectionsReducer'
 import collectionById             from './modules/collections/reducers/collectionByIdReducer'
+import notifications              from './modules/notifications/reducers/notificationsReducer'
+
 
 
 export default combineReducers({
@@ -34,4 +36,5 @@ export default combineReducers({
     newsItemsStatsByEntityId,
     collections,
     collectionById,
+    notifications,
 })
