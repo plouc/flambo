@@ -43,6 +43,7 @@
     "combokeys": "2.4.6",
     "intl": "1.2.4",
     "lodash": "4.13.1",
+    "node-uuid": "1.4.7",
     "react": "15.2.1",
     "react-addons-css-transition-group": "15.2.1",
     "react-addons-shallow-compare": "15.2.1",

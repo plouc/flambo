@@ -41,4 +41,6 @@ export default {
     'logout': 'déconnexion',
 
     'internal_error.message': 'Une erreur est survenue, merci d\'essayez de rafraîchir la page ou bien contacter un administrateur si le problème persiste.',
+
+    'notification.topic_deleted': 'La thématique a bien été supprimée.',
 }

@@ -41,4 +41,6 @@ export default {
     'logout': 'logout',
     
     'internal_error.message': 'An error occurred, please try to refresh the page or contact an administrator if the problem persists.',
+
+    'notification.topic_deleted': 'Topic has been successfully deleted.',
 }
