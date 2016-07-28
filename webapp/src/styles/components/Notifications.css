@@ -8,14 +8,14 @@
 .notifications__item {
     position: relative;
     font-size: 14px;
+    line-height: 20px;
     padding: 10px 45px 10px 15px;
-    margin-top: 15px;
-    background: #fff;
-    border-radius: 2px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 3px 8px rgba(0, 0, 0, 0.1);
+    background: #f9eaca;
+    border: 1px solid #d9caae;
+    border-top-width: 0;
 }
 .notifications__item:first-child {
-    margin-top: 0;
+    border-top-width: 1px;
 }
 .notifications__item__delete {
     position: absolute;
