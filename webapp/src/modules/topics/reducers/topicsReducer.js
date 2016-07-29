@@ -5,7 +5,7 @@
 
 import _ from 'lodash'
 import {
-    FETCH_TOPICS, FETCH_TOPICS_SUCCESS, FETCH_TOPICS_FAILURE, INVALIDATE_TOPICS,
+    FETCH_TOPICS, FETCH_TOPICS_SUCCESS, FETCH_TOPICS_FAILURE, FILTER_TOPICS, INVALIDATE_TOPICS,
     FETCH_TOPIC, FETCH_TOPIC_SUCCESS, FETCH_TOPIC_ERROR, INVALIDATE_TOPIC,
     CREATE_TOPIC, CREATE_TOPIC_SUCCESS, CREATE_TOPIC_FAILURE,
     UPDATE_TOPIC, UPDATE_TOPIC_SUCCESS, UPDATE_TOPIC_FAILURE,
@@ -88,6 +88,9 @@ export default function topics(state = {
         stale:   true,
         error:   null,
         items:   [],
+        filters: {
+            subscribed: true,
+        },
     },
     byId:     {},
     creation: {
@@ -99,7 +102,7 @@ export default function topics(state = {
         topic:   {},
         loading: false,
         error:   null,
-    }
+    },
 }, action) {
     switch (action.type) {
         case FETCH_TOPICS:
@@ -129,6 +132,15 @@ export default function topics(state = {
                     ...state.list,
                     loading: false,
                     stale:   false,
+                },
+            }
+
+        case FILTER_TOPICS:
+            return {
+                ...state,
+                list: {
+                    ...state.list,
+                    filters: action.filters,
                 },
             }
 

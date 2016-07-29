@@ -1,6 +1,9 @@
+'use strict'
+
 import React, { Component, PropTypes }         from 'react'
 import { Link }                                from 'react-router'
 import { FormattedMessage, FormattedRelative } from 'react-intl'
+import classNames                              from 'classnames'
 import TopicList                               from './TopicList'
 import UserBadge                               from '../../users/containers/UserBadgeContainer'
 import Loader                                  from '../../core/components/Loader'
@@ -14,7 +17,7 @@ class Topics extends Component {
     }
 
     render() {
-        const { topics, loading, error } = this.props
+        const { topics, loading, error, filters, filterTopics } = this.props
 
         if (error) {
             return <InternalError />
@@ -26,6 +29,24 @@ class Topics extends Component {
                     <h1>
                         <FormattedMessage id="topics" />
                     </h1>
+                    <div className="button-group">
+                        <span
+                            className={classNames('button', {
+                                'button--action': filters.subscribed,
+                            })}
+                            onClick={() => { filterTopics({ subscribed: true }) }}
+                        >
+                            <FormattedMessage id="topics.filter.subscribed" />
+                        </span>
+                        <span
+                            className={classNames('button', {
+                                'button--action': Object.keys(filters).length === 0,
+                            })}
+                            onClick={() => { filterTopics({}) }}
+                        >
+                            <FormattedMessage id="topics.filter.all" />
+                        </span>
+                    </div>
                     <div>
                         <UserBadge />
                     </div>
@@ -41,8 +62,10 @@ class Topics extends Component {
 
 Topics.propTypes = {
     fetchTopicsIfNeeded: PropTypes.func.isRequired,
+    filterTopics:        PropTypes.func.isRequired,
     topics:              PropTypes.array.isRequired,
     loading:             PropTypes.bool.isRequired,
+    filters:             PropTypes.object.isRequired,
 }
 
 

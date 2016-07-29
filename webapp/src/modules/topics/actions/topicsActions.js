@@ -19,6 +19,8 @@ export const FETCH_TOPICS_SUCCESS         = 'FETCH_TOPICS_SUCCESS'
 export const FETCH_TOPICS_FAILURE         = 'FETCH_TOPICS_FAILURE'
 export const INVALIDATE_TOPICS            = 'INVALIDATE_TOPICS'
 
+export const FILTER_TOPICS                = 'FILTER_TOPICS'
+
 export const FETCH_TOPIC                  = 'FETCH_TOPIC'
 export const FETCH_TOPIC_SUCCESS          = 'FETCH_TOPIC_SUCCESS'
 export const FETCH_TOPIC_ERROR            = 'FETCH_TOPIC_ERROR'
@@ -97,6 +99,10 @@ export const fetchTopicsIfNeeded = () => (dispatch, getState) => {
     }
 }
 
+export const filterTopics = filters => ({
+    type: FILTER_TOPICS,
+    filters,
+})
 
 
 

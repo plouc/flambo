@@ -10,6 +10,8 @@ export default {
     'source.form.data.rss.url': 'feed url',
 
     'topics': 'Topics',
+    'topics.filter.subscribed': 'subscriptions',
+    'topics.filter.all': 'all topics',
     'topic.create': 'New topic',
     'topic.edit': 'Edit topic',
     'topic.settings': 'settings',

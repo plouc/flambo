@@ -10,6 +10,8 @@ export default {
     'source.form.data.rss.url': 'url du flux',
 
     'topics': 'Thématiques',
+    'topics.filter.subscribed': 'abonnements',
+    'topics.filter.all': 'toutes les thématiques',
     'topic.create': 'Nouvelle thématique',
     'topic.edit': 'Editer la thématique',
     'topic.settings': 'configuration',
