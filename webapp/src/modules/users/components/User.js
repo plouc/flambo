@@ -1,56 +1,45 @@
 import React, { Component, PropTypes } from 'react'
-import Loader                          from '../../core/components/Loader'
-import UserNotFound                    from './UserNotFound'
-import InternalError                   from '../../core/components/InternalError'
-import { FETCH_STATUS_FAILURE }        from '../../core/constants/fetchStatuses'
+import { FormattedMessage }            from 'react-intl'
+import { Link, matchPath }             from 'react-router-dom'
+
+import Helmet                          from '../../../core/components/HelmetIntl'
+import GroupInfo                       from './GroupInfo'
+//import EditAgency                      from '../containers/EditAgencyContainer'
 
 
-class User extends Component {
-    componentWillMount() {
-        const { fetchUserIfNeeded } = this.props
-        const { id }                = this.props.params
-        fetchUserIfNeeded(id)
+export default class Group extends Component {
+    static propTypes = {
+        id:          PropTypes.string.isRequired,
+        fetch:       PropTypes.func.isRequired,
+        error:       PropTypes.object,
+        group:       PropTypes.object,
+        isFetching:  PropTypes.bool.isRequired,
+    }
+
+    componentDidMount() {
+        this.props.fetch()
+    }
+
+    componentDidUpdate({ id }) {
+        const { id: prevId, fetch } = this.props
+        if (prevId !== id) fetch()
     }
 
     render() {
-        const { userId, user, status, isFetching } = this.props
+        const { error, group, match, location } = this.props
 
-        if (status === 404) {
-            return <UserNotFound id={userId} />
-        } else if (status === FETCH_STATUS_FAILURE) {
-            return <InternalError />
-        }
+        const isEditing = !!matchPath(location.pathname, {
+            path: `${match.url}/edit`,
+        })
 
         return (
-            <div className="content">
-                <div className="fixed-header content-header">
-                    {!isFetching && (
-                        <h1>
-                            <img className="avatar avatar--small" src={user.gravatarUrl} /> {user.name}
-                        </h1>
-                    )}
-                    <Loader loading={isFetching} />
-                </div>
-                <div className="content-with-fixed-header">
-                    <div className="sub-header">
-                        {!isFetching && (
-                            <div>
-                                {user.createdAt}
-                            </div>
-                        )}
-                    </div>
-                </div>
+            <div>
+                <Helmet
+                    title={group ? 'group_with_name' : 'group'}
+                    titleValues={group ? { group: group.name } : {}}
+                />
+                {group && !isEditing && <GroupInfo group={group}/>}
             </div>
         )
     }
 }
-
-User.propTypes = {
-    fetchUserIfNeeded: PropTypes.func.isRequired,
-    user:              PropTypes.object,
-    status:            PropTypes.number.isRequired,
-    isFetching:        PropTypes.bool.isRequired,
-}
-
-
-export default User

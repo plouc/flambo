@@ -1,31 +1,43 @@
-'use strict'
+import { connect }    from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
-import { connect }             from 'react-redux'
-import EditSource              from '../components/EditSource'
-import { fetchSourceIfNeeded } from '../actions/sourcesActions'
+import EditContracts  from '../components/EditContract'
+import {
+    fetchContractIfNeeded,
+    updateContract,
+} from '../actions'
 
 
-const mapStateToProps = ({ sourceById, locale }, props) => {
-    const sourceId = props.params.id
-    const source   = sourceById[sourceId]
+const mapStateToProps = (state, { user }) => {
+    const {
+        hrContracts: { byId },
+        updateHrContract: {
+            isUpdating,
+            error: updateError,
+        },
+    } = state
+
+    const contract = byId[user.contractId || user.contract.id]
 
     return {
-        sourceId,
-        source:  source ? source.source : null,
-        loading: !source || source.isFetching,
-        locale:  locale.locale,
+        contract:   contract ? contract.data : undefined,
+        isFetching: contract ? contract.isFetching : false,
+        error:      contract ? contract.error : null,
+        isUpdating,
+        updateError,
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-    fetchSourceIfNeeded: id => {
-        dispatch(fetchSourceIfNeeded(id))
+const mapDispatchToProps = (dispatch, { user }) => ({
+    fetch: () => {
+        dispatch(fetchContractIfNeeded(user.contractId || user.contract.id))
+    },
+    update: data => {
+        dispatch(updateContract(user.contractId || user.contract.id, data))
     },
 })
 
-
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
-    mapDispatchToProps
-)(EditSource)
-
+    mapDispatchToProps,
+)(EditContracts))

@@ -1,21 +1,31 @@
-'use strict'
+import { connect }                             from 'react-redux'
+import { withRouter }                          from 'react-router-dom'
+import { injectIntl }                          from 'react-intl'
 
-import { connect }  from 'react-redux'
-import CreateSource from '../components/CreateSource'
+
+import CreatePosition                          from '../components/CreatePosition'
+import { createPosition, resetCreatePosition } from '../actions'
 
 
-const mapStateToProps = ({ topics: { creation: { topic, loading } }, locale }) => {
+const mapStateToProps = state => {
+    const { createPosition: { isCreating, error } } = state
+
     return {
-        loading,
-        topic,
-        locale: locale.locale,
+        isCreating,
+        error,
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => ({})
+const mapDispatchToProps = dispatch => ({
+    create: data => {
+        dispatch(createPosition(data))
+    },
+    reset: () => {
+        dispatch(resetCreatePosition())
+    },
+})
 
-
-export default connect(
+export default withRouter(injectIntl(connect(
     mapStateToProps,
     mapDispatchToProps
-)(CreateSource)
+)(CreatePosition)))

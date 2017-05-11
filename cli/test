@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+const program = require('commander')
+
+const core    = require('./core')
+const pkg     = require('./package.json')
+
+
+program.version(pkg.version)
+
+/*
+ .command('login',       'login')
+ .command('users',       'list users')
+ .command('groups',      'list groups')
+ .command('sources',     'list sources')
+ .command('collections', 'list collections')
+
+ */
+
+core.collectionCommand(program, {
+    name:        'users',
+    description: 'list users',
+    path:        '/users',
+})
+
+core.collectionCommand(program, {
+    name:        'groups',
+    description: 'list groups',
+    path:        '/groups',
+})
+
+core.collectionCommand(program, {
+    name:        'sources',
+    description: 'list sources',
+    path:        '/sources',
+})
+
+core.collectionCommand(program, {
+    name:        'collections',
+    description: 'list collections',
+    path:        '/collections',
+})
+
+program.parse(process.argv)

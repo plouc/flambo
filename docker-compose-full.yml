@@ -1,0 +1,33 @@
+version: '2'
+services:
+  server:
+    image: abiosoft/caddy:0.9.5
+    volumes:
+      - ${PWD}/Caddyfile:/etc/Caddyfile
+    depends_on:
+      - api
+      - webapp
+    ports:
+      - 8090:2015
+
+  postgres:
+    image: postgres:9.6.2-alpine
+    environment:
+      POSTGRES_DB:       flambo
+      POSTGRES_USER:     pg
+      POSTGRES_PASSWORD: pg
+
+  api:
+    image: flambo/api:latest
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: pg
+      POSTGRES_PWD:  pg
+      POSTGRES_DB:   flambo
+
+  webapp:
+    image: flambo/webapp:latest
+
+

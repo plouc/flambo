@@ -1,50 +1,62 @@
-'use strict'
-
 import React, { Component, PropTypes } from 'react'
-import { FormattedMessage }            from 'react-intl'
-import SourceForm                      from './SourceForm'
-import Loader                          from '../../core/components/Loader'
-import { updateSource }                from '../actions/sourcesActions'
+import { Prompt }                      from 'react-router-dom'
+
+import ErrorChecker                    from '../../../../core/components/errors/ErrorChecker'
+import { edit }                        from '../dto'
+import AgencyForm                      from '../containers/AgencyFormContainer'
 
 
-class EditSource extends Component {
-    componentWillMount() {
-        const { fetchSourceIfNeeded } = this.props
-        const { id }                  = this.props.params
+export default class EditAgency extends Component {
+    static propTypes = {
+        error:      PropTypes.object,
+        agency:     PropTypes.object.isRequired,
+        update:     PropTypes.func.isRequired,
+        isUpdating: PropTypes.bool.isRequired,
+        isDirty:    PropTypes.bool.isRequired,
+        history:    PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
+        intl:       PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired,
+    }
 
-        fetchSourceIfNeeded(id)
+    handleCancel = () => {
+        const { history, agency } = this.props
+        history.push(`/entities/agencies/${agency.id}`)
     }
 
     render() {
-        const { loading, source } = this.props
+        const {
+            agency,
+            update,
+            isUpdating,
+            isDirty,
+            agencies,
+            error,
+            intl: { formatMessage },
+        } = this.props
 
         return (
-            <div className="content">
-                <div className="fixed-header content-header">
-                    <h1>
-                        <FormattedMessage id="source.edit" />
-                    </h1>
-                </div>
-                <div className="content-with-fixed-header">
-                    <Loader loading={loading} />
-                    {!loading && (
-                        <SourceForm
-                            initialValues={source}
-                            onSubmit={updateSource}
-                            cancelPath={`/sources/${source.id}`}
-                        />
-                    )}
-                </div>
+            <div
+                style={{
+                    position: 'absolute',
+                    top:      168,
+                    right:    0,
+                    bottom:   0,
+                    left:     0,
+                }}
+            >
+                <ErrorChecker error={error} />
+                <AgencyForm
+                    agency={agency}
+                    agencies={agencies}
+                    initialValues={edit(agency)}
+                    onSubmit={update}
+                    onCancel={this.handleCancel}
+                    isSubmitting={isUpdating}
+                />
+                <Prompt
+                    when={isDirty}
+                    message={formatMessage({ id: 'form_cancel_message' })}
+                />
             </div>
         )
     }
 }
-
-EditSource.propTypes = {
-    fetchSourceIfNeeded: PropTypes.func.isRequired,
-    source:              PropTypes.object,
-    loading:             PropTypes.bool.isRequired,
-}
-
-
-export default EditSource
