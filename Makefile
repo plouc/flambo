@@ -1,39 +1,121 @@
-help: ## prints help
-	@cat $(MAKEFILE_LIST) | grep -e "^[a-zA-Z_\-]*: *.*## *" | awk 'BEGIN {FS = ":.*?## "}; {printf " > \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+.DEFAULT_GOAL := help
 
-doc: doc-api doc-css-styleguide doc-webapp ## builds all documentations
+PRODUCT_NAME ?= flambo
 
-doc-api: ## builds api documentation (Node.js required)
-	cd api && npm run doc
+DOCKER_COMPOSE ?= docker-compose -f docker-compose-full.yml
 
-doc-css-styleguide: ## builds webapp CSS styleguide (Node.js required)
-	cd webapp && npm run styleguide
 
-doc-webapp: ## builds webapp documentation (Node.js required)
-	cd webapp && npm run doc
+########################################################################################################################
+#
+# HELP
+#
+########################################################################################################################
 
-run-dev: ## launch docker containers and starts webapp dev server
-	NODE_ENV=development docker-compose up --build --remove-orphans
-	#cd webapp && npm start
+# COLORS
+RED    := $(shell tput -Txterm setaf 1)
+GREEN  := $(shell tput -Txterm setaf 2)
+WHITE  := $(shell tput -Txterm setaf 7)
+YELLOW := $(shell tput -Txterm setaf 3)
+RESET  := $(shell tput -Txterm sgr0)
 
-logs-api: ## outputs logs from api
-	docker-compose logs -f api
+# Add the following 'help' target to your Makefile
+# And add help text after each target name starting with '\#\#'
+# A category can be added with @category
+HELP_HELPER = \
+    %help; \
+    while(<>) { push @{$$help{$$2 // 'options'}}, [$$1, $$3] if /^([a-zA-Z\-\%]+)\s*:.*\#\#(?:@([a-zA-Z\-\%]+))?\s(.*)$$/ }; \
+    print "usage: make [target]\n\n"; \
+    for (sort keys %help) { \
+    print "${WHITE}$$_:${RESET}\n"; \
+    for (@{$$help{$$_}}) { \
+    $$sep = " " x (32 - length $$_->[0]); \
+    print "  ${YELLOW}$$_->[0]${RESET}$$sep${GREEN}$$_->[1]${RESET}\n"; \
+    }; \
+    print "\n"; }
 
-test: test-api-bdd ## runs all tests (api & webapp)
+help: ##prints help
+	@perl -e '$(HELP_HELPER)' $(MAKEFILE_LIST)
 
-test-api-bdd: ## runs api functional tests
-	docker-compose exec api /bin/ash -c "cd /flambo/api && ../node_modules/.bin/cucumberjs"
+########################################################################################################################
+#
+# BUILD/PUBLISH
+#
+########################################################################################################################
 
-data-reset: ## reset rethinkdb and elasticsearch data
-	docker-compose exec api /bin/ash -c "cd /flambo/api && npm run reset"
+build: build-webapp docker-build-webapp docker-build-api docker-ls ##@build Build all Docker images
 
-build-webapp: ## builds webapp inside a docker container
-	@docker run --rm=true --volume=$(shell pwd)/webapp:/webapp mhart/alpine-node:6.3 /bin/ash -c "cd /webapp && npm i && npm run build"
-	@cp -r webapp/public/ api/public/
+build-webapp: ##@build Build webapp
+	@echo "${YELLOW}Building webapp targeting env: \"${TARGET_ENV}\"${RESET}"
+	@cd webapp && PUBLIC_URL=/webapp \
+		REACT_APP_API_URL=/api/v1 \
+		yarn run build
 
-run: build-webapp ## run flambo
-	NODE_ENV=production docker-compose up
+docker-build-webapp: ##@build Build webapp Docker image
+	@echo "${YELLOW}Building webapp Docker image: \"${PRODUCT_NAME}/webapp:latest\"${RESET}"
+	@cd webapp && docker build -t ${PRODUCT_NAME}/webapp:latest .
 
-kill: ## kill all running services and remove associated containers/volumes
-	NODE_ENV=production docker-compose kill
-	NODE_ENV=production docker-compose rm -f -v
+docker-build-api: ##@build Build API Docker image
+	@echo "${YELLOW}Building API Docker image: \"${PRODUCT_NAME}/api:latest\"${RESET}"
+	@cd api && docker build -t ${PRODUCT_NAME}/api:latest .
+
+docker-ls: ##@build List local related Docker images
+	@echo "${YELLOW}Available Docker images for: \"${PRODUCT_NAME}\"${RESET}"
+	@docker images | grep ${PRODUCT_NAME}
+
+clean:
+	@${DOCKER_COMPOSE} stop -t 0
+	@${DOCKER_COMPOSE} rm -f
+
+up: ##@setup setup stack
+	@${DOCKER_COMPOSE} up -d postgres elastic
+	@make wait-for-postgres
+	@make wait-for-elastic
+	@sleep 3
+	@${DOCKER_COMPOSE} up
+
+########################################################################################################################
+#
+# TESTING
+#
+########################################################################################################################
+
+test: test-api-unit ##@testing Run all tests
+
+test-api-unit: ##@testing Run API unit tests
+	@cd api && yarn run test-unit
+
+install:
+	@cd api && yarn install
+	@cd webapp && yarn install
+	@cd sources/meetup && yarn install
+	@cd sources/rss && yarn install
+	@make link-packages
+
+link-packages:
+	@cd sources/meetup && yarn link
+	@cd sources/rss && yarn link
+	@cd api yarn link flambo-source-meetup
+	@cd api yarn link flambo-source-rss
+
+########################################################################################################################
+#
+# UTILS
+#
+########################################################################################################################
+
+wait-for-postgres: ##@utils used to ensure posgresql is running
+	@${DOCKER_COMPOSE} exec -T postgres /bin/bash -c \
+    "while ! pg_isready > /dev/null 2> /dev/null; do \
+        echo \"${YELLOW}Waiting for postgres to accept connections…${RESET}\"; \
+        sleep 1; \
+    done;"
+	@echo "${GREEN}postgres is ready${RESET}"
+
+wait-for-elastic: ##@utils used to ensure elastic is running
+	@${DOCKER_COMPOSE} exec -T elastic /bin/bash -c \
+	"while ! curl http://0.0.0.0:9200/ > /dev/null 2> /dev/null; do \
+      echo \"${YELLOW}Waiting for elastic to accept connections…${RESET}\"; \
+      sleep 3; \
+    done;"
+	@echo "${GREEN}elastic is ready${RESET}"
+

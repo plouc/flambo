@@ -1,1 +1,1 @@
-export const FORM_NAME = 'group'
+export const FORM_NAME = 'settings'

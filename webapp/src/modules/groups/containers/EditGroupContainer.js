@@ -2,19 +2,22 @@ import { connect }              from 'react-redux'
 import { withRouter }           from 'react-router-dom'
 
 import { createUpdateSelector } from '../../../core/selectors'
-import Edit                     from '../components/EditSource'
-import { updateSource }         from '../actions'
+import Edit                     from '../components/EditGroup'
+import { updateGroup }          from '../actions'
 
 
-const updateSelector = createUpdateSelector('source')
+const updateSelector = createUpdateSelector('group')
 
 const mapStateToProps = state => ({
     ...updateSelector(state),
 })
 
-const mapDispatchToProps = (dispatch, { source }) => ({
+const mapDispatchToProps = (dispatch, { history, group }) => ({
     update: data => {
-        dispatch(updateSource(source.id, data))
+        dispatch(updateGroup(group.id, data))
+    },
+    cancel: () => {
+        history.push(`/groups/${group.id}`)
     },
 })
 

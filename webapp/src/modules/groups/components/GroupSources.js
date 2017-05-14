@@ -2,12 +2,18 @@ import React, { PropTypes } from 'react'
 import styled               from 'styled-components'
 import { Link }             from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
+import SourcesIcon          from 'react-icons/lib/md/play-for-work'
+
+import Loader               from '../../../core/components/Loader'
+import typeImages           from '../../sources/components/typeImages'
+
 
 
 const Container = styled.div`
     background-color: #fff;
     box-shadow:       0 1px 2px rgba(0, 0, 0, .07);
     padding-bottom:   6px;
+    position:         relative;
 `
 
 const Title = styled.div`
@@ -30,8 +36,8 @@ const Item = styled.div`
 `
 
 const Picture = styled.div`
-    width:               36px;
-    height:              36px;
+    width:               24px;
+    height:              24px;
     background:          black;
     margin-right:        12px;
     background-size:     contain;
@@ -39,22 +45,47 @@ const Picture = styled.div`
     background-repeat:   no-repeat;
     background-position: center center;
     background-image:    ${props => props.url ? `url(${props.url})` : 'none'};
-    border:              1px solid rgba(0, 0, 0, .1);
 `
 
-const UserGroups = ({
-    groups,
+const Empty = styled.div`
+    display:        flex;
+    flex-direction: column;
+    align-items:    center;
+    color:          #ddd;
+    margin:         24px;
+`
+
+const EmptyMessage = styled.div`
+    color:      #777;
+    margin-top: 24px;
+    font-size:  12px;
+    text-align: center;
+`
+
+const GroupSources = ({
+    hasBeenFetched,
+    isFetching,
+    sources,
 }) => {
     return (
         <Container>
             <Title>
-                <FormattedMessage id="groups"/>
+                <FormattedMessage id="sources"/>
             </Title>
-            {groups.map(group => (
-                <Link key={group.id} to={`/groups/${group.id}`}>
+            {isFetching && <Loader/>}
+            {hasBeenFetched && sources.length === 0 && (
+                <Empty>
+                    <SourcesIcon size={60}/>
+                    <EmptyMessage>
+                        <FormattedMessage id="group_sources_none"/>
+                    </EmptyMessage>
+                </Empty>
+            )}
+            {sources.map(source => (
+                <Link key={source.id} to={`/sources/${source.id}`}>
                     <Item>
-                        <Picture url={group.picture_url}/>
-                        {group.name}
+                        <Picture url={typeImages[source.type]}/>
+                        {source.name}
                     </Item>
                 </Link>
             ))}
@@ -62,8 +93,10 @@ const UserGroups = ({
     )
 }
 
-UserGroups.propTypes = {
-    groups: PropTypes.array.isRequired,
+GroupSources.propTypes = {
+    hasBeenFetched: PropTypes.bool.isRequired,
+    isFetching:     PropTypes.bool.isRequired,
+    sources:        PropTypes.array.isRequired,
 }
 
-export default UserGroups
+export default GroupSources

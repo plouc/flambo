@@ -1,30 +1,31 @@
-import { connect }            from 'react-redux'
-import { withRouter }         from 'react-router-dom'
-import { compose, lifecycle } from 'recompose'
+import { connect }             from 'react-redux'
+import { withRouter }          from 'react-router-dom'
+import { compose, lifecycle }  from 'recompose'
 
-import UserFeed               from '../components/UserFeed'
-import { fetchUserFeed }      from '../actions'
+import CollectionFeed          from '../components/CollectionFeed'
+import { fetchCollectionFeed } from '../actions'
 
 
-const mapStateToProps = ({ usersFeed: { byId } }, { user }) => {
-    const userFeed = byId[user.id]
+const mapStateToProps = ({ collectionsFeed: { byId } }, { collection }) => {
+    const collectionFeed = byId[collection.id]
 
     let items = []
-    if (userFeed) {
-        items = userFeed.currentIds.map(id => {
-            return userFeed.byId[id].data
+    if (collectionFeed) {
+        items = collectionFeed.currentIds.map(id => {
+            return collectionFeed.byId[id].data
         })
     }
 
     return {
+        isFetching:     collectionFeed ? collectionFeed.isFetching : true,
+        hasBeenFetched: collectionFeed ? !!collectionFeed.fetchedAt : false,
         items,
     }
 }
 
-const mapDispatchToProps = (dispatch, { user }) => ({
+const mapDispatchToProps = (dispatch, { collection }) => ({
     fetch: () => {
-        console.log('fetching user feed')
-        dispatch(fetchUserFeed(user.id))
+        dispatch(fetchCollectionFeed(collection.id))
     },
 })
 
@@ -39,4 +40,4 @@ export default compose(
             this.props.fetch()
         },
     })
-)(UserFeed)
+)(CollectionFeed)

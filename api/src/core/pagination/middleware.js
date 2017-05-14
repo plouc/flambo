@@ -1,6 +1,7 @@
-const _        = require('lodash')
-const Joi      = require('joi')
-const validate = require('../../validate')
+const _          = require('lodash')
+const Joi        = require('joi')
+
+const validation = require('../validation')
 
 
 const DEFAULTS = {
@@ -22,7 +23,7 @@ module.exports = (opts = {}) => {
             [options.perPage.key]: perPage = options.perPage.default,
         } = ctx.request.query
 
-        const { error: validationError, data } = validate({ page, perPage }, validationSchema)
+        const { error: validationError, data } = validation.validate({ page, perPage }, validationSchema)
         if (validationError) {
             ctx.response.status = 400
             ctx.response.body   = validationError

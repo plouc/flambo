@@ -1,9 +1,12 @@
-const Router  = require('koa-router')
+const Router = require('koa-router')
+const Tags   = require('../../../modules/tags')
 
 const router = Router()
 
-router.get('/', (ctx, next) => {
-    ctx.body = 'sources'
+router.get('/', async function (ctx) {
+    const tags = await Tags.all()
+
+    ctx.body = tags
 })
 
 module.exports = router

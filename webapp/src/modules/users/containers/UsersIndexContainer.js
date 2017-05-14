@@ -1,26 +1,16 @@
 import { connect }               from 'react-redux'
 import { withRouter }            from 'react-router-dom'
-import { createSelector }        from 'reselect'
 
 import createCollectionSelector  from '../../../core/selectors/createCollectionSelector'
-import Index                     from '../components/GroupsIndex'
-import { fetchGroupsIfNeeded }   from '../actions'
-//import * as dto                  from '../dto'
+import Index                     from '../components/UsersIndex'
+import { fetchUsersIfNeeded }    from '../actions'
 
 
-const collectionSelector = createCollectionSelector('groups')
-
-/*
-const filtersSelector          = state => state.agencies.filters
-const hasActiveFiltersSelector = createSelector(
-    filtersSelector,
-    filters => Object.keys(dto.filters(filters)).length > 0,
-)
-*/
+const collectionSelector = createCollectionSelector('users')
 
 const mapStateToProps = state => {
     const {
-        groups: {
+        users: {
             fetchedAt,
             isFetching,
             perPage,
@@ -35,7 +25,8 @@ const mapStateToProps = state => {
     return {
         hasBeenFetched:   !!fetchedAt,
         //hasActiveFilters: hasActiveFiltersSelector(state),
-        groups:           collectionSelector(state),
+        hasActiveFilters: false,
+        users:            collectionSelector(state),
         isFetching,
         perPage,
         page,
@@ -48,7 +39,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     fetch: options => {
-        dispatch(fetchGroupsIfNeeded(options))
+        dispatch(fetchUsersIfNeeded(options))
     },
 })
 

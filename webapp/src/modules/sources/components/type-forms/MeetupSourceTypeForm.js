@@ -6,12 +6,12 @@ import { Grid, Cell, Label } from '../../../../core/components/Grid'
 
 
 export default () => (
-    <Grid>
+    <Grid xTemplate="1fr 1fr" style={{ padding: 24 }}>
         <Cell xSpan="2">
-            <Label htmlFor="data_url">
-                <FormattedMessage id="url"/>
+            <Label htmlFor="data_urlname">
+                <FormattedMessage id="meetup_group_urlname"/>
             </Label>
-            <Field id="data_url" name="data.url" component="input" type="text"/>
+            <Field id="data_urlname" name="data.urlname" component="input" type="text"/>
         </Cell>
     </Grid>
 )

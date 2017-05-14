@@ -1,0 +1,22 @@
+# groups
+aws:           aws.png
+go:            golang.png
+java:          java.png
+nodejs:        nodejs.png
+php:           php.svg
+reactjs:       reactjs.svg
+swift:         swift.png
+javascript:    javascript.png
+ux:            ux.jpg
+devops:        devops.png
+big_data:      big_data.png
+frontend:      frontend.png
+
+# users
+raph:          plouc.png
+janis:         janis.jpg
+bon_iver:      bon_iver.jpg
+horace_silver: horace_silver.jpg
+alton_ellis:   alton_ellis.jpg
+lou_reed:      lou_reed.jpg
+david_bowie:   david_bowie.jpg

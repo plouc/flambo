@@ -1,39 +1,84 @@
 import URLSearchParams     from 'url-search-params'
 
-//import * as dto            from './dto'
 import {
     apiBaseUrl,
     API_PAGINATION_PAGE,
     API_PAGINATION_PER_PAGE,
-    API_SORT,
     checkApiResponse,
     apiGet,
-    apiPut,
-    apiPost,
 } from '../../core/api'
 
-const groupsApiEndpoint = `${apiBaseUrl}/groups`
 
-export function list({ perPage, page, sort: _sort = {}, filters: _filters = {} }) {
+const endpoint = `${apiBaseUrl}/users`
+
+export const list = (token, { perPage, page, sort: _sort = {}, filters: _filters = {} }) => {
     const query = new URLSearchParams()
 
     query.append(API_PAGINATION_PER_PAGE, perPage)
     query.append(API_PAGINATION_PAGE,     page)
 
-    /*
-    const sort    = dto.sort(_sort)
-    let sortQuery = ''
-    Object.keys(sort).forEach(key => {
-        sortQuery = `${sortQuery}${sort[key] === 'desc' ? '-' : ''}${key}`
-    })
-    query.append(API_SORT, sortQuery)
+    return apiGet(query ? `${endpoint}?${query}` : endpoint, { token })
+        .then(checkApiResponse())
+}
 
-    const filters = dto.filters(_filters)
-    Object.keys(filters).forEach(key => {
-        query.append(key, filters[key])
-    })
-    */
+export const get = (token, id) => {
+    return apiGet(`${endpoint}/${id}`, { token })
+        .then(checkApiResponse({ id, entity: 'user' }))
+}
 
-    return apiGet(query ? `${groupsApiEndpoint}?${query}` : groupsApiEndpoint)
+export const getMe = token => {
+    return apiGet(`${endpoint}/me`, { token })
+        .then(checkApiResponse())
+}
+
+export const feed = (token, id, { perPage, page, sort: _sort = {}, filters: _filters = {} }) => {
+    const query = new URLSearchParams()
+
+    query.append(API_PAGINATION_PER_PAGE, perPage)
+    query.append(API_PAGINATION_PAGE,     page)
+
+    const feedEndpoint = `${endpoint}/${id}/feed`
+
+    return apiGet(query ? `${feedEndpoint}?${query}` : feedEndpoint, { token })
+        .then(checkApiResponse())
+}
+
+export const comments = (token, id, { perPage, page, sort: _sort = {}, filters: _filters = {} }) => {
+    const query = new URLSearchParams()
+
+    query.append(API_PAGINATION_PER_PAGE, perPage)
+    query.append(API_PAGINATION_PAGE,     page)
+
+    const commentsEndpoint = `${endpoint}/${id}/comments`
+
+    return apiGet(query ? `${commentsEndpoint}?${query}` : commentsEndpoint, { token })
+        .then(checkApiResponse())
+}
+
+export const publicCollections = (token, id, {
+    perPage, page, sort: _sort = {}, filters: _filters = {},
+}) => {
+    const query = new URLSearchParams()
+
+    query.append(API_PAGINATION_PER_PAGE, perPage)
+    query.append(API_PAGINATION_PAGE,     page)
+
+    const collectionsEndpoint = `${endpoint}/${id}/collections/public`
+
+    return apiGet(query ? `${collectionsEndpoint}?${query}` : collectionsEndpoint, { token })
+        .then(checkApiResponse())
+}
+
+export const collectionsSubscriptions = (token, id, {
+    perPage, page, sort: _sort = {}, filters: _filters = {},
+}) => {
+    const query = new URLSearchParams()
+
+    query.append(API_PAGINATION_PER_PAGE, perPage)
+    query.append(API_PAGINATION_PAGE,     page)
+
+    const collectionsEndpoint = `${endpoint}/${id}/collections/subscriptions`
+
+    return apiGet(query ? `${collectionsEndpoint}?${query}` : collectionsEndpoint, { token })
         .then(checkApiResponse())
 }

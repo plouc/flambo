@@ -17,7 +17,7 @@ const source = (state = {
     error:         null,
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_SOURCE_FEED_REQUEST:
+        case actions.FETCH_SOURCE_JOBS_REQUEST:
             return {
                 ...state,
                 perPage:     action.perPage,
@@ -29,7 +29,7 @@ const source = (state = {
                 error:       null,
             }
 
-        case actions.FETCH_SOURCE_FEED_SUCCESS:
+        case actions.FETCH_SOURCE_JOBS_SUCCESS:
             return {
                 ...state,
                 isFetching:    false,
@@ -48,7 +48,7 @@ const source = (state = {
                 },
             }
 
-        case actions.FETCH_SOURCE_FEED_FAILURE:
+        case actions.FETCH_SOURCE_JOBS_FAILURE:
             return {
                 ...state,
                 isFetching:    false,
@@ -56,7 +56,7 @@ const source = (state = {
                 error:         action.error,
             }
 
-        case actions.INVALIDATE_SOURCE_FEED:
+        case actions.INVALIDATE_SOURCE_JOBS:
             return {
                 ...state,
                 didInvalidate: true,
@@ -72,10 +72,10 @@ export default (state = {
     byId: {},
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_SOURCE_FEED_REQUEST:
-        case actions.FETCH_SOURCE_FEED_SUCCESS:
-        case actions.FETCH_SOURCE_FEED_FAILURE:
-        case actions.INVALIDATE_SOURCE_FEED:
+        case actions.FETCH_SOURCE_JOBS_REQUEST:
+        case actions.FETCH_SOURCE_JOBS_SUCCESS:
+        case actions.FETCH_SOURCE_JOBS_FAILURE:
+        case actions.INVALIDATE_SOURCE_JOBS:
             return {
                 ...state,
                 byId: {

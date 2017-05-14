@@ -1,27 +1,25 @@
 import React, { Component, PropTypes } from 'react'
 import { FormattedMessage }            from 'react-intl'
-import { Link }                        from 'react-router-dom'
-import CancelIcon                      from 'material-ui/svg-icons/navigation/close'
 
-import Helmet                          from '../../../../core/components/HelmetIntl'
-import ErrorChecker                    from '../../../../core/components/errors/ErrorChecker'
-import PositionForm                    from '../containers/PositionFormContainer'
+import Helmet                          from '../../../core/components/HelmetIntl'
+import Form                            from '../containers/SourceFormContainer'
 import {
     Header,
-    TopBar,
-    Breadcrumbs,
     Title,
-    MainAction,
-} from '../../../../core/components/page'
+    Bar,
+    Content,
+} from '../../../core/components/info-page'
 
 
-export default class CreatePosition extends Component {
+export default class CreateSource extends Component {
     static propTypes = {
         reset:      PropTypes.func.isRequired,
         create:     PropTypes.func.isRequired,
         isCreating: PropTypes.bool.isRequired,
         error:      PropTypes.object,
-        history:    PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
+        history:    PropTypes.shape({
+            push: PropTypes.func.isRequired,
+        }).isRequired,
     }
 
     componentDidMount() {
@@ -29,40 +27,33 @@ export default class CreatePosition extends Component {
     }
 
     handleCancel = () => {
-        this.props.history.push('/hr/positions')
+        this.props.history.push('/sources')
     }
 
     render() {
         const {
             create,
             isCreating,
-            error,
         } = this.props
 
         return (
             <div>
-                <Helmet title="position_create"/>
+                <Helmet title="source_create"/>
                 <Header>
-                    <TopBar>
-                        <Breadcrumbs breadcrumbs={[
-                            <FormattedMessage key="hr" id="hr_management"/>,
-                            <Link to="/hr/positions" key="positions">
-                                <FormattedMessage id="positions"/>
-                            </Link>,
-                            <FormattedMessage key="create" id="create"/>,
-                        ]}/>
-                    </TopBar>
+                    <span/>
                     <Title>
-                        <FormattedMessage id="position_create"/>
+                        <FormattedMessage id="source_create"/>
                     </Title>
-                    <MainAction icon={CancelIcon} path="/hr/positions"/>
                 </Header>
-                <ErrorChecker error={error} />
-                <PositionForm
-                    onSubmit={create}
-                    onCancel={this.handleCancel}
-                    isSubmitting={isCreating}
-                />
+                <Bar/>
+                <Content>
+                    <span/>
+                    <Form
+                        onSubmit={create}
+                        onCancel={this.handleCancel}
+                        isSubmitting={isCreating}
+                    />
+                </Content>
             </div>
         )
     }

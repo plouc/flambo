@@ -1,14 +1,14 @@
-import { connect }                             from 'react-redux'
-import { withRouter }                          from 'react-router-dom'
-import { injectIntl }                          from 'react-intl'
+import { connect }                         from 'react-redux'
+import { withRouter }                      from 'react-router-dom'
+import { injectIntl }                      from 'react-intl'
 
 
-import CreatePosition                          from '../components/CreatePosition'
-import { createPosition, resetCreatePosition } from '../actions'
+import Create                              from '../components/CreateSource'
+import { createSource, resetCreateSource } from '../actions'
 
 
 const mapStateToProps = state => {
-    const { createPosition: { isCreating, error } } = state
+    const { createSource: { isCreating, error } } = state
 
     return {
         isCreating,
@@ -18,14 +18,14 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     create: data => {
-        dispatch(createPosition(data))
+        dispatch(createSource(data))
     },
     reset: () => {
-        dispatch(resetCreatePosition())
+        dispatch(resetCreateSource())
     },
 })
 
 export default withRouter(injectIntl(connect(
     mapStateToProps,
     mapDispatchToProps
-)(CreatePosition)))
+)(Create)))

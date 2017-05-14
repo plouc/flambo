@@ -1,30 +1,46 @@
-const uuid    = require('uuid')
-const request = require('request-promise-native')
+const FeedParser = require('feedparser')
+const uuid       = require('uuid')
+const request    = require('request-promise-native')
 
 
-module.exports = config => source => {
-    return request({
-        baseUrl: config.get('meetup.host'),
-        uri:     `/${source.data.urlname}/events`,
-        method: 'GET',
-        qs:     {
-            key: config.get('meetup.api_key'),
-        },
-        json: true,
+module.exports = config => source => new Promise((resolve, reject) => {
+    const req    = request(source.data.url)
+    const parser = new FeedParser()
+
+    req.on('error', reject)
+
+    req.on('response', function (res) {
+        const stream = this
+
+        if (res.statusCode !== 200) {
+            this.emit('error', new Error('Bad status code'))
+        } else {
+            stream.pipe(parser)
+        }
     })
-        .then(events => {
-            return events.map(event => ({
-                title:        event.name,
-                link:         event.link,
-                external_id:  event.id,
-                published_at: event.created,
-                content:      event.description,
+
+    parser.on('error', reject)
+
+    const items = []
+    parser.on('end', () => { resolve(items) })
+
+    parser.on('readable', function () {
+        const stream = this
+        let item
+
+        while (item = stream.read()) {
+            items.push({
+                id:           uuid.v4(),
+                title:        item.title,
+                link:         item.link,
+                external_id:  item.guid,
+                image:        item.image.url ? item.image.url : null,
+                published_at: item.pubdate,
+                content:      item.summary,
                 source_id:    source.id,
                 source_name:  source.name,
                 source_type:  source.type,
-            }))
-        })
-        .catch(err => {
-            console.error(err)
-        })
-}
+            })
+        }
+    })
+})

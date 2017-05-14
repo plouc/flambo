@@ -7,10 +7,12 @@ export const FETCH_SOURCE_SUCCESS = 'FETCH_SOURCE_SUCCESS'
 export const FETCH_SOURCE_FAILURE = 'FETCH_SOURCE_FAILURE'
 export const INVALIDATE_SOURCE    = 'INVALIDATE_SOURCE'
 
-export const fetchSource = id => dispatch => {
+export const fetchSource = id => (dispatch, getState) => {
     dispatch({ type: FETCH_SOURCE_REQUEST, id })
 
-    return get(id)
+    const { auth: { token } } = getState()
+
+    return get(token, id)
         .then(data => {
             dispatch({ type: FETCH_SOURCE_SUCCESS, id, data })
         })

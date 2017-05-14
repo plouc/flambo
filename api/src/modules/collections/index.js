@@ -1,26 +1,20 @@
 const db        = require('../../core/database')
 const dbHelpers = require('../../core/database/helpers')
+const dao       = require('./dao')
 
 
-exports.all = async ({
-    limit, offset,
-}) => {
-    return db.from('groups')
-        .modify(qb => {
-            if (limit  !== undefined) qb.limit(limit)
-            if (offset !== undefined) qb.offset(offset)
-        })
-        .orderBy('name')
+exports.all = ({ limit, offset, query }) => {
+    return dao.find({ limit, offset, query })
 }
 
-exports.get = async id => {
-    return db.from('groups')
-        .where('id', id)
-        .then(([group]) => group)
-}
+exports.get = id => dao.findOne({ query: { id } })
 
-exports.create = async group => {
-    return db('groups')
+exports.create = async collection => {
+    return db('collections')
         .returning('*')
-        .insert(dbHelpers.uuid(group))
+        .insert(dbHelpers.uuid(collection))
 }
+
+exports.addSubscriber = dao.createSubscription
+
+exports.removeSubscriber = dao.deleteSubscription

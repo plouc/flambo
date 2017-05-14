@@ -10,7 +10,10 @@ export const FETCH_USERS_FAILURE = 'FETCH_USERS_FAILURE'
 export const INVALIDATE_USERS    = 'INVALIDATE_USERS'
 
 export const fetchUsers = (_options = {}) => (dispatch, getState) => {
-    const { users: { perPage, page, sort, filters } } = getState()
+    const {
+        users: { perPage, page, sort, filters },
+        auth:  { token },
+    } = getState()
 
     const options = {
         perPage,
@@ -20,12 +23,9 @@ export const fetchUsers = (_options = {}) => (dispatch, getState) => {
         ..._options,
     }
 
-    dispatch({
-        type: FETCH_USERS_REQUEST,
-        ...options,
-    })
+    dispatch({ type: FETCH_USERS_REQUEST, ...options })
 
-    return list(options)
+    return list(token, options)
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_USERS_SUCCESS,

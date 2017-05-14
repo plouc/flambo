@@ -5,48 +5,28 @@ const spawn    = require('child_process').spawn
 
 
 program
-    //.arguments('[name]')
-    .action(() => {
-        console.log('hey')
+    .arguments('<login> <password>')
+    .action((login, password) => {
+        console.log(login, password)
 
-        spawn(process.env.SHELL, {
-            env:   {
-                crap: 'of course',
-            },
-            stdio: 'inherit',
+        request({
+            method: 'POST',
+            uri:    `http://localhost:7000/api/v1/login`,
+            json:   { login, password },
         })
-
-        /*
-        request('http://localhost:7000/api/v1/groups')
             .then(res => {
                 console.log(res)
+                spawn(process.env.SHELL, {
+                    env:   {
+                        FLAMBO_TOKEN: res.token,
+                    },
+                    stdio: 'inherit',
+                })
             })
-            .catch(err => {
-                console.error(err)
+            .catch(error => {
+                console.error(error)
             })
 
-        /*
-        let version
-
-        // issues with wildcard expansion
-        if (name === 'wildcard') {
-            name = '*'
-        }
-
-        api.newDomainVersion()
-            .then(_version => {
-                version = _version
-                console.log(`created new version: ${version}`)
-            })
-            .then(() => api.addRecord(version, { name, type, value }))
-            .then(record => {
-                console.log('added record:')
-                console.log(columnify(record))
-
-                return api.updateDomainVersion(version)
-            })
-            .catch(console.error)
-            */
     })
     .parse(process.argv)
 

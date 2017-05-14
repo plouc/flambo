@@ -1,14 +1,12 @@
 import React, { PropTypes } from 'react'
-import { FormattedMessage } from 'react-intl'
-import RaisedButton         from 'material-ui/RaisedButton'
-import CircularProgress     from 'material-ui/CircularProgress'
 import styled               from 'styled-components'
+
+import { Button }           from '../buttons'
 
 
 const Wrapper = styled.div`
     display:        flex;
-    padding:        36px 60px;
-    justifyContent: space-between;
+    justifyContent: flex-end;
     background:     white;
 `
 
@@ -19,28 +17,26 @@ const FormActions = ({
     cancelLabel,
     submitLabel,
     isSubmitting,
+    size,
+    ...props,
 }) => (
-    <Wrapper>
-        <div>
-            {isSubmitting && <CircularProgress size={32} thickness={3}/>}
-        </div>
-        <div>
-            <RaisedButton
-                className="FormActions__Button FormActions__Button--cancel"
-                onClick={onCancel}
-                disabled={isSubmitting}
-                label={<FormattedMessage id={cancelLabel}/>}
-                primary={false}
-                style={{ marginRight: '24px' }}
-            />
-            <RaisedButton
-                className="FormActions__Button FormActions__Button--submit"
-                onClick={onSubmit}
-                disabled={submitDisabled || isSubmitting}
-                label={<FormattedMessage id={submitLabel}/>}
-                primary={true}
-            />
-        </div>
+    <Wrapper {...props}>
+        <Button
+            onClick={onCancel}
+            disabled={isSubmitting}
+            label={cancelLabel}
+            style={{
+                marginRight: `${size === 'small' ? 12 : 24}px`,
+            }}
+            size={size}
+        />
+        <Button
+            onClick={onSubmit}
+            disabled={submitDisabled || isSubmitting}
+            label={submitLabel}
+            size={size}
+            primary
+        />
     </Wrapper>
 )
 
@@ -51,6 +47,7 @@ FormActions.propTypes = {
     cancelLabel:    PropTypes.string.isRequired,
     submitLabel:    PropTypes.string.isRequired,
     isSubmitting:   PropTypes.bool.isRequired,
+    size:           PropTypes.string.isRequired,
 }
 
 FormActions.defaultProps = {
@@ -58,6 +55,7 @@ FormActions.defaultProps = {
     cancelLabel:    'cancel',
     submitLabel:    'submit',
     isSubmitting:   false,
+    size:           'standard',
 }
 
 export default FormActions

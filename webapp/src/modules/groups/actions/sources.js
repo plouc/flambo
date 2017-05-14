@@ -1,13 +1,13 @@
 import { fetchTime } from '../../../core/actions/actionsHelpers'
-import { members }   from '../api'
+import { sources }   from '../api'
 
 
-export const FETCH_GROUP_MEMBERS_REQUEST = 'FETCH_GROUP_MEMBERS_REQUEST'
-export const FETCH_GROUP_MEMBERS_SUCCESS = 'FETCH_GROUP_MEMBERS_SUCCESS'
-export const FETCH_GROUP_MEMBERS_FAILURE = 'FETCH_GROUP_MEMBERS_FAILURE'
-export const INVALIDATE_GROUP_MEMBERS    = 'INVALIDATE_GROUP_MEMBERS'
+export const FETCH_GROUP_SOURCES_REQUEST = 'FETCH_GROUP_SOURCES_REQUEST'
+export const FETCH_GROUP_SOURCES_SUCCESS = 'FETCH_GROUP_SOURCES_SUCCESS'
+export const FETCH_GROUP_SOURCES_FAILURE = 'FETCH_GROUP_SOURCES_FAILURE'
+export const INVALIDATE_GROUP_SOURCES    = 'INVALIDATE_GROUP_SOURCES'
 
-export const fetchGroupMembers = (id, _options = {}) => (dispatch, getState) => {
+export const fetchGroupSources = (id, _options = {}) => (dispatch, getState) => {
     const {
         collections: { perPage, page, sort, filters },
         auth:        { token },
@@ -21,23 +21,23 @@ export const fetchGroupMembers = (id, _options = {}) => (dispatch, getState) => 
         ..._options,
     }
 
-    dispatch({ type: FETCH_GROUP_MEMBERS_REQUEST, id, ...options })
+    dispatch({ type: FETCH_GROUP_SOURCES_REQUEST, id, ...options })
 
-    return members(token, id, options)
+    return sources(token, id, options)
         .then(res => {
             dispatch(fetchTime({
-                type: FETCH_GROUP_MEMBERS_SUCCESS,
+                type: FETCH_GROUP_SOURCES_SUCCESS,
                 id,
                 ...res,
             }))
         })
         .catch(error => {
             dispatch({
-                type: FETCH_GROUP_MEMBERS_FAILURE,
+                type: FETCH_GROUP_SOURCES_FAILURE,
                 id,
                 error,
             })
         })
 }
 
-export const invalidateGroupMembers = id => ({ type: INVALIDATE_GROUP_MEMBERS, id })
+export const invalidateGroupSources = id => ({ type: INVALIDATE_GROUP_SOURCES, id })

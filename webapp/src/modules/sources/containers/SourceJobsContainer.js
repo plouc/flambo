@@ -2,28 +2,28 @@ import { connect }            from 'react-redux'
 import { withRouter }         from 'react-router-dom'
 import { compose, lifecycle } from 'recompose'
 
-import SourceFeed             from '../components/SourceFeed'
-import { fetchSourceFeed }    from '../actions'
+import SourceJobs             from '../components/SourceJobs'
+import { fetchSourceJobs }    from '../actions'
 
 
-const mapStateToProps = ({ sourcesFeed: { byId } }, { source }) => {
-    const sourceFeed = byId[source.id]
+const mapStateToProps = ({ sourcesJobs: { byId } }, { source }) => {
+    const sourceJobs = byId[source.id]
 
-    let items = []
-    if (sourceFeed) {
-        items = sourceFeed.currentIds.map(id => {
-            return sourceFeed.byId[id].data
+    let jobs = []
+    if (sourceJobs) {
+        jobs = sourceJobs.currentIds.map(id => {
+            return sourceJobs.byId[id].data
         })
     }
 
     return {
-        items,
+        jobs,
     }
 }
 
 const mapDispatchToProps = (dispatch, { source }) => ({
     fetch: () => {
-        dispatch(fetchSourceFeed(source.id))
+        dispatch(fetchSourceJobs(source.id))
     },
 })
 
@@ -38,4 +38,4 @@ export default compose(
             this.props.fetch()
         },
     })
-)(SourceFeed)
+)(SourceJobs)

@@ -1,1 +1,0 @@
-# The flambo style guide

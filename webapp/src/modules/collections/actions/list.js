@@ -10,7 +10,10 @@ export const FETCH_COLLECTIONS_FAILURE = 'FETCH_COLLECTIONS_FAILURE'
 export const INVALIDATE_COLLECTIONS    = 'INVALIDATE_COLLECTIONS'
 
 export const fetchCollections = (_options = {}) => (dispatch, getState) => {
-    const { collections: { perPage, page, sort, filters } } = getState()
+    const {
+        collections: { perPage, page, sort, filters },
+        auth:        { token },
+    } = getState()
 
     const options = {
         perPage,
@@ -20,12 +23,9 @@ export const fetchCollections = (_options = {}) => (dispatch, getState) => {
         ..._options,
     }
 
-    dispatch({
-        type: FETCH_COLLECTIONS_REQUEST,
-        ...options,
-    })
+    dispatch({ type: FETCH_COLLECTIONS_REQUEST, ...options })
 
-    return list(options)
+    return list(token, options)
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_COLLECTIONS_SUCCESS,

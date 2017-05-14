@@ -1,10 +1,17 @@
 import React, { Component, PropTypes } from 'react'
+import { FormattedMessage }            from 'react-intl'
 
 import Helmet                          from '../../../core/components/HelmetIntl'
-import Form                            from '../containers/GroupFormContainer'
+import Form                            from '../containers/CollectionFormContainer'
+import {
+    Header,
+    Title,
+    Bar,
+    Content,
+} from '../../../core/components/info-page'
 
 
-export default class CreateGroup extends Component {
+export default class CreateCollection extends Component {
     static propTypes = {
         reset:      PropTypes.func.isRequired,
         create:     PropTypes.func.isRequired,
@@ -20,26 +27,30 @@ export default class CreateGroup extends Component {
     }
 
     handleCancel = () => {
-        this.props.history.push('/groups')
+        this.props.history.push('/collections')
     }
 
     render() {
-        const {
-            create,
-            isCreating,
-        } = this.props
+        const { create, isCreating } = this.props
 
         return (
             <div>
-                <Helmet title="group_create"/>
-                <Form
-                    onSubmit={create}
-                    onCancel={this.handleCancel}
-                    isSubmitting={isCreating}
-                    initialValues={{
-                        type: 'rss',
-                    }}
-                />
+                <Helmet title="collection_create"/>
+                <Header>
+                    <span/>
+                    <Title>
+                        <FormattedMessage id="collection_create"/>
+                    </Title>
+                </Header>
+                <Bar/>
+                <Content>
+                    <span/>
+                    <Form
+                        onSubmit={create}
+                        onCancel={this.handleCancel}
+                        isSubmitting={isCreating}
+                    />
+                </Content>
             </div>
         )
     }

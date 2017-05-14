@@ -1,23 +1,23 @@
-import Joi                  from 'joi-browser'
+import Joi                       from 'joi-browser'
 
-import history              from '../../../core/history'
-import { create }           from '../api'
-import schema               from '../schemas/groupSchema'
-import { invalidateGroups } from './index'
-import * as media           from '../../media/api'
+import history                   from '../../../core/history'
+import { create }                from '../api'
+import schema                    from '../schemas/collectionSchema'
+import { invalidateCollections } from './index'
+import * as media                from '../../media/api'
 
 
-export const CREATE_GROUP_REQUEST = 'CREATE_GROUP_REQUEST'
-export const CREATE_GROUP_SUCCESS = 'CREATE_GROUP_SUCCESS'
-export const CREATE_GROUP_FAILURE = 'CREATE_GROUP_FAILURE'
-export const CREATE_GROUP_RESET   = 'CREATE_GROUP_RESET'
+export const CREATE_COLLECTION_REQUEST = 'CREATE_COLLECTION_REQUEST'
+export const CREATE_COLLECTION_SUCCESS = 'CREATE_COLLECTION_SUCCESS'
+export const CREATE_COLLECTION_FAILURE = 'CREATE_COLLECTION_FAILURE'
+export const CREATE_COLLECTION_RESET   = 'CREATE_COLLECTION_RESET'
 
-export const createGroup = _data => (dispatch, getState) => {
+export const createCollection = _data => (dispatch, getState) => {
     console.log(_data)
 
     const { value: data } = Joi.validate(_data, schema)
 
-    dispatch({ type: CREATE_GROUP_REQUEST, data })
+    dispatch({ type: CREATE_COLLECTION_REQUEST, data })
 
     const { auth: { token } } = getState()
 
@@ -32,16 +32,13 @@ export const createGroup = _data => (dispatch, getState) => {
             return create(token, data)
         })
         .then(() => {
-            dispatch({ type: CREATE_GROUP_SUCCESS })
-            dispatch(invalidateGroups())
-            history.push('/groups')
+            dispatch({ type: CREATE_COLLECTION_SUCCESS })
+            dispatch(invalidateCollections())
+            history.push('/collections')
         })
         .catch(error => {
-            dispatch({
-                type: CREATE_GROUP_FAILURE,
-                error,
-            })
+            dispatch({ type: CREATE_COLLECTION_FAILURE, error })
         })
 }
 
-export const resetCreateGroup = () => ({ type: CREATE_GROUP_RESET })
+export const resetCreateCollection = () => ({ type: CREATE_COLLECTION_RESET })

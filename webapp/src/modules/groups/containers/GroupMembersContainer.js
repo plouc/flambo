@@ -2,28 +2,30 @@ import { connect }            from 'react-redux'
 import { withRouter }         from 'react-router-dom'
 import { compose, lifecycle } from 'recompose'
 
-import GroupComments          from '../components/GroupComments'
-import { fetchGroupComments } from '../../comments/actions'
+import GroupMembers           from '../components/GroupMembers'
+import { fetchGroupMembers }  from '../actions'
 
 
-const mapStateToProps = ({ groupsComments: { byId } }, { group }) => {
-    const groupComments = byId[group.id]
+const mapStateToProps = ({ groupsMembers: { byId } }, { group }) => {
+    const groupMembers = byId[group.id]
 
-    let comments = []
-    if (groupComments) {
-        comments = groupComments.currentIds.map(id => {
-            return groupComments.byId[id].data
+    let members = []
+    if (groupMembers) {
+        members = groupMembers.currentIds.map(id => {
+            return groupMembers.byId[id].data
         })
     }
 
     return {
-        comments,
+        isFetching:     groupMembers ? groupMembers.isFetching : true,
+        hasBeenFetched: groupMembers ? !!groupMembers.fetchedAt : false,
+        members,
     }
 }
 
 const mapDispatchToProps = (dispatch, { group }) => ({
-    fetchComments: () => {
-        dispatch(fetchGroupComments(group.id))
+    fetch: () => {
+        dispatch(fetchGroupMembers(group.id))
     },
 })
 
@@ -35,7 +37,7 @@ export default compose(
     ),
     lifecycle({
         componentDidMount() {
-            this.props.fetchComments()
+            this.props.fetch()
         },
     })
-)(GroupComments)
+)(GroupMembers)

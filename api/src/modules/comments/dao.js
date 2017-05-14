@@ -6,35 +6,51 @@ const Users = require('../users')
 
 exports.columns = [
     'id',
-    'name',
-    'description',
+    'content',
     'created_at',
     'updated_at',
 ]
 
 exports.find = ({ offset, limit, query = {} } = {}) => {
-    const nesting = nest('groups', exports.columns, { extra: ['members_count'] })
-        .one('picture', Media.dao.columns)
-        .one('owner',   Users.dao.relatedColumns)
-        .one('avatar',  Media.dao.columns, { parent: 'owner' })
+    const nesting = nest('comments', exports.columns)
+        .one('author', Users.dao.relatedColumns)
+        .one('avatar', Media.dao.columns, { parent: 'author' })
+        .one('group', ['id', 'name'])
+        .one('group_picture', Media.dao.columns, { parent: 'group' })
+        .one('collection', ['id', 'name'])
+        .one('collection_picture', Media.dao.columns, { parent: 'collection' })
 
-    return db.from('groups')
+    const queryKeys = Object.keys(query)
+
+    return db.from('comments')
         .select(nesting.selection())
-        .count('members AS members_count')
         .modify(qb => {
             if (limit  !== undefined) qb.limit(limit)
             if (offset !== undefined) qb.offset(offset)
 
-            Object.keys(query).forEach(key => {
-                qb.where(`groups.${key}`, query[key])
-            })
+            const hasAuthorFilter = !!queryKeys.find(key => key.startsWith('author'))
+            qb[hasAuthorFilter ? 'innerJoin' : 'leftJoin']('users as author', 'author.id', 'comments.author_id')
+
+            const hasGroupFilter = !!queryKeys.find(key => key.startsWith('group'))
+            qb[hasGroupFilter ? 'innerJoin' : 'leftJoin']('groups as group', 'group.id', 'comments.group_id')
+
+            const hasCollectionFilter = !!queryKeys.find(key => key.startsWith('collection'))
+            qb[hasCollectionFilter ? 'innerJoin' : 'leftJoin']('collections as collection', 'collection.id', 'comments.collection_id')
+
+            queryKeys.filter(key => !key.includes('.'))
+                .forEach(key => {
+                    qb.where(`comments.${key}`, query[key])
+                })
+
+            queryKeys.filter(key => key.includes('.'))
+                .forEach(key => {
+                    qb.where(key, query[key])
+                })
         })
-        .leftJoin('users as owner', 'owner.id', 'groups.owner_id')
-        .leftJoin('media as avatar', 'avatar.id', 'owner.avatar_id')
-        .leftJoin('media as picture', 'picture.id', 'groups.picture_id')
-        .leftJoin('users_groups as members', 'members.group_id', 'groups.id')
-        .groupBy('groups.id', 'picture.id', 'owner.id', 'avatar.id')
-        .orderBy('groups.name')
+        .leftJoin('media as avatar', 'avatar.id', 'author.avatar_id')
+        .leftJoin('media as group_picture', 'group_picture.id', 'group.picture_id')
+        .leftJoin('media as collection_picture', 'collection_picture.id', 'collection.picture_id')
+        .orderBy('comments.created_at', 'desc')
         .then(nesting.rollup.bind(nesting))
 }
 
@@ -43,35 +59,9 @@ exports.findOne = ({ query = {} } = {}) => {
         .then(([row]) => row)
 }
 
-exports.create = group => {
-    return db('groups')
+exports.create = comment => {
+    return db('comments')
         .returning('*')
-        .insert(group)
-        .then(([g]) => g)
-}
-
-exports.update = (id, data) => {
-    return db('groups')
-        .where('id', id)
-        .returning('*')
-        .update(data)
-}
-
-exports.createMembership = (groupId, userId) => {
-    return db('users_groups')
-        .returning('*')
-        .insert({
-            group_id: groupId,
-            user_id:  userId,
-        })
-        .then(([m]) => m)
-}
-
-exports.deleteMembership = (groupId, userId) => {
-    return db('users_groups')
-        .where({
-            group_id: groupId,
-            user_id:  userId,
-        })
-        .del()
+        .insert(comment)
+        .then(([c]) => c)
 }

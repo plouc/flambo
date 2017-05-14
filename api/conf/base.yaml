@@ -1,0 +1,29 @@
+port: 7000
+
+static:
+  base_url: http://localhost:7000/static
+
+jwt:
+  secret: fl4mboO°
+
+db:
+  client:     pg
+  debug:      true
+  connection:
+    host:     localhost
+    port:     5444
+    database: flambo
+    user:     pg
+    password: pg
+  pool:
+    min:      2
+    max:      10
+
+elastic:
+  host:  localhost
+  port:  9222
+  log:   warning
+  index: flambo
+
+meetup:
+  host: https://api.meetup.com

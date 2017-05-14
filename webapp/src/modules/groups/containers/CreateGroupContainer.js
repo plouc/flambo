@@ -1,31 +1,38 @@
-import { connect }                         from 'react-redux'
-import { withRouter }                      from 'react-router-dom'
-import { injectIntl }                      from 'react-intl'
+import { connect }                       from 'react-redux'
+import { withRouter }                    from 'react-router-dom'
+import { compose, lifecycle }            from 'recompose'
+
+import Create                            from '../components/CreateGroup'
+import { createGroup, resetCreateGroup } from '../actions'
 
 
-import Create                              from '../components/CreateSource'
-import { createSource, resetCreateSource } from '../actions'
+const mapStateToProps = ({
+    createGroup: { isCreating, error },
+}) => ({
+    isCreating, error,
+})
 
-
-const mapStateToProps = state => {
-    const { createSource: { isCreating, error } } = state
-
-    return {
-        isCreating,
-        error,
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, { history }) => ({
     create: data => {
-        dispatch(createSource(data))
+        dispatch(createGroup(data))
     },
     reset: () => {
-        dispatch(resetCreateSource())
+        dispatch(resetCreateGroup())
+    },
+    cancel: () => {
+        history.push('/groups')
     },
 })
 
-export default withRouter(injectIntl(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Create)))
+export default compose(
+    withRouter,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    lifecycle({
+        componentDidMount() {
+            this.props.reset()
+        }
+    })
+)(Create)

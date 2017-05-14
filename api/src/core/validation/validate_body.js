@@ -1,5 +1,5 @@
 const _        = require('lodash')
-const validate = require('../../validate')
+const validate = require('./validate')
 
 
 module.exports = (schema, opts = {}) => {

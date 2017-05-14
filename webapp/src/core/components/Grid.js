@@ -3,11 +3,11 @@ import styled, { withTheme } from 'styled-components'
 
 
 export const Grid = styled.div`
-    background-color:      #fff;
+    background:            white;
     padding:               60px;
     display:               grid;
-    grid-column-gap:       60px;
-    grid-row-gap:          60px;
+    grid-column-gap:       ${props => props.xGap || 24}px;
+    grid-row-gap:          ${props => props.yGap || 24}px;
     align-content:         start;
     grid-template-columns: ${props => props.xTemplate || '1fr 1fr 1fr'};
 `
@@ -33,20 +33,19 @@ export const Cell = styled.div`
     align-items:       ${xAlign};
     grid-column-start: ${({ x }) => x || 'auto'};
     grid-column-end:   ${({ xSpan }) => xSpan ? `span ${xSpan}` : 'auto'};
+    grid-row-start:    ${({ y }) => y || 'auto'};
 `
 
 export const Label = styled.label`
     color:          #838a8e;
-    font-size:      12px;
-    font-family:    'Roboto', sans-serif;
-    font-weight:    700;
+    font-size:      11px;
+    font-weight:    500;
     text-transform: uppercase;
     margin-bottom:  12px;
 `
 
 const ValueWrapper = styled.div`
     color:          #324150;
-    font-family:    'Roboto', sans-serif;
     font-weight:    500;
     border-bottom:  1px solid #d9e1ea;
     padding-bottom: 6px;

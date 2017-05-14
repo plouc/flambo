@@ -1,31 +1,31 @@
-import { connect }              from 'react-redux'
-import { withRouter }           from 'react-router-dom'
-import { compose, lifecycle }   from 'recompose'
+import { connect }            from 'react-redux'
+import { withRouter }         from 'react-router-dom'
+import { compose, lifecycle } from 'recompose'
 
-import UserCollections          from '../components/UserCollections'
-import { fetchUserCollections } from '../actions'
+import UserComments           from '../components/UserComments'
+import { fetchUserComments }  from '../actions'
 
 
-const mapStateToProps = ({ usersCollections: { byId } }, { user }) => {
-    const userCollections = byId[user.id]
+const mapStateToProps = ({ usersComments: { byId } }, { user }) => {
+    const userComments = byId[user.id]
 
-    let collections = []
-    if (userCollections) {
-        collections = userCollections.currentIds.map(id => {
-            return userCollections.byId[id].data
+    let comments = []
+    if (userComments) {
+        comments = userComments.currentIds.map(id => {
+            return userComments.byId[id].data
         })
     }
 
-    console.log(collections)
-
     return {
-        collections,
+        isFetching:     userComments ? userComments.isFetching : true,
+        hasBeenFetched: userComments ? !!userComments.fetchedAt : false,
+        comments,
     }
 }
 
 const mapDispatchToProps = (dispatch, { user }) => ({
     fetch: () => {
-        dispatch(fetchUserCollections(user.id))
+        dispatch(fetchUserComments(user.id))
     },
 })
 
@@ -40,4 +40,4 @@ export default compose(
             this.props.fetch()
         },
     })
-)(UserCollections)
+)(UserComments)

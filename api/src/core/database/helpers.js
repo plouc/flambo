@@ -1,10 +1,12 @@
-const _ = require('lodash')
+const _    = require('lodash')
+const uuid = require('uuid')
 
-const prefixColumns = (table, columns) => columns.map(column => {
+
+exports.prefix = (table, columns) => columns.map(column => {
     return `${table}.${column} AS ${table}__${column}`
 })
 
-const extractUsingPrefix = (data, _prefix) => {
+exports.extractWithPrefix = (data, _prefix) => {
     const prefix = `${_prefix}__`
 
     return _.mapKeys(
@@ -13,70 +15,13 @@ const extractUsingPrefix = (data, _prefix) => {
     )
 }
 
-exports.nestFrom = (parentTable, parentColumns, _groupBy) => {
-    const groupBy = _groupBy || parentColumns[0]
-
-    let select = prefixColumns(parentTable, parentColumns)
-
-    const relations         = []
-    const relationsDefaults = {}
-
-    const boundNest = {
-        item: (table, fields, options = {}) => {
-            select = select.concat(prefixColumns(table, fields))
-
-            const checkColumn = options.checkValueOf || fields[0]
-            const key         = options.rename       || table
-
-            if (options.hasOwnProperty('default')) {
-                relationsDefaults[table] = options.default
-            }
-
-            relations.push({
-                predicate: row => row[`${table}__${checkColumn}`] !== null,
-                append:    (current, row) => {
-                    current[key] = extractUsingPrefix(row, table)
-                }
-            })
-
-            return boundNest
-        },
-        items: (table, fields, options = {}) => {
-            select = select.concat(prefixColumns(table, fields))
-
-            relationsDefaults[table] = []
-
-            const checkColumn = options.checkValueOf || fields[0]
-            const key         = options.rename       || table
-
-            relations.push({
-                predicate: row => row[`${table}__${checkColumn}`] !== null,
-                append:    (current, row) => {
-                    current[key] = [ ...current[table], extractUsingPrefix(row, table) ]
-                }
-            })
-
-            return boundNest
-        },
-        nest: query => query(select).then(rows => {
-            return rows.reduce((parents, row) => {
-                const current = _.last(parents)
-
-                if (!current || row[`${parentTable}__${groupBy}`] !== current[groupBy]) {
-                    parents.push(Object.assign(
-                        extractUsingPrefix(row, parentTable),
-                        relationsDefaults
-                    ))
-                }
-
-                relations
-                    .filter(({ predicate }) => predicate(row))
-                    .forEach(({ append }) => append(current, row))
-
-                return parents
-            }, [])
+exports.extractWithPrefixes = (data, prefixes) => {
+    return prefixes.reduce((result, prefix) => {
+        return Object.assign(result, {
+            [prefix]: exports.extractWithPrefix(data, prefix)
         })
-    }
-
-    return boundNest
+    }, {})
 }
+
+exports.uuid  = item  => Object.assign(item, { id: uuid.v4() })
+exports.uuids = items => items.map(exports.uuid)

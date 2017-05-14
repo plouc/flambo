@@ -17,15 +17,30 @@ services:
       POSTGRES_USER:     pg
       POSTGRES_PASSWORD: pg
 
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.3.0
+    environment:
+      http.host:              0.0.0.0
+      xpack.security.enabled: 'false'
+    ports:
+      - 9222:9200
+      - 9333:9300
+
   api:
     image: flambo/api:latest
     depends_on:
       - postgres
+      - elastic
     environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_USER: pg
-      POSTGRES_PWD:  pg
-      POSTGRES_DB:   flambo
+      PORT:            80
+      STATIC_BASE_URL: http://localhost:8090/static
+      POSTGRES_HOST:   postgres
+      POSTGRES_PORT:   5432
+      POSTGRES_USER:   pg
+      POSTGRES_PWD:    pg
+      POSTGRES_DB:     flambo
+      ELASTIC_HOST:    http://elastic
+      ELASTIC_PORT:    9200
 
   webapp:
     image: flambo/webapp:latest

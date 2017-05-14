@@ -1,12 +1,44 @@
-import '../../styles/Pager.css'
-import React, { Component, PropTypes } from 'react'
-import { FormattedMessage }            from 'react-intl'
-import FlatButton                      from 'material-ui/FlatButton'
-import ChevronLeft                     from 'material-ui/svg-icons/navigation/chevron-left'
-import ChevronRight                    from 'material-ui/svg-icons/navigation/chevron-right'
-import PagerPerPage                    from './PagerPerPage'
+import React, { Component, PropTypes }  from 'react'
+import { FormattedMessage, injectIntl } from 'react-intl'
+import styled                           from 'styled-components'
+import PreviousIcon                     from 'react-icons/lib/fa/angle-left'
+import NextIcon                         from 'react-icons/lib/fa/angle-right'
 
-export default class Pager extends Component {
+import PagerPerPage                     from './PagerPerPage'
+
+
+const Container = styled.div`
+    display:     flex;
+    font-size:   13px;
+    height:      36px;
+    align-items: center;
+`
+
+const PageContainer = styled.div`
+    margin-right: 12px;
+`
+
+const Page = styled.span`
+    color:       #000;
+    font-weight: 500;
+`
+
+const IconButton = styled.span`
+    cursor:        pointer;
+    user-select:   none;
+    display:       flex;
+    align-items:   center;
+    height:        26px;
+    padding:       0 6px;
+    border-radius: 2px;
+    color:         ${props => props.disabled ? '#bbb' : '#000'};
+    
+    &:hover {
+        background: #fff;
+    }
+`
+
+class Pager extends Component {
     static propTypes = {
         page:           PropTypes.number.isRequired,
         perPage:        PropTypes.number.isRequired,
@@ -14,15 +46,11 @@ export default class Pager extends Component {
         hasNext:        PropTypes.bool.isRequired,
         onChange:       PropTypes.func.isRequired,
         disabled:       PropTypes.bool.isRequired,
-        style:          PropTypes.object.isRequired,
     }
 
     static defaultProps = {
-        page:           1,
-        perPage:        10,
-        perPageOptions: [10, 20, 30, 40, 50],
+        perPageOptions: [10, 20, 50],
         disabled:       false,
-        style:          {},
     }
 
     constructor(props) {
@@ -35,14 +63,14 @@ export default class Pager extends Component {
 
     handlePrevious() {
         const { disabled, page, perPage, onChange } = this.props
-        if (!disabled) {
+        if (!disabled && page > 1) {
             onChange(Math.max(1, page - 1), perPage)
         }
     }
 
     handleNext() {
-        const { disabled, page, perPage, onChange } = this.props
-        if (!disabled) {
+        const { disabled, hasNext, page, perPage, onChange } = this.props
+        if (!disabled && hasNext) {
             onChange(page + 1, perPage)
         }
     }
@@ -55,19 +83,21 @@ export default class Pager extends Component {
     }
 
     render() {
-        const { page, perPage, perPageOptions, hasNext, disabled, style } = this.props
-
-        const iconStyle = {
-            height:       42,
-            minWidth:     52,
-            borderRadius: 0,
-        }
+        const {
+            page,
+            perPage,
+            perPageOptions,
+            hasNext,
+            disabled,
+            intl: { formatMessage },
+        } = this.props
 
         return (
-            <div className="pager" style={style}>
-                <div className="pager__page">
-                    <FormattedMessage id="pager.page"/>&nbsp;: {page}
-                </div>
+            <Container>
+                <PageContainer>
+                    <FormattedMessage id="pager_page"/>&nbsp;
+                    <Page>{page}</Page>
+                </PageContainer>
                 {perPageOptions.length > 1 && (
                     <PagerPerPage
                         perPage={perPage}
@@ -75,19 +105,23 @@ export default class Pager extends Component {
                         onChange={this.handlePerPageUpdate}
                     />
                 )}
-                <FlatButton
+                <IconButton
                     disabled={page <= 1 || disabled}
                     onClick={this.handlePrevious}
-                    icon={<ChevronLeft />}
-                    style={iconStyle}
-                />
-                <FlatButton
+                    title={formatMessage({ id: 'pager_previous' })}
+                >
+                    <PreviousIcon size={20}/>
+                </IconButton>
+                <IconButton
                     disabled={!hasNext || disabled}
                     onClick={this.handleNext}
-                    icon={<ChevronRight />}
-                    style={iconStyle}
-                />
-            </div>
+                    title={formatMessage({ id: 'pager_next' })}
+                >
+                    <NextIcon size={20}/>
+                </IconButton>
+            </Container>
         )
     }
 }
+
+export default injectIntl(Pager)

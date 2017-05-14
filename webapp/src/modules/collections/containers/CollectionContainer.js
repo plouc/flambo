@@ -1,22 +1,24 @@
 import { connect }                 from 'react-redux'
-import { withRouter }              from 'react-router-dom'
+import { withRouter, matchPath }   from 'react-router-dom'
+import { compose, lifecycle }      from 'recompose'
+import { reduxForm }               from 'redux-form'
 
-import Group                       from '../components/Group'
+import { createItemSelector }      from '../../../core/selectors'
+import Collection                  from '../components/Collection'
 import { fetchCollectionIfNeeded } from '../actions'
+import { FORM_NAME }               from '../constants'
 
 
-const mapStateToProps = (
-    state,
-    { match: { params: { id } } },
-) => {
-    const { groups: { byId } } = state
-    const group                = byId[id]
+const itemSelector = createItemSelector('collections', 'collection')
+
+const mapStateToProps = (state, { location, match: { url, params } }) => {
+    const isEditing = !!matchPath(location.pathname, {
+        path: `${url}/edit`,
+    })
 
     return {
-        id,
-        isFetching: group ? group.isFetching : false,
-        group:      (group && group.data) ? group.data : null,
-        error:      group ? group.error : null,
+        ...itemSelector({ state, params }),
+        isEditing,
     }
 }
 
@@ -26,7 +28,22 @@ const mapDispatchToProps = (dispatch, { match: { params: { id } } }) => ({
     },
 })
 
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Group))
+export default compose(
+    withRouter,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    reduxForm({
+        form: FORM_NAME,
+    }),
+    lifecycle({
+        componentDidMount() {
+            this.props.fetch()
+        },
+        componentDidUpdate({ id }) {
+            const { id: prevId, fetch } = this.props
+            if (prevId !== id) fetch()
+        },
+    })
+)(Collection)

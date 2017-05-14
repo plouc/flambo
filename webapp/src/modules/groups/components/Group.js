@@ -1,108 +1,161 @@
-import React, { Component, PropTypes } from 'react'
-import { FormattedMessage }            from 'react-intl'
-import { Link, matchPath }             from 'react-router-dom'
-import EditIcon                        from 'material-ui/svg-icons/editor/mode-edit'
-import CancelIcon                      from 'material-ui/svg-icons/navigation/close'
+import React, { PropTypes } from 'react'
+import { Switch, Route }    from 'react-router-dom'
+import styled               from 'styled-components'
+import FeedIcon             from 'react-icons/lib/md/featured-play-list'
+import MembersIcon          from 'react-icons/lib/md/group'
+import CommentsIcon         from 'react-icons/lib/md/chat'
+import {
+    FormattedMessage,
+    FormattedRelative,
+} from 'react-intl'
 
-import Helmet                          from '../../../../core/components/HelmetIntl'
-import ErrorChecker                    from '../../../../core/components/errors/ErrorChecker'
-import EntityDates                     from '../../../../core/components/dates/EntityDates'
-import Icon                            from './AgenciesIcon'
-import AgencyInfo                      from './AgencyInfo'
-import EditAgency                      from '../containers/EditAgencyContainer'
+import Helmet               from '../../../core/components/HelmetIntl'
+import { Label, Value }     from '../../../core/components/Grid'
+import { Button }           from '../../../core/components/buttons'
+import { Tabs, Tab }        from '../../../core/components/tabs'
+import RelatedUser          from '../../users/components/RelatedUser'
+import Edit                 from '../containers/EditGroupContainer'
+import GroupMembership      from '../containers/GroupMembershipContainer'
+import Feed                 from '../containers/GroupFeedContainer'
+import Members              from '../containers/GroupMembersContainer'
+import Comments             from '../containers/GroupCommentsContainer'
+import Sources              from '../containers/GroupSourcesContainer'
 import {
     Header,
-    TopBar,
-    Breadcrumbs,
     Title,
-    Meta,
-    MainAction,
+    Bar,
+    Content,
+    Sidebar,
     Picture,
-    ViewEditTransition,
-} from '../../../../core/components/page'
+} from '../../../core/components/info-page'
 
 
-export default class Agency extends Component {
-    static propTypes = {
-        id:          PropTypes.number.isRequired,
-        fetch:       PropTypes.func.isRequired,
-        error:       PropTypes.object,
-        agency:      PropTypes.object,
-        isFetching:  PropTypes.bool.isRequired,
-        update:      PropTypes.func.isRequired,
-        isUpdating:  PropTypes.bool.isRequired,
-        isDirty:     PropTypes.bool.isRequired,
-        updateError: PropTypes.object,
-    }
+const Description = styled.div`
+    font-size:     14px;
+    margin-bottom: 12px;
+`
 
-    componentDidMount() {
-        this.props.fetch()
-    }
+const MembersCount = styled.span`
+    margin-left: 9px;
+    font-weight: 700;
+`
 
-    componentDidUpdate({ id }) {
-        const { id: prevId, fetch } = this.props
-        if (prevId !== id) fetch()
-    }
-
-    render() {
-        const {
-            error, agency, match, location,
-            update, isUpdating, isDirty, updateError,
-        } = this.props
-
-        const isEditing = !!matchPath(location.pathname, {
-            path: `${match.url}/edit`,
-        })
-
-        return (
-            <div>
-                <Helmet
-                    title={agency ? 'agency_with_name' : 'agency'}
-                    titleValues={agency ? { agency: agency.name } : {}}
-                />
-                <Header>
-                    <TopBar>
-                        <Breadcrumbs breadcrumbs={[
-                            <FormattedMessage key="org" id="organization"/>,
-                            <Link to="/entities/agencies" key="agencies">
-                                <FormattedMessage id="agencies"/>
-                            </Link>,
-                        ]}/>
-                    </TopBar>
-                    <Picture icon={Icon}/>
-                    <Title hasPicture={true}>
-                        {agency ? (
-                            <FormattedMessage
-                                id="agency_with_name"
-                                values={{ agency: agency.name }}
-                            />
-                        ) : ''}
-                    </Title>
-                    <Meta hasPicture={true}>
-                        {agency && <EntityDates entity={agency} gender="female"/>}
-                    </Meta>
-                    <MainAction
-                        icon={isEditing ? CancelIcon : EditIcon}
-                        path={isEditing ? match.url : `${match.url}/edit`}
+const Group = ({ group, match }) => {
+    return (
+        <div>
+            <Helmet
+                title={group ? 'group_with_name' : 'group'}
+                titleValues={group ? { group: group.name } : {}}
+            />
+            <Header>
+                {group && <Picture url={group.picture_url}/>}
+                {group && <Title>{group.name}</Title>}
+            </Header>
+            {group ? (
+                <Bar>
+                    <RelatedUser
+                        user={group.owner}
+                        messageId="group_created_by"
+                        avatarUrlKey="avatar_url"
                     />
-                </Header>
-                <ErrorChecker error={error}>
-                    {agency && (
-                        <ViewEditTransition>
-                            {!isEditing && <AgencyInfo agency={agency}/>}
-                            {isEditing && (
-                                <EditAgency
-                                    agency={agency}
-                                    update={update}
-                                    error={updateError}
-                                    isUpdating={isUpdating}
-                                    isDirty={isDirty}
-                                />
+                    <Tabs>
+                        <Tab
+                            to={`${match.url}`}
+                            label="group_feed"
+                            icon={FeedIcon}
+                            exact
+                        />
+                        <Tab
+                            to={`${match.url}/comments`}
+                            label="group_comments"
+                            icon={CommentsIcon}
+                        />
+                        <Tab
+                            to={`${match.url}/members`}
+                            icon={MembersIcon}
+                        >
+                            <FormattedMessage id="group_members"/>
+                            <MembersCount>
+                                {group.members}
+                            </MembersCount>
+                        </Tab>
+                    </Tabs>
+                    <div>
+                        <GroupMembership
+                            group={group}
+                            style={{ marginRight: 12 }}
+                        />
+                        <Button
+                            label="edit"
+                            to={`/groups/${group.id}/edit`}
+                            primary
+                            raised
+                        />
+                    </div>
+                </Bar>
+            ) : <Bar/>}
+            <Content>
+                <Sidebar>
+                    {group && (
+                        <div>
+                            {group.description && (
+                                <Description>
+                                    {group.description}
+                                </Description>
                             )}
-                        </ViewEditTransition>
+                            <Label>
+                                <FormattedMessage id="created_at"/>
+                            </Label>
+                            <Value>
+                                <FormattedRelative
+                                    value={group.created_at}
+                                    updateInterval={10000}
+                                />
+                            </Value>
+                            <Label>
+                                <FormattedMessage id="updated_at"/>
+                            </Label>
+                            <Value>
+                                <FormattedRelative
+                                    value={group.updated_at}
+                                    updateInterval={10000}
+                                />
+                            </Value>
+                        </div>
                     )}
-                </ErrorChecker>
-            </div>
-        )
-    }
+                </Sidebar>
+                <div style={{ overflow: 'visible' }}>
+                    {group && (
+                        <Switch>
+                            <Route path={`${match.url}`} exact render={() => (
+                                <Feed group={group}/>
+                            )}/>
+                            <Route path={`${match.url}/members`} render={() => (
+                                <Members group={group}/>
+                            )}/>
+                            <Route path={`${match.url}/comments`} exact render={() => (
+                                <Comments group={group}/>
+                            )}/>
+                            <Route path={`${match.url}/edit`} exact render={() => (
+                                <Edit group={group}/>
+                            )}/>
+                        </Switch>
+                    )}
+                </div>
+                <div>
+                    {group && <Sources group={group}/>}
+                </div>
+            </Content>
+        </div>
+    )
 }
+
+Group.propTypes = {
+    id:         PropTypes.string.isRequired,
+    fetch:      PropTypes.func.isRequired,
+    error:      PropTypes.object,
+    group:      PropTypes.object,
+    isFetching: PropTypes.bool.isRequired,
+}
+
+export default Group

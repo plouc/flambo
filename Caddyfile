@@ -1,0 +1,17 @@
+0.0.0.0
+
+log stdout "{remote} {upstream} - {user} [{when}] "{method} {uri} {proto}" {status} {size}"
+errors stdout
+
+proxy /api api:80 {
+    transparent
+}
+
+proxy /static api:80 {
+    transparent
+}
+
+proxy /webapp webapp:2015 {
+    without /webapp
+    transparent
+}

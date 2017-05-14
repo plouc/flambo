@@ -1,0 +1,120 @@
+nodejs_blog:
+  name:        Node.js blog
+  description: Node.js blog rss feed
+  type:        rss
+  owner:       raph
+  data:
+    url: https://nodejs.org/en/feed/blog.xml
+  jobs:
+    - status: created
+    - status: succeeded
+    - status: succeeded
+    - status: succeeded
+    - status: failed
+
+nodejs_paris_meetup:
+  name:  Node.js Paris meetup
+  type:  meetup
+  owner: raph
+  data:
+    urlname: Nodejs-Paris
+    name:    Node.js Paris
+    url:     https://www.meetup.com/fr-FR/Nodejs-Paris/
+    country: France
+    city:    Paris
+
+nodeschool_paris_meetup:
+  name:  NodeSchool Paris meetup
+  type:  meetup
+  owner: raph
+  data:
+    urlname: NodeSchool-Paris
+    name:    NodeSchool Paris
+    url:     https://www.meetup.com/fr-FR/NodeSchool-Paris/
+    country: France
+    city:    Paris
+
+symfony_blog:
+  name:        symfony blog
+  description: symfony blog rss feed
+  type:        rss
+  owner:       raph
+  data:
+    url: http://feeds.feedburner.com/symfony/blog
+
+docker_blog:
+  name:        Docker blog
+  description: Docker blog rss feed
+  type:        rss
+  owner:       raph
+  data:
+    url: https://blog.docker.com/feed/
+
+golang_weekly:
+  name:        Golang Weekly
+  description: A weekly newsletter about the Go programming language
+  type:        rss
+  owner:       alton
+  data:
+    url: https://golangweekly.com/rss
+
+alex_edwards_blog:
+  name:        Alex Edwards
+  description: Hi, I'm Alex Edwards. I'm a Go programmer based near Innsbruck, Austria specialising in web service and application development.
+  type:        rss
+  owner:       raph
+  data:
+    url: http://www.alexedwards.net/static/feed.rss
+
+elastic_blog:
+  name:  elastic blog
+  type:  rss
+  owner: sabine
+  data:
+    url: https://www.elastic.co/blog/feed
+
+a_list_apart:
+  name:  A list apart
+  type:  rss
+  owner: janis
+  data:
+    url: https://alistapart.com/main/feed
+
+smashing_mag:
+  name:        Smashing magazine
+  description: Vitaly Friedman, editor-in-chief of Smashing Magazine, an online magazine for professional Web designers and developers.
+  type:        rss
+  owner:       david
+  data:
+    url: https://www.smashingmagazine.com/feed/
+
+iot_thinkers_meetup:
+  name:  IoT & Big Data Thinkers Meetup
+  type:  meetup
+  owner: bon
+  data:
+    urlname: Internet-of-Things-Thinkers-Meetup
+    name:    IoT & Big Data Thinkers Meetup
+    url:     https://www.meetup.com/fr-FR/Internet-of-Things-Thinkers-Meetup/
+    country: France
+    city:    Paris
+
+behance:
+  name:        Behance
+  description: Présentez et découvrez des travaux de création
+  type:        rss
+  owner:       david
+  data:
+    url: https://forums.adobe.com/community/feeds/allcontent?community=4890
+
+nodejs_chicago_meetup:
+  name:        Chicago Node.js meetup
+  description: A group to discuss Node.js, its frameworks, and best practices.
+  type:        meetup
+  owner:       bon
+  data:
+    urlname: Chicago-Nodejs
+    name:    Chicago Node.js
+    url:     https://www.meetup.com/fr-FR/Chicago-Nodejs/
+    country: US
+    city:    Chicago

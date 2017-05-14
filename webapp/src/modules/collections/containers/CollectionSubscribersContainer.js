@@ -1,29 +1,31 @@
-import { connect }                 from 'react-redux'
-import { withRouter }              from 'react-router-dom'
-import { compose, lifecycle }      from 'recompose'
+import { connect }                    from 'react-redux'
+import { withRouter }                 from 'react-router-dom'
+import { compose, lifecycle }         from 'recompose'
 
-import CollectionComments          from '../components/CollectionComments'
-import { fetchCollectionComments } from '../actions'
+import CollectionSubscribers          from '../components/CollectionSubscribers'
+import { fetchCollectionSubscribers } from '../actions'
 
 
-const mapStateToProps = ({ collectionsComments: { byId } }, { collection }) => {
-    const collectionComments = byId[collection.id]
+const mapStateToProps = ({ collectionsSubscribers: { byId } }, { collection }) => {
+    const collectionSubscribers = byId[collection.id]
 
-    let comments = []
-    if (collectionComments) {
-        comments = collectionComments.currentIds.map(id => {
-            return collectionComments.byId[id].data
+    let subscribers = []
+    if (collectionSubscribers) {
+        subscribers = collectionSubscribers.currentIds.map(id => {
+            return collectionSubscribers.byId[id].data
         })
     }
 
     return {
-        comments,
+        isFetching:     collectionSubscribers ? collectionSubscribers.isFetching : true,
+        hasBeenFetched: collectionSubscribers ? !!collectionSubscribers.fetchedAt : false,
+        subscribers,
     }
 }
 
 const mapDispatchToProps = (dispatch, { collection }) => ({
     fetch: () => {
-        dispatch(fetchCollectionComments(collection.id))
+        dispatch(fetchCollectionSubscribers(collection.id))
     },
 })
 
@@ -38,4 +40,4 @@ export default compose(
             this.props.fetch()
         },
     })
-)(CollectionComments)
+)(CollectionSubscribers)

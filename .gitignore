@@ -1,12 +1,67 @@
-.DS_Store
-api/.env
-api/uploads
-node_modules
+# api
+api/static
+
+# webapp
+webapp/build
+
+# deploy
+terraform.tfstate
+terraform.tfstate.backup
+
+# bot
+hubot.conf
+
+# IDE
 .idea
-rethinkdb_data
+
+# Node.js
+node_modules
 npm-debug*
-webapp/public
-api/public
-docs/api
-docs/webapp
-docs/styleguide
+yarn-error.log
+
+# misc
+/old
+.env
+
+
+# OSX
+.DS_Store
+
+# Xcode
+/mobile/*/build/
+/mobile*.pbxuser
+!/mobile/default.pbxuser
+/mobile*.mode1v3
+!default.mode1v3
+/mobile/*.mode2v3
+!default.mode2v3
+/mobile/*.perspectivev3
+!default.perspectivev3
+/mobile/xcuserdata
+/mobile/*.xccheckout
+/mobile/*.moved-aside
+/mobile/DerivedData
+/mobile/*.hmap
+/mobile/*.ipa
+/mobile/*.xcuserstate
+/mobile/project.xcworkspace
+
+# Android/IntelliJ
+/mobile/.gradle
+/mobile/local.properties
+/mobile/*.iml
+
+# BUCK
+/mobile/buck-out/
+/mobile/\.buckd/
+/mobile/*.keystore
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md
+/mobile/fastlane/report.xml
+/mobile/fastlane/Preview.html
+/mobile/fastlane/screenshots

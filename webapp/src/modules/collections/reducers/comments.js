@@ -3,7 +3,7 @@ import _            from 'lodash'
 import * as actions from '../actions'
 
 
-const user = (state = {
+const collection = (state = {
     perPage:       10,
     page:          1,
     sort:          {},
@@ -17,7 +17,7 @@ const user = (state = {
     error:         null,
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_USER_COMMENTS_REQUEST:
+        case actions.FETCH_COLLECTION_COMMENTS_REQUEST:
             return {
                 ...state,
                 perPage:     action.perPage,
@@ -29,7 +29,7 @@ const user = (state = {
                 error:       null,
             }
 
-        case actions.FETCH_USER_COMMENTS_SUCCESS:
+        case actions.FETCH_COLLECTION_COMMENTS_SUCCESS:
             return {
                 ...state,
                 isFetching:    false,
@@ -48,7 +48,7 @@ const user = (state = {
                 },
             }
 
-        case actions.FETCH_USER_COMMENTS_FAILURE:
+        case actions.FETCH_COLLECTION_COMMENTS_FAILURE:
             return {
                 ...state,
                 isFetching:    false,
@@ -56,7 +56,7 @@ const user = (state = {
                 error:         action.error,
             }
 
-        case actions.INVALIDATE_USER_COMMENTS:
+        case actions.INVALIDATE_COLLECTION_COMMENTS:
             return {
                 ...state,
                 didInvalidate: true,
@@ -72,15 +72,15 @@ export default (state = {
     byId: {},
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_USER_COMMENTS_REQUEST:
-        case actions.FETCH_USER_COMMENTS_SUCCESS:
-        case actions.FETCH_USER_COMMENTS_FAILURE:
-        case actions.INVALIDATE_USER_COMMENTS:
+        case actions.FETCH_COLLECTION_COMMENTS_REQUEST:
+        case actions.FETCH_COLLECTION_COMMENTS_SUCCESS:
+        case actions.FETCH_COLLECTION_COMMENTS_FAILURE:
+        case actions.INVALIDATE_COLLECTION_COMMENTS:
             return {
                 ...state,
                 byId: {
                     ...state.byId,
-                    [action.id]: user(state.byId[action.id], action),
+                    [action.id]: collection(state.byId[action.id], action),
                 }
             }
 

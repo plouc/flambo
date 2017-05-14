@@ -1,43 +1,24 @@
-import { connect }    from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { connect }              from 'react-redux'
+import { withRouter }           from 'react-router-dom'
 
-import EditContracts  from '../components/EditContract'
-import {
-    fetchContractIfNeeded,
-    updateContract,
-} from '../actions'
+import { createUpdateSelector } from '../../../core/selectors'
+import Edit                     from '../components/EditSource'
+import { updateSource }         from '../actions'
 
 
-const mapStateToProps = (state, { user }) => {
-    const {
-        hrContracts: { byId },
-        updateHrContract: {
-            isUpdating,
-            error: updateError,
-        },
-    } = state
+const updateSelector = createUpdateSelector('source')
 
-    const contract = byId[user.contractId || user.contract.id]
+const mapStateToProps = state => ({
+    ...updateSelector(state),
+})
 
-    return {
-        contract:   contract ? contract.data : undefined,
-        isFetching: contract ? contract.isFetching : false,
-        error:      contract ? contract.error : null,
-        isUpdating,
-        updateError,
-    }
-}
-
-const mapDispatchToProps = (dispatch, { user }) => ({
-    fetch: () => {
-        dispatch(fetchContractIfNeeded(user.contractId || user.contract.id))
-    },
+const mapDispatchToProps = (dispatch, { source }) => ({
     update: data => {
-        dispatch(updateContract(user.contractId || user.contract.id, data))
+        dispatch(updateSource(source.id, data))
     },
 })
 
 export default withRouter(connect(
     mapStateToProps,
-    mapDispatchToProps,
-)(EditContracts))
+    mapDispatchToProps
+)(Edit))

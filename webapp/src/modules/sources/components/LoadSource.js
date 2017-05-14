@@ -1,40 +1,37 @@
 import React, { Component, PropTypes } from 'react'
 
-import Form                            from '../containers/SourceFormContainer'
+import { TopBar }                              from '../../../core/components/page'
+import { Button }                              from '../../../core/components/buttons'
 
 
-export default class EditSource extends Component {
+export default class LoadSource extends Component {
     static propTypes = {
-        source:     PropTypes.object.isRequired,
-        update:     PropTypes.func.isRequired,
-        error:      PropTypes.object,
-        isUpdating: PropTypes.bool.isRequired,
-        history:    PropTypes.shape({
-            push: PropTypes.func.isRequired,
-        }).isRequired,
-    }
-
-    handleCancel = () => {
-        const { history, source } = this.props
-        history.push(`/sources/${source.id}`)
+        source: PropTypes.object.isRequired,
+        load:   PropTypes.func.isRequired,
     }
 
     render() {
         const {
             source,
-            update,
-            isUpdating,
+            load,
         } = this.props
 
         return (
             <div>
-                <Form
-                    source={source}
-                    initialValues={source}
-                    onSubmit={update}
-                    onCancel={this.handleCancel}
-                    isSubmitting={isUpdating}
-                />
+                <TopBar>
+                    <Button
+                        label="load"
+                        onClick={load}
+                        primary
+                        raised
+                    />
+                    <Button
+                        label="cancel"
+                        to={`/sources/${source.id}`}
+                        raised
+                    />
+                </TopBar>
+                LOAD SOURCE
             </div>
         )
     }

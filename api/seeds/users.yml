@@ -1,0 +1,56 @@
+raph:
+  first_name:  Raphaël
+  last_name:   Benitte
+  role:        admin
+  avatar:      raph
+  intro:       Digital architect @ekino, I'm the creator of this toy project!
+
+janis:
+  first_name:  Janis
+  last_name:   Joplin
+  avatar:      janis
+
+bon:
+  first_name:  Bon
+  last_name:   Iver
+  avatar:      bon_iver
+
+horace:
+  first_name: Horace
+  last_name:  Silver
+  avatar:     horace_silver
+
+alton:
+  first_name:  Alton
+  last_name:   Ellis
+  avatar:      alton_ellis
+
+david:
+  first_name: David
+  last_name:  Bowie
+  avatar:     david_bowie
+
+lou:
+  first_name: Lou
+  last_name:  Reed
+  avatar:     lou_reed
+
+ella:
+  first_name: Ella
+  last_name:  Fitzgerald
+
+kendrick:
+  first_name:  Kendrick
+  last_name:   Lamar
+
+marcel:
+  first_name: Marcel
+  last_name:  Dupond
+
+josiane:
+  first_name: Josiane
+  last_name:  René
+
+sabine:
+  first_name: Sabine
+  last_name:  Lefebvre

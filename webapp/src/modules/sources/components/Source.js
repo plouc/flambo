@@ -1,19 +1,44 @@
 import React, { Component, PropTypes } from 'react'
-import { FormattedMessage }            from 'react-intl'
-import { Link, matchPath }             from 'react-router-dom'
+import { Route, Switch }               from 'react-router-dom'
+import styled                          from 'styled-components'
+import FeedIcon                        from 'react-icons/lib/md/featured-play-list'
+import {
+    FormattedMessage,
+    FormattedRelative,
+} from 'react-intl'
 
 import Helmet                          from '../../../core/components/HelmetIntl'
-import GroupInfo                       from './GroupInfo'
-//import EditAgency                      from '../containers/EditAgencyContainer'
+import Edit                            from '../containers/EditSourceContainer'
+import { Tabs, Tab }                   from '../../../core/components/tabs'
+import { Label, Value }                from '../../../core/components/Grid'
+import { Button }                      from '../../../core/components/buttons'
+import RelatedUser                     from '../../users/components/RelatedUser'
+import Feed                            from '../containers/SourceFeedContainer'
+import Jobs                            from '../containers/SourceJobsContainer'
+import typeInfos                       from './type-infos'
+import typeImages                      from './typeImages'
+import {
+    Header,
+    Title,
+    Bar,
+    Content,
+    Sidebar,
+    Picture,
+} from '../../../core/components/info-page'
 
+
+const Description = styled.div`
+    font-size:     14px;
+    margin-bottom: 12px;
+`
 
 export default class Group extends Component {
     static propTypes = {
-        id:          PropTypes.string.isRequired,
-        fetch:       PropTypes.func.isRequired,
-        error:       PropTypes.object,
-        group:       PropTypes.object,
-        isFetching:  PropTypes.bool.isRequired,
+        id:         PropTypes.string.isRequired,
+        fetch:      PropTypes.func.isRequired,
+        error:      PropTypes.object,
+        source:     PropTypes.object,
+        isFetching: PropTypes.bool.isRequired,
     }
 
     componentDidMount() {
@@ -26,19 +51,105 @@ export default class Group extends Component {
     }
 
     render() {
-        const { error, group, match, location } = this.props
-
-        const isEditing = !!matchPath(location.pathname, {
-            path: `${match.url}/edit`,
-        })
+        const { source, match } = this.props
 
         return (
             <div>
                 <Helmet
-                    title={group ? 'group_with_name' : 'group'}
-                    titleValues={group ? { group: group.name } : {}}
+                    title={source ? 'source_with_name' : 'source'}
+                    titleValues={source ? { source: source.name } : {}}
                 />
-                {group && !isEditing && <GroupInfo group={group}/>}
+                <Header>
+                    {source && <Picture url={typeImages[source.type]}/>}
+                    {source && <Title>{source.name}</Title>}
+                </Header>
+                {source ? (
+                    <Bar>
+                        <RelatedUser
+                            user={source.owner}
+                            avatarUrlKey="avatar_url"
+                            messageId="source_created_by"
+                        />
+                        <Tabs>
+                            <Tab
+                                label="source_feed"
+                                icon={FeedIcon}
+                                to={`/sources/${source.id}`}
+                                exact
+                            />
+                            <Tab
+                                label="source_jobs"
+                                to={`/sources/${source.id}/jobs`}
+                            />
+                        </Tabs>
+                        <div>
+                            <Button
+                                label="load"
+                                to={`/sources/${source.id}/load`}
+                                primary
+                            />
+                            <Button
+                                label="edit"
+                                to={`/sources/${source.id}/edit`}
+                                style={{ marginLeft: 12 }}
+                                primary
+                            />
+                        </div>
+                    </Bar>
+                ) : <Bar/>}
+                <Content>
+                    <Sidebar>
+                        {source && (
+                            <div>
+                                <Label>
+                                    <FormattedMessage id="source_type"/>
+                                </Label>
+                                <Value>{source.type}</Value>
+                                {source.description && (
+                                    <Description>
+                                        {source.description}
+                                    </Description>
+                                )}
+                                <Label>
+                                    <FormattedMessage id="created_at"/>
+                                </Label>
+                                <Value>
+                                    <FormattedRelative
+                                        value={source.created_at}
+                                        updateInterval={10000}
+                                    />
+                                </Value>
+                                <Label>
+                                    <FormattedMessage id="updated_at"/>
+                                </Label>
+                                <Value>
+                                    <FormattedRelative
+                                        value={source.updated_at}
+                                        updateInterval={10000}
+                                    />
+                                </Value>
+                            </div>
+                        )}
+                    </Sidebar>
+                    <div style={{ overflow: 'hidden' }}>
+                        {source && (
+                            <Switch>
+                                <Route path={`${match.url}`} exact render={() => (
+                                    <Feed source={source}/>
+                                )}/>
+                                <Route path={`${match.url}/jobs`} render={() => (
+                                    <Jobs source={source}/>
+                                )}/>
+                                <Route path={`${match.url}/edit`} render={() => (
+                                    <Edit source={source}/>
+                                )}/>
+                            </Switch>
+                        )}
+                    </div>
+                    <div>
+                        {source && React.createElement(typeInfos[source.type], { source })}
+                    </div>
+                </Content>
             </div>
         )
     }

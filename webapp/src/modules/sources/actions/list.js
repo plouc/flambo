@@ -10,7 +10,10 @@ export const FETCH_SOURCES_FAILURE = 'FETCH_SOURCES_FAILURE'
 export const INVALIDATE_SOURCES    = 'INVALIDATE_SOURCES'
 
 export const fetchSources = (_options = {}) => (dispatch, getState) => {
-    const { groups: { perPage, page, sort, filters } } = getState()
+    const {
+        sources: { perPage, page, sort, filters },
+        auth:    { token },
+    } = getState()
 
     const options = {
         perPage,
@@ -25,7 +28,7 @@ export const fetchSources = (_options = {}) => (dispatch, getState) => {
         ...options,
     })
 
-    return list(options)
+    return list(token, options)
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_SOURCES_SUCCESS,

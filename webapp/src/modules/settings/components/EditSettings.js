@@ -1,36 +1,29 @@
 import React, { Component, PropTypes } from 'react'
 
-import Form                            from '../containers/GroupFormContainer'
+import Form                            from '../containers/SettingsFormContainer'
 
 
-export default class EditGroup extends Component {
+export default class EditSettings extends Component {
     static propTypes = {
-        group:      PropTypes.object.isRequired,
+        settings:   PropTypes.object.isRequired,
         update:     PropTypes.func.isRequired,
         error:      PropTypes.object,
-        isUpdating: PropTypes.bool.isRequired,
         history:    PropTypes.shape({
             push: PropTypes.func.isRequired,
         }).isRequired,
     }
 
     handleCancel = () => {
-        const { history, group } = this.props
-        history.push(`/groups/${group.id}`)
+        this.history.push('/settings')
     }
 
     render() {
-        const {
-            group,
-            update,
-            isUpdating,
-        } = this.props
+        const { settings, update, isUpdating } = this.props
 
         return (
             <div>
                 <Form
-                    group={group}
-                    initialValues={group}
+                    initialValues={settings}
                     onSubmit={update}
                     onCancel={this.handleCancel}
                     isSubmitting={isUpdating}

@@ -2,40 +2,30 @@ import Joi        from 'joi-browser'
 
 import history    from '../../../core/history'
 import { update } from '../api'
-import schema     from '../schemas/groupSchema'
-import {
-    invalidateGroup,
-    invalidateGroups,
-    fetchGroupIfNeeded,
-} from './index'
+import schema     from '../schemas/collectionSchema'
 
-export const UPDATE_GROUP_REQUEST = 'UPDATE_GROUP_REQUEST'
-export const UPDATE_GROUP_SUCCESS = 'UPDATE_GROUP_SUCCESS'
-export const UPDATE_GROUP_FAILURE = 'UPDATE_GROUP_FAILURE'
-export const UPDATE_GROUP_RESET   = 'UPDATE_GROUP_RESET'
 
-export const resetUpdateGroup = () => ({ type: UPDATE_GROUP_RESET })
+export const UPDATE_COLLECTION_REQUEST = 'UPDATE_COLLECTION_REQUEST'
+export const UPDATE_COLLECTION_SUCCESS = 'UPDATE_COLLECTION_SUCCESS'
+export const UPDATE_COLLECTION_FAILURE = 'UPDATE_COLLECTION_FAILURE'
+export const UPDATE_COLLECTION_RESET   = 'UPDATE_COLLECTION_RESET'
 
-export const updateGroup = (id, _data) => (dispatch, getState) => {
+export const resetUpdateCollection = () => ({ type: UPDATE_COLLECTION_RESET })
+
+export const updateCollection = (id, _data) => (dispatch, getState) => {
     const { value: data } = Joi.validate(_data, schema)
 
-    dispatch({ type: UPDATE_GROUP_REQUEST, id, data })
+    dispatch({ type: UPDATE_COLLECTION_REQUEST, id, data })
 
     const { auth: { token } } = getState()
 
     return update(token, id, data)
         .then(() => {
-            dispatch({ type: UPDATE_GROUP_SUCCESS, id })
-            dispatch(resetUpdateGroup())
-            dispatch(invalidateGroup(id))
-            dispatch(fetchGroupIfNeeded(id))
-            dispatch(invalidateGroups())
-            //dispatch(notifySuccess({
-            //    message: 'contract_successful_update',
-            //}))
-            history.push(`/groups/${id}`)
+            dispatch({ type: UPDATE_COLLECTION_SUCCESS, id })
+            dispatch(resetUpdateCollection())
+            history.push(`/collections/${id}`)
         })
         .catch(error => {
-            dispatch({ type: UPDATE_GROUP_FAILURE, id, error })
+            dispatch({ type: UPDATE_COLLECTION_FAILURE, id, error })
         })
 }

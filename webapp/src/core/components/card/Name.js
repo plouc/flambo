@@ -2,7 +2,9 @@ import styled from 'styled-components'
 
 
 export default styled.div`
-    font-weight:   500;
-    margin-bottom: 6px;
-    color:         ${props => props.theme.primaryTextColor};
+    margin-bottom: 3px;
+    color:         black;
+    font-weight:   600;
+    font-size:     18px;
+    font-family:   'Rajdhani', sans-serif;
 `

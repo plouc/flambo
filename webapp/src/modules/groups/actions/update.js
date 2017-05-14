@@ -1,39 +1,41 @@
-import Joi               from 'joi-browser'
+import Joi        from 'joi-browser'
 
-import history           from '../../../core/history'
-import * as api          from '../api'
-import schema            from '../schemas/sourceSchema'
+import history    from '../../../core/history'
+import { update } from '../api'
+import schema     from '../schemas/groupSchema'
 import {
-    invalidateSource,
-    invalidateSources,
-    fetchSourceIfNeeded,
+    invalidateGroup,
+    invalidateGroups,
+    fetchGroupIfNeeded,
 } from './index'
 
-export const UPDATE_SOURCE_REQUEST = 'UPDATE_SOURCE_REQUEST'
-export const UPDATE_SOURCE_SUCCESS = 'UPDATE_SOURCE_SUCCESS'
-export const UPDATE_SOURCE_FAILURE = 'UPDATE_SOURCE_FAILURE'
-export const UPDATE_SOURCE_RESET   = 'UPDATE_SOURCE_RESET'
+export const UPDATE_GROUP_REQUEST = 'UPDATE_GROUP_REQUEST'
+export const UPDATE_GROUP_SUCCESS = 'UPDATE_GROUP_SUCCESS'
+export const UPDATE_GROUP_FAILURE = 'UPDATE_GROUP_FAILURE'
+export const UPDATE_GROUP_RESET   = 'UPDATE_GROUP_RESET'
 
-export const resetUpdateSource = () => ({ type: UPDATE_SOURCE_RESET })
+export const resetUpdateGroup = () => ({ type: UPDATE_GROUP_RESET })
 
-export const updateSource = (id, _data) => dispatch => {
+export const updateGroup = (id, _data) => (dispatch, getState) => {
     const { value: data } = Joi.validate(_data, schema)
 
-    dispatch({ type: UPDATE_SOURCE_REQUEST, id, data })
+    dispatch({ type: UPDATE_GROUP_REQUEST, id, data })
 
-    return api.update(id, data)
+    const { auth: { token } } = getState()
+
+    return update(token, id, data)
         .then(() => {
-            dispatch({ type: UPDATE_SOURCE_SUCCESS, id })
-            dispatch(resetUpdateSource())
-            dispatch(invalidateSource(id))
-            dispatch(fetchSourceIfNeeded(id))
-            dispatch(invalidateSources())
+            dispatch({ type: UPDATE_GROUP_SUCCESS, id })
+            dispatch(resetUpdateGroup())
+            dispatch(invalidateGroup(id))
+            dispatch(fetchGroupIfNeeded(id))
+            dispatch(invalidateGroups())
             //dispatch(notifySuccess({
             //    message: 'contract_successful_update',
             //}))
-            history.push(`/sources/${id}`)
+            history.push(`/groups/${id}`)
         })
         .catch(error => {
-            dispatch({ type: UPDATE_SOURCE_FAILURE, id, error })
+            dispatch({ type: UPDATE_GROUP_FAILURE, id, error })
         })
 }

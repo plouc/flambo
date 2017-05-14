@@ -1,32 +1,37 @@
 import { connect }            from 'react-redux'
 import { withRouter }         from 'react-router-dom'
+import { compose, lifecycle } from 'recompose'
 
-import Group                  from '../components/Group'
-import { fetchGroupIfNeeded } from '../actions'
+import { createItemSelector } from '../../../core/selectors'
+import User                   from '../components/User'
+import { fetchUserIfNeeded }  from '../actions'
 
 
-const mapStateToProps = (
-    state,
-    { match: { params: { id } } },
-) => {
-    const { groups: { byId } } = state
-    const group                = byId[id]
+const itemSelector = createItemSelector('users', 'user')
 
-    return {
-        id,
-        isFetching: group ? group.isFetching : false,
-        group:      (group && group.data) ? group.data : null,
-        error:      group ? group.error : null,
-    }
-}
+const mapStateToProps = (state, { match: { params } }) => ({
+    ...itemSelector({ state, params }),
+})
 
 const mapDispatchToProps = (dispatch, { match: { params: { id } } }) => ({
     fetch: () => {
-        dispatch(fetchGroupIfNeeded(id))
+        dispatch(fetchUserIfNeeded(id))
     },
 })
 
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Group))
+export default compose(
+    withRouter,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    lifecycle({
+        componentDidMount() {
+            this.props.fetch()
+        },
+        componentDidUpdate({ id }) {
+            const { id: prevId, fetch } = this.props
+            if (prevId !== id) fetch()
+        },
+    })
+)(User)

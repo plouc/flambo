@@ -1,40 +1,39 @@
-import { connect }                           from 'react-redux'
-import { withRouter }                        from 'react-router-dom'
-import { isDirty }                           from 'redux-form'
+import { connect }            from 'react-redux'
+import { withRouter }         from 'react-router-dom'
+import { compose, lifecycle } from 'recompose'
 
-import Agency                                from '../components/Agency'
-import { fetchAgencyIfNeeded, updateAgency } from '../actions'
-import { FORM_NAME }                         from '../constants'
+import { createItemSelector } from '../../../core/selectors'
+import Group                  from '../components/Group'
+import { fetchGroupIfNeeded } from '../actions'
 
 
-const mapStateToProps = (
-    state,
-    { match: { params: { id } } },
-) => {
-    const { agencies: { byId } } = state
-    const agency                 = byId[Number(id)]
+const itemSelector = createItemSelector('groups', 'group')
 
+const mapStateToProps = (state, { match: { params } }) => {
     return {
-        id:          Number(id),
-        isFetching:  agency ? agency.isFetching : false,
-        agency:      (agency && agency.data) ? agency.data : null,
-        error:       agency ? agency.error : null,
-        isUpdating:  state.updateAgency.isUpdating,
-        isDirty:     isDirty(FORM_NAME)(state),
-        updateError: state.updateAgency.error,
+        ...itemSelector({state, params}),
     }
 }
 
 const mapDispatchToProps = (dispatch, { match: { params: { id } } }) => ({
     fetch: () => {
-        dispatch(fetchAgencyIfNeeded(Number(id)))
-    },
-    update: data => {
-        dispatch(updateAgency(Number(id), data))
+        dispatch(fetchGroupIfNeeded(id))
     },
 })
 
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Agency))
+export default compose(
+    withRouter,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    lifecycle({
+        componentDidMount() {
+            this.props.fetch()
+        },
+        componentDidUpdate({ id }) {
+            const { id: prevId, fetch } = this.props
+            if (prevId !== id) fetch()
+        },
+    })
+)(Group)

@@ -17,7 +17,7 @@ const collection = (state = {
     error:         null,
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_COLLECTION_COMMENTS_REQUEST:
+        case actions.FETCH_COLLECTION_SUBSCRIBERS_REQUEST:
             return {
                 ...state,
                 perPage:     action.perPage,
@@ -29,7 +29,7 @@ const collection = (state = {
                 error:       null,
             }
 
-        case actions.FETCH_COLLECTION_COMMENTS_SUCCESS:
+        case actions.FETCH_COLLECTION_SUBSCRIBERS_SUCCESS:
             return {
                 ...state,
                 isFetching:    false,
@@ -48,7 +48,7 @@ const collection = (state = {
                 },
             }
 
-        case actions.FETCH_COLLECTION_COMMENTS_FAILURE:
+        case actions.FETCH_COLLECTION_SUBSCRIBERS_FAILURE:
             return {
                 ...state,
                 isFetching:    false,
@@ -56,7 +56,7 @@ const collection = (state = {
                 error:         action.error,
             }
 
-        case actions.INVALIDATE_COLLECTION_COMMENTS:
+        case actions.INVALIDATE_COLLECTION_SUBSCRIBERS:
             return {
                 ...state,
                 didInvalidate: true,
@@ -72,10 +72,10 @@ export default (state = {
     byId: {},
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_COLLECTION_COMMENTS_REQUEST:
-        case actions.FETCH_COLLECTION_COMMENTS_SUCCESS:
-        case actions.FETCH_COLLECTION_COMMENTS_FAILURE:
-        case actions.INVALIDATE_COLLECTION_COMMENTS:
+        case actions.FETCH_COLLECTION_SUBSCRIBERS_REQUEST:
+        case actions.FETCH_COLLECTION_SUBSCRIBERS_SUCCESS:
+        case actions.FETCH_COLLECTION_SUBSCRIBERS_FAILURE:
+        case actions.INVALIDATE_COLLECTION_SUBSCRIBERS:
             return {
                 ...state,
                 byId: {

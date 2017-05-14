@@ -1,0 +1,37 @@
+{
+  "name": "webapp",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "dependencies": {
+    "color": "^1.0.3",
+    "history": "^4.6.1",
+    "joi-browser": "^10.0.6",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-dropzone": "^3.13.1",
+    "react-helmet": "^5.0.3",
+    "react-icons": "^2.2.3",
+    "react-intl": "^2.2.3",
+    "react-intl-redux": "^0.4.1",
+    "react-redux": "^5.0.4",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",
+    "react-virtualized": "^9.7.4",
+    "recompose": "^0.23.1",
+    "redux": "^3.6.0",
+    "redux-form": "^6.6.3",
+    "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.0",
+    "styled-components": "^1.4.5",
+    "url-search-params": "^0.7.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

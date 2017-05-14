@@ -1,6 +1,6 @@
 import { decorateForm } from '../../../core/components/form'
-import Form              from '../components/GroupForm'
-import validationSchema from '../schemas/groupSchema'
+import Form              from '../components/SettingsForm'
+import validationSchema from '../schemas/settingsSchema'
 import { FORM_NAME }    from '../constants'
 
 

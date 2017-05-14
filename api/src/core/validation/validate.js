@@ -1,6 +1,9 @@
-const Joi       = require('joi')
-const makeError = require('./error')
-const ERROR     = require('./error_types')
+const Joi   = require('joi')
+
+const {
+    make:  makeError,
+    types: errorTypes,
+} = require('../error')
 
 /**
  * Validate with joi schema.
@@ -20,7 +23,7 @@ module.exports = (data, schema, opts = {}) => {
     if (result.error.name !== 'ValidationError') {
         return {
             error: makeError(
-                ERROR.UNCAUGHT_ERROR,
+                errorTypes.UNCAUGHT_ERROR,
                 'A joi validation error occured',
                 { error: result.error }
             ),
@@ -28,6 +31,6 @@ module.exports = (data, schema, opts = {}) => {
     }
 
     const message = (result.error.details) ? result.error.details.join(', ') : ''
-    const error = makeError(ERROR.MALFORMATTED_DATA, message, result.error.details)
+    const error = makeError(errorTypes.MALFORMATTED_DATA, message, result.error.details)
     return { error }
 }

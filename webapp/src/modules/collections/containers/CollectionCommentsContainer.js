@@ -1,29 +1,45 @@
-import { connect }            from 'react-redux'
-import { withRouter }         from 'react-router-dom'
-import { compose, lifecycle } from 'recompose'
+import { connect }                 from 'react-redux'
+import { withRouter }              from 'react-router-dom'
+import { compose, lifecycle }      from 'recompose'
 
-import UserComments           from '../components/UserComments'
-import { fetchUserComments }  from '../actions'
+import CollectionComments          from '../components/CollectionComments'
+import {
+    fetchCollectionComments,
+    createCollectionComment,
+} from '../actions'
 
 
-const mapStateToProps = ({ usersComments: { byId } }, { user }) => {
-    const userComments = byId[user.id]
+const mapStateToProps = ({
+    collectionsComments:     { byId },
+    createCollectionComment: { isCreating },
+    me:                      { data: me },
+}, { collection }) => {
+    const collectionComments = byId[collection.id]
 
     let comments = []
-    if (userComments) {
-        comments = userComments.currentIds.map(id => {
-            return userComments.byId[id].data
+    if (collectionComments) {
+        comments = collectionComments.currentIds.map(id => {
+            return collectionComments.byId[id].data
         })
     }
 
     return {
+        isFetching:     collectionComments ? collectionComments.isFetching : true,
+        hasBeenFetched: collectionComments ? !!collectionComments.fetchedAt : false,
         comments,
+        isCreating,
+        me,
     }
 }
 
-const mapDispatchToProps = (dispatch, { user }) => ({
+const mapDispatchToProps = (dispatch, { collection }) => ({
     fetch: () => {
-        dispatch(fetchUserComments(user.id))
+        dispatch(fetchCollectionComments(collection.id))
+    },
+    comment: data => {
+        dispatch(createCollectionComment(collection.id, data))
+    },
+    onCancel: () => {
     },
 })
 
@@ -38,4 +54,4 @@ export default compose(
             this.props.fetch()
         },
     })
-)(UserComments)
+)(CollectionComments)

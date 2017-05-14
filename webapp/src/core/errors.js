@@ -5,6 +5,8 @@ export const SERVICE_UNAVAILABLE_ERROR = 'SERVICE_UNAVAILABLE_ERROR'
 export const VALIDATION_ERROR          = 'VALIDATION_ERROR'
 
 export const namedError                = (name = UNDEFINED_ERROR, message, data = {}) => {
+    console.log(name, message, data)
+
     const error = new Error(message || name)
     error.name = name
     error.data = data

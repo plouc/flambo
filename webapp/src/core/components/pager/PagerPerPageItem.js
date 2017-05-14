@@ -1,5 +1,14 @@
 import React, { Component, PropTypes } from 'react'
+import styled                          from 'styled-components'
 
+
+const Container = styled.span`
+    margin-right: 12px;
+    cursor:       pointer;
+    color:        ${props => props.isActive ? '#000' : '#bbb'};
+    font-weight:  ${props => props.isActive ? '500' : '400'};
+    user-select:  none;
+`
 
 class PagerPerPageItem extends Component {
     constructor(props) {
@@ -17,12 +26,12 @@ class PagerPerPageItem extends Component {
         const { value, perPage } = this.props
 
         return (
-            <span
+            <Container
                 onClick={this.handleClick}
-                className={`pager__per-page__item${value === perPage ? ' _is-active' : ''}`}
+                isActive={value === perPage}
             >
                 {value}
-            </span>
+            </Container>
         )
     }
 }

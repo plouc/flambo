@@ -7,10 +7,12 @@ export const FETCH_GROUP_SUCCESS = 'FETCH_GROUP_SUCCESS'
 export const FETCH_GROUP_FAILURE = 'FETCH_GROUP_FAILURE'
 export const INVALIDATE_GROUP    = 'INVALIDATE_GROUP'
 
-export const fetchGroup = id => dispatch => {
+export const fetchGroup = id => (dispatch, getState) => {
     dispatch({ type: FETCH_GROUP_REQUEST, id })
 
-    return get(id)
+    const { auth: { token } } = getState()
+
+    return get(token, id)
         .then(data => {
             dispatch({ type: FETCH_GROUP_SUCCESS, id, data })
         })

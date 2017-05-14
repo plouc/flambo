@@ -6,9 +6,6 @@ const defaultOptions = {
     presence:   'optional',
 }
 
-export const PHONE_NUMBER_REGEX = /^\+(?:[0-9] ?){6,14}[0-9]$/
-export const DATE_REGEX         = /^\d{4}-\d{2}-\d{2}$/
-
 /**
  * Returns a validator which maps errors to form fields using Joi error path property,
  * used to be able to display errors on forms managed by redux-form.

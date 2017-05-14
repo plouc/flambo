@@ -1,5 +1,24 @@
-const db = require('../../core/database')
+const dbHelpers = require('../../core/database/helpers')
+const dao       = require('./dao')
 
-exports.all = async function() {
-    return db.from('users')
+
+exports.all = ({ limit, offset }) => {
+    return dao.find({ limit, offset })
 }
+
+exports.get = id => dao.findOne({ query: { id } })
+
+exports.getGroupSourceIds = id => {
+    return dao.findSourceIds(id)
+        .then(ids => ids.map(({ id }) => id))
+}
+
+exports.create = group => {
+    return dao.create(dbHelpers.uuid(group))
+}
+
+exports.update = dao.update
+
+exports.addMember = dao.createMembership
+
+exports.removeMember = dao.deleteMembership

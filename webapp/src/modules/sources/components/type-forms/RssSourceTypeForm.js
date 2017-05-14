@@ -1,26 +1,17 @@
-import React, { Component, PropTypes } from 'react'
-import { FormattedMessage }            from 'react-intl'
+import React                 from 'react'
+import { FormattedMessage }  from 'react-intl'
+import { Field }             from 'redux-form'
 
-import { Grid, Cell, Label, Value }    from '../../../../core/components/Grid'
+import { Grid, Cell, Label } from '../../../../core/components/Grid'
 
 
-export default class RssSourceTypeInfo extends Component {
-    static propTypes = {
-        source: PropTypes.object.isRequired,
-    }
-
-    render() {
-        const { source } = this.props
-
-        return (
-            <Grid>
-                <Cell xSpan="2">
-                    <Label>
-                        <FormattedMessage id="url"/>
-                    </Label>
-                    <Value>{source.data.url}</Value>
-                </Cell>
-            </Grid>
-        )
-    }
-}
+export default () => (
+    <Grid xTemplate="1fr 1fr" style={{ padding: 24 }}>
+        <Cell xSpan="2">
+            <Label htmlFor="data_url">
+                <FormattedMessage id="url"/>
+            </Label>
+            <Field id="data_url" name="data.url" component="input" type="text"/>
+        </Cell>
+    </Grid>
+)

@@ -17,7 +17,7 @@ const group = (state = {
     error:         null,
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_GROUP_COMMENTS_REQUEST:
+        case actions.FETCH_GROUP_MEMBERS_REQUEST:
             return {
                 ...state,
                 perPage:     action.perPage,
@@ -29,7 +29,7 @@ const group = (state = {
                 error:       null,
             }
 
-        case actions.FETCH_GROUP_COMMENTS_SUCCESS:
+        case actions.FETCH_GROUP_MEMBERS_SUCCESS:
             return {
                 ...state,
                 isFetching:    false,
@@ -48,7 +48,7 @@ const group = (state = {
                 },
             }
 
-        case actions.FETCH_GROUP_COMMENTS_FAILURE:
+        case actions.FETCH_GROUP_MEMBERS_FAILURE:
             return {
                 ...state,
                 isFetching:    false,
@@ -56,7 +56,7 @@ const group = (state = {
                 error:         action.error,
             }
 
-        case actions.INVALIDATE_GROUP_COMMENTS:
+        case actions.INVALIDATE_GROUP_MEMBERS:
             return {
                 ...state,
                 didInvalidate: true,
@@ -72,10 +72,10 @@ export default (state = {
     byId: {},
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_GROUP_COMMENTS_REQUEST:
-        case actions.FETCH_GROUP_COMMENTS_SUCCESS:
-        case actions.FETCH_GROUP_COMMENTS_FAILURE:
-        case actions.INVALIDATE_GROUP_COMMENTS:
+        case actions.FETCH_GROUP_MEMBERS_REQUEST:
+        case actions.FETCH_GROUP_MEMBERS_SUCCESS:
+        case actions.FETCH_GROUP_MEMBERS_FAILURE:
+        case actions.INVALIDATE_GROUP_MEMBERS:
             return {
                 ...state,
                 byId: {

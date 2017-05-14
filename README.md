@@ -20,16 +20,13 @@
 
 ## Stack/Tools/Libs
 
-- Rethinkdb
+- Postgres
 - elasticsearch
 - rabbitmq
 - Node.js
-- Express
-- Cucumber
+- Koa
 - Reactjs
 - Redux
-- Postcss
-- webpack
 - …
 
 ## Run it

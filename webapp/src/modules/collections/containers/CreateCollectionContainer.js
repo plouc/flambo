@@ -1,14 +1,14 @@
-import { connect }                       from 'react-redux'
-import { withRouter }                    from 'react-router-dom'
-import { injectIntl }                    from 'react-intl'
+import { connect }                                 from 'react-redux'
+import { withRouter }                              from 'react-router-dom'
+import { injectIntl }                              from 'react-intl'
 
 
-import Create                            from '../components/CreateGroup'
-import { createGroup, resetCreateGroup } from '../actions'
+import Create                                      from '../components/CreateCollection'
+import { createCollection, resetCreateCollection } from '../actions'
 
 
 const mapStateToProps = state => {
-    const { createGroup: { isCreating, error } } = state
+    const { createCollection: { isCreating, error } } = state
 
     return {
         isCreating,
@@ -18,10 +18,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     create: data => {
-        dispatch(createGroup(data))
+        dispatch(createCollection(data))
     },
     reset: () => {
-        dispatch(resetCreateGroup())
+        dispatch(resetCreateCollection())
     },
 })
 

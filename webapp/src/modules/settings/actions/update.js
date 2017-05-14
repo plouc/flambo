@@ -1,6 +1,6 @@
 import { initialize }   from 'redux-form'
 
-import history          from '../../../../core/history'
+import history          from '../../../core/history'
 import { switchLocale } from './i18nActions'
 
 

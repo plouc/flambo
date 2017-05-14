@@ -7,10 +7,12 @@ export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS'
 export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE'
 export const INVALIDATE_USER    = 'INVALIDATE_USER'
 
-export const fetchUser = id => dispatch => {
+export const fetchUser = id => (dispatch, getState) => {
     dispatch({ type: FETCH_USER_REQUEST, id })
 
-    return get(id)
+    const { auth: { token } } = getState()
+
+    return get(token, id)
         .then(data => {
             dispatch({ type: FETCH_USER_SUCCESS, id, data })
         })

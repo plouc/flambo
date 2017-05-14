@@ -1,40 +1,28 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 
-import Form                            from '../containers/SourceFormContainer'
+import Form                 from '../containers/GroupFormContainer'
 
 
-export default class EditSource extends Component {
-    static propTypes = {
-        source:     PropTypes.object.isRequired,
-        update:     PropTypes.func.isRequired,
-        error:      PropTypes.object,
-        isUpdating: PropTypes.bool.isRequired,
-        history:    PropTypes.shape({
-            push: PropTypes.func.isRequired,
-        }).isRequired,
-    }
+const EditGroup = ({
+    group, update, cancel, isUpdating,
+}) => (
+    <div>
+        <Form
+            group={group}
+            initialValues={group}
+            onSubmit={update}
+            onCancel={cancel}
+            isSubmitting={isUpdating}
+        />
+    </div>
+)
 
-    handleCancel = () => {
-        const { history, source } = this.props
-        history.push(`/sources/${source.id}`)
-    }
-
-    render() {
-        const {
-            source,
-            update,
-            isUpdating,
-        } = this.props
-
-        return (
-            <div>
-                <Form
-                    initialValues={source}
-                    onSubmit={update}
-                    onCancel={this.handleCancel}
-                    isSubmitting={isUpdating}
-                />
-            </div>
-        )
-    }
+EditGroup.propTypes = {
+    group:      PropTypes.object.isRequired,
+    update:     PropTypes.func.isRequired,
+    cancel:     PropTypes.func.isRequired,
+    error:      PropTypes.object,
+    isUpdating: PropTypes.bool.isRequired,
 }
+
+export default EditGroup

@@ -1,2 +1,2 @@
 export * from './i18nActions'
-export * from './settingsActions'
+export * from './update'

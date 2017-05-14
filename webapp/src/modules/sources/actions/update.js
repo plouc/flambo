@@ -16,12 +16,14 @@ export const UPDATE_SOURCE_RESET   = 'UPDATE_SOURCE_RESET'
 
 export const resetUpdateSource = () => ({ type: UPDATE_SOURCE_RESET })
 
-export const updateSource = (id, _data) => dispatch => {
+export const updateSource = (id, _data) => (dispatch, getState) => {
     const { value: data } = Joi.validate(_data, schema)
 
     dispatch({ type: UPDATE_SOURCE_REQUEST, id, data })
 
-    return api.update(id, data)
+    const { auth: { token } } = getState()
+
+    return api.update(token, id, data)
         .then(() => {
             dispatch({ type: UPDATE_SOURCE_SUCCESS, id })
             dispatch(resetUpdateSource())

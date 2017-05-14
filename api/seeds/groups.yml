@@ -1,0 +1,151 @@
+ux:
+  name:        UX
+  owner:       janis
+  members:
+    - { user: raph, is_administrator: true }
+    - { user: alton }
+  picture:     ux
+  sources:
+    - a_list_apart
+    - smashing_mag
+
+design:
+  name:        design
+  owner:       bon
+  members:
+    - { user: ella }
+  sources:
+    - a_list_apart
+    - smashing_mag
+    - behance
+
+big_data:
+  name:        Big data
+  owner:       sabine
+  members:
+    - { user: marcel }
+  picture:     big_data
+  sources:
+    - elastic_blog
+    - iot_thinkers_meetup
+
+dba:
+  name:        DBA
+  owner:       marcel
+  members:     []
+
+nodejs:
+  name:        Node.js
+  description: An open-source, cross-platform JavaScript run-time environment for executing JavaScript code server-side.
+  owner:       raph
+  picture:     nodejs
+  members:
+    - { user: horace, is_administrator: true }
+    - { user: bon }
+    - { user: alton }
+  sources:
+    - nodejs_blog
+    - nodejs_paris_meetup
+    - nodeschool_paris_meetup
+    - nodejs_chicago_meetup
+
+java:
+  name:        Java
+  description: Java is a general-purpose computer programming language that is concurrent, class-based, object-oriented, and specifically designed to have as few implementation dependencies as possible.
+  owner:       alton
+  picture:     java
+  members:
+    - { user: bon, is_administrator: true }
+    - { user: horace }
+
+go:
+  name:        Go
+  description: Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.
+  owner:       horace
+  picture:     go
+  members:
+    - { user: david, is_administrator: true }
+    - { user: raph }
+    - { user: ella }
+  sources:
+    - golang_weekly
+    - alex_edwards_blog
+
+frontend:
+  name:        Frontend
+  owner:       raph
+  members:
+    - { user: horace }
+  picture:     frontend
+  sources:
+    - a_list_apart
+    - smashing_mag
+    - nodejs_blog
+
+reactjs:
+  name:        React
+  description: A javascript library for building user interfaces.
+  owner:       raph
+  picture:     reactjs
+  members:
+    - { user: bon, is_administrator: true }
+    - { user: alton }
+    - { user: kendrick }
+    - { user: josiane }
+    - { user: sabine }
+
+devOps:
+  name:        DevOps
+  owner:       raph
+  members:
+    - { user: kendrick }
+    - { user: bon }
+    - { user: alton }
+    - { user: josiane }
+    - { user: sabine }
+  picture:     devops
+  sources:     [docker_blog]
+
+aws:
+  name:        AWS
+  owner:       raph
+  picture:     aws
+  members:
+    - { user: kendrick }
+    - { user: bon }
+    - { user: alton }
+    - { user: josiane }
+    - { user: sabine }
+
+php:
+  name:        PHP
+  description: A widely-used open source scripting language that is especially suited for web development.
+  owner:       raph
+  picture:     php
+  members:
+    - { user: kendrick, is_administrator: true }
+    - { user: bon }
+    - { user: alton }
+    - { user: josiane }
+    - { user: sabine }
+  sources:     [symfony_blog]
+
+swift:
+  name:        swift
+  owner:       horace
+  picture:     swift
+  members:
+    - { user: josiane }
+    - { user: sabine }
+
+javascript:
+  name:        javascript
+  owner:       alton
+  picture:     javascript
+  members:
+    - { user: raph, is_administrator: true }
+    - { user: marcel }
+    - { user: josiane }
+    - { user: sabine }
+  sources:
+    - nodejs_blog

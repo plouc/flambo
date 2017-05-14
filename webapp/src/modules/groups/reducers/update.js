@@ -4,9 +4,9 @@ import * as actions        from '../actions'
 
 export default createUpdateReducer({
     actionTypes: {
-        request: actions.UPDATE_SOURCE_REQUEST,
-        success: actions.UPDATE_SOURCE_SUCCESS,
-        failure: actions.UPDATE_SOURCE_FAILURE,
-        reset:   actions.UPDATE_SOURCE_RESET,
+        request: actions.UPDATE_GROUP_REQUEST,
+        success: actions.UPDATE_GROUP_SUCCESS,
+        failure: actions.UPDATE_GROUP_FAILURE,
+        reset:   actions.UPDATE_GROUP_RESET,
     },
 })

@@ -2,12 +2,12 @@ import { fetchTime } from '../../../core/actions/actionsHelpers'
 import { feed }      from '../api'
 
 
-export const FETCH_GROUP_FEED_REQUEST = 'FETCH_GROUP_FEED_REQUEST'
-export const FETCH_GROUP_FEED_SUCCESS = 'FETCH_GROUP_FEED_SUCCESS'
-export const FETCH_GROUP_FEED_FAILURE = 'FETCH_GROUP_FEED_FAILURE'
-export const INVALIDATE_GROUP_FEED    = 'INVALIDATE_GROUP_FEED'
+export const FETCH_SOURCE_FEED_REQUEST = 'FETCH_SOURCE_FEED_REQUEST'
+export const FETCH_SOURCE_FEED_SUCCESS = 'FETCH_SOURCE_FEED_SUCCESS'
+export const FETCH_SOURCE_FEED_FAILURE = 'FETCH_SOURCE_FEED_FAILURE'
+export const INVALIDATE_SOURCE_FEED    = 'INVALIDATE_SOURCE_FEED'
 
-export const fetchGroupFeed = (id, _options = {}) => (dispatch, getState) => {
+export const fetchSourceFeed = (id, _options = {}) => (dispatch, getState) => {
     const {
         collections: { perPage, page, sort, filters },
         auth:        { token },
@@ -21,23 +21,23 @@ export const fetchGroupFeed = (id, _options = {}) => (dispatch, getState) => {
         ..._options,
     }
 
-    dispatch({ type: FETCH_GROUP_FEED_REQUEST, id, ...options })
+    dispatch({ type: FETCH_SOURCE_FEED_REQUEST, id, ...options })
 
     return feed(token, id, options)
         .then(res => {
             dispatch(fetchTime({
-                type: FETCH_GROUP_FEED_SUCCESS,
+                type: FETCH_SOURCE_FEED_SUCCESS,
                 id,
                 ...res,
             }))
         })
         .catch(error => {
             dispatch({
-                type: FETCH_GROUP_FEED_FAILURE,
+                type: FETCH_SOURCE_FEED_FAILURE,
                 id,
                 error,
             })
         })
 }
 
-export const invalidateGroupFeed = id => ({ type: INVALIDATE_GROUP_FEED, id })
+export const invalidateSourceFeed = id => ({ type: INVALIDATE_SOURCE_FEED, id })

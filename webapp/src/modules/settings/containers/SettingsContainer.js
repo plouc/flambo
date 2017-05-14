@@ -20,7 +20,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    updateSettings: settings => {
+    update: settings => {
         dispatch(updateSettings(settings))
     },
 })

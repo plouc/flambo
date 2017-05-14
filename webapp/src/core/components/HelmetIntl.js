@@ -2,6 +2,7 @@ import React, { PropTypes }      from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import Helmet                    from 'react-helmet'
 
+
 export const HelmetIntl = ({
     intl: { formatMessage },
     title,

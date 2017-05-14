@@ -2,28 +2,30 @@ import { connect }            from 'react-redux'
 import { withRouter }         from 'react-router-dom'
 import { compose, lifecycle } from 'recompose'
 
-import GroupFeed              from '../components/GroupFeed'
-import { fetchGroupFeed }     from '../actions'
+import SourceFeed             from '../components/SourceFeed'
+import { fetchSourceFeed }    from '../actions'
 
 
-const mapStateToProps = ({ groupsFeed: { byId } }, { group }) => {
-    const groupFeed = byId[group.id]
+const mapStateToProps = ({ sourcesFeed: { byId } }, { source }) => {
+    const sourceFeed = byId[source.id]
 
     let items = []
-    if (groupFeed) {
-        items = groupFeed.currentIds.map(id => {
-            return groupFeed.byId[id].data
+    if (sourceFeed) {
+        items = sourceFeed.currentIds.map(id => {
+            return sourceFeed.byId[id].data
         })
     }
 
     return {
+        isFetching:     sourceFeed ? sourceFeed.isFetching : true,
+        hasBeenFetched: sourceFeed ? !!sourceFeed.fetchedAt : false,
         items,
     }
 }
 
-const mapDispatchToProps = (dispatch, { group }) => ({
+const mapDispatchToProps = (dispatch, { source }) => ({
     fetch: () => {
-        dispatch(fetchGroupFeed(group.id))
+        dispatch(fetchSourceFeed(source.id))
     },
 })
 
@@ -38,4 +40,4 @@ export default compose(
             this.props.fetch()
         },
     })
-)(GroupFeed)
+)(SourceFeed)

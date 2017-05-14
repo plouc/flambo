@@ -1,13 +1,13 @@
 import { fetchTime } from '../../../core/actions/actionsHelpers'
-import { comments }  from '../api'
+import { feed }      from '../api'
 
 
-export const FETCH_COLLECTION_COMMENTS_REQUEST = 'FETCH_COLLECTION_COMMENTS_REQUEST'
-export const FETCH_COLLECTION_COMMENTS_SUCCESS = 'FETCH_COLLECTION_COMMENTS_SUCCESS'
-export const FETCH_COLLECTION_COMMENTS_FAILURE = 'FETCH_COLLECTION_COMMENTS_FAILURE'
-export const INVALIDATE_COLLECTION_COMMENTS    = 'INVALIDATE_COLLECTION_COMMENTS'
+export const FETCH_COLLECTION_FEED_REQUEST = 'FETCH_COLLECTION_FEED_REQUEST'
+export const FETCH_COLLECTION_FEED_SUCCESS = 'FETCH_COLLECTION_FEED_SUCCESS'
+export const FETCH_COLLECTION_FEED_FAILURE = 'FETCH_COLLECTION_FEED_FAILURE'
+export const INVALIDATE_COLLECTION_FEED    = 'INVALIDATE_COLLECTION_FEED'
 
-export const fetchCollectionComments = (id, _options = {}) => (dispatch, getState) => {
+export const fetchCollectionFeed = (id, _options = {}) => (dispatch, getState) => {
     const {
         collections: { perPage, page, sort, filters },
         auth:        { token },
@@ -21,23 +21,23 @@ export const fetchCollectionComments = (id, _options = {}) => (dispatch, getStat
         ..._options,
     }
 
-    dispatch({ type: FETCH_COLLECTION_COMMENTS_REQUEST, id, ...options })
+    dispatch({ type: FETCH_COLLECTION_FEED_REQUEST, id, ...options })
 
-    return comments(token, id, options)
+    return feed(token, id, options)
         .then(res => {
             dispatch(fetchTime({
-                type: FETCH_COLLECTION_COMMENTS_SUCCESS,
+                type: FETCH_COLLECTION_FEED_SUCCESS,
                 id,
                 ...res,
             }))
         })
         .catch(error => {
             dispatch({
-                type: FETCH_COLLECTION_COMMENTS_FAILURE,
+                type: FETCH_COLLECTION_FEED_FAILURE,
                 id,
                 error,
             })
         })
 }
 
-export const invalidateCollectionComments = id => ({ type: INVALIDATE_COLLECTION_COMMENTS, id })
+export const invalidateCollectionFeed = id => ({ type: INVALIDATE_COLLECTION_FEED, id })

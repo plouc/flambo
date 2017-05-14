@@ -1,13 +1,13 @@
-import { fetchTime }   from '../../../core/actions/actionsHelpers'
-import { collections } from '../api'
+import { fetchTime } from '../../../core/actions/actionsHelpers'
+import { comments }  from '../api'
 
 
-export const FETCH_USER_COLLECTIONS_REQUEST = 'FETCH_USER_COLLECTIONS_REQUEST'
-export const FETCH_USER_COLLECTIONS_SUCCESS = 'FETCH_USER_COLLECTIONS_SUCCESS'
-export const FETCH_USER_COLLECTIONS_FAILURE = 'FETCH_USER_COLLECTIONS_FAILURE'
-export const INVALIDATE_USER_COLLECTIONS    = 'INVALIDATE_USER_COLLECTIONS'
+export const FETCH_USER_COMMENTS_REQUEST = 'FETCH_USER_COMMENTS_REQUEST'
+export const FETCH_USER_COMMENTS_SUCCESS = 'FETCH_USER_COMMENTS_SUCCESS'
+export const FETCH_USER_COMMENTS_FAILURE = 'FETCH_USER_COMMENTS_FAILURE'
+export const INVALIDATE_USER_COMMENTS    = 'INVALIDATE_USER_COMMENTS'
 
-export const fetchUserCollections = (id, _options = {}) => (dispatch, getState) => {
+export const fetchUserComments = (id, _options = {}) => (dispatch, getState) => {
     const {
         collections: { perPage, page, sort, filters },
         auth:        { token },
@@ -21,23 +21,23 @@ export const fetchUserCollections = (id, _options = {}) => (dispatch, getState) 
         ..._options,
     }
 
-    dispatch({ type: FETCH_USER_COLLECTIONS_REQUEST, id, ...options })
+    dispatch({ type: FETCH_USER_COMMENTS_REQUEST, id, ...options })
 
-    return collections(token, id, options)
+    return comments(token, id, options)
         .then(res => {
             dispatch(fetchTime({
-                type: FETCH_USER_COLLECTIONS_SUCCESS,
+                type: FETCH_USER_COMMENTS_SUCCESS,
                 id,
                 ...res,
             }))
         })
         .catch(error => {
             dispatch({
-                type: FETCH_USER_COLLECTIONS_FAILURE,
+                type: FETCH_USER_COMMENTS_FAILURE,
                 id,
                 error,
             })
         })
 }
 
-export const invalidateUserCollections = id => ({ type: INVALIDATE_USER_COLLECTIONS, id })
+export const invalidateUserComments = id => ({ type: INVALIDATE_USER_COMMENTS, id })

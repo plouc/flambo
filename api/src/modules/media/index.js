@@ -1,26 +1,27 @@
-const db        = require('../../core/database')
 const dbHelpers = require('../../core/database/helpers')
+const config    = require('../../core/config')
+const dao       = require('./dao')
 
 
-exports.all = async ({
-    limit, offset,
-}) => {
-    return db.from('collections')
-        .modify(qb => {
-            if (limit  !== undefined) qb.limit(limit)
-            if (offset !== undefined) qb.offset(offset)
-        })
-        .orderBy('name')
+exports.dao = dao
+
+exports.getMediumUrl = medium => {
+    return `${config.get('static.base_url')}/${medium.path}`
 }
 
-exports.get = async id => {
-    return db.from('collections')
-        .where('id', id)
-        .then(([collection]) => collection)
+exports.appendMediumUrl = medium => Object.assign(medium, {
+    url: exports.getMediumUrl(medium),
+})
+
+exports.appendRelatedMediumUrl = (item, key) => {
+    if (item[key]) item[key] = exports.appendMediumUrl(item[key])
+    return item
 }
 
-exports.create = async collection => {
-    return db('collections')
-        .returning('*')
-        .insert(dbHelpers.uuid(collection))
+exports.all = ({ limit, offset }) => {
+    return dao.find({ limit, offset })
 }
+
+exports.get = id => dao.findOne({ query: { id } })
+
+exports.create = medium => dao.create(dbHelpers.uuid(medium))

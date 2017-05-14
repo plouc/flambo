@@ -1,56 +1,31 @@
-import React, { Component, PropTypes }         from 'react'
-import { FormattedMessage, FormattedRelative } from 'react-intl'
+import React, { Component, PropTypes } from 'react'
+import { FormattedMessage }            from 'react-intl'
 
-import { Grid, Cell, Label, Value }            from '../../../core/components/Grid'
+import { Grid, Cell, Label, Value }    from '../../../core/components/Grid'
 
 
-export default class CollectionInfo extends Component {
+export default class SettingsInfo extends Component {
     static propTypes = {
-        collection: PropTypes.object.isRequired,
+        settings: PropTypes.object.isRequired,
     }
 
     render() {
-        const { collection } = this.props
+        const { settings } = this.props
 
         return (
             <Grid
+                xTemplate="1fr 1fr"
                 style={{
-                    margin:    60,
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.07)',
+                    padding:   24,
+                    boxShadow: '0 1px 2px rgba(0, 0, 0, .07)',
                 }}
             >
                 <Cell>
                     <Label>
-                        <FormattedMessage id="name"/>
-                    </Label>
-                    <Value>{collection.name}</Value>
-                </Cell>
-                <Cell x="3">
-                    <Label>
-                        <FormattedMessage id="created_at"/>
+                        <FormattedMessage id="language"/>
                     </Label>
                     <Value>
-                        <FormattedRelative
-                            value={collection.created_at}
-                            updateInterval={10000}
-                        />
-                    </Value>
-                </Cell>
-                <Cell xSpan="2">
-                    <Label>
-                        <FormattedMessage id="description"/>
-                    </Label>
-                    <Value>{collection.description || '—'}</Value>
-                </Cell>
-                <Cell>
-                    <Label>
-                        <FormattedMessage id="updated_at"/>
-                    </Label>
-                    <Value>
-                        <FormattedRelative
-                            value={collection.updated_at}
-                            updateInterval={10000}
-                        />
+                        <FormattedMessage id={`lang_${settings.locale}`}/>
                     </Value>
                 </Cell>
             </Grid>

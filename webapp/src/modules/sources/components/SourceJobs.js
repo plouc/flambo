@@ -23,15 +23,14 @@ const Title = styled.div`
     color:         black;
 `
 
-const SourceFeed = ({ items }) => (
+const SourceJobs = ({ jobs }) => (
     <Container>
-        {items.map(item => (
-            <ListItem key={item.id}>
-                <Title>{item.title}</Title>
-                <div>{item.content}</div>
+        {jobs.map(job => (
+            <ListItem key={job.id}>
+                <Title>{job.id} {job.status}</Title>
             </ListItem>
         ))}
     </Container>
 )
 
-export default SourceFeed
+export default SourceJobs

@@ -17,7 +17,7 @@ const user = (state = {
     error:         null,
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_USER_COLLECTIONS_REQUEST:
+        case actions.FETCH_USER_COMMENTS_REQUEST:
             return {
                 ...state,
                 perPage:     action.perPage,
@@ -29,7 +29,7 @@ const user = (state = {
                 error:       null,
             }
 
-        case actions.FETCH_USER_COLLECTIONS_SUCCESS:
+        case actions.FETCH_USER_COMMENTS_SUCCESS:
             return {
                 ...state,
                 isFetching:    false,
@@ -48,7 +48,7 @@ const user = (state = {
                 },
             }
 
-        case actions.FETCH_USER_COLLECTIONS_FAILURE:
+        case actions.FETCH_USER_COMMENTS_FAILURE:
             return {
                 ...state,
                 isFetching:    false,
@@ -56,7 +56,7 @@ const user = (state = {
                 error:         action.error,
             }
 
-        case actions.INVALIDATE_USER_COLLECTIONS:
+        case actions.INVALIDATE_USER_COMMENTS:
             return {
                 ...state,
                 didInvalidate: true,
@@ -72,10 +72,10 @@ export default (state = {
     byId: {},
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_USER_COLLECTIONS_REQUEST:
-        case actions.FETCH_USER_COLLECTIONS_SUCCESS:
-        case actions.FETCH_USER_COLLECTIONS_FAILURE:
-        case actions.INVALIDATE_USER_COLLECTIONS:
+        case actions.FETCH_USER_COMMENTS_REQUEST:
+        case actions.FETCH_USER_COMMENTS_SUCCESS:
+        case actions.FETCH_USER_COMMENTS_FAILURE:
+        case actions.INVALIDATE_USER_COMMENTS:
             return {
                 ...state,
                 byId: {

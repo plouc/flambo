@@ -1,0 +1,31 @@
+raph_public_dataviz:
+  name:        Raph dataviz public collection
+  description: A collection about dataviz stuff.
+  owner:       raph
+  public:      true
+  subscribers:
+    - { user: alton, is_contributor: true }
+    - { user: ella }
+
+raph_private_es6:
+  name:        Raph private es6 collection
+  description: A collection about javascript es6 stuff.
+  owner:       raph
+  picture:     javascript
+
+raph_public_fonts:
+  name:        Raph fonts public collection
+  description: Just collecting some fonts I like.
+  owner:       raph
+  public:      true
+  subscribers:
+    - { user: bon, is_contributor: true }
+    - { user: sabine }
+    - { user: marcel }
+    - { user: josiane }
+
+alton_public_java:
+  name:        Alton java public collection
+  owner:       alton
+  public:      true
+  picture:     java

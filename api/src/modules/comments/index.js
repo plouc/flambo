@@ -2,18 +2,17 @@ const dbHelpers = require('../../core/database/helpers')
 const dao       = require('./dao')
 
 
-exports.all = ({ limit, offset }) => {
-    return dao.find({ limit, offset })
+exports.all = ({ limit, offset, query }) => {
+    return dao.find({ limit, offset, query })
 }
 
-exports.get = id => dao.findOne({ query: { id } })
-
-exports.create = group => {
-    return dao.create(dbHelpers.uuid(group))
+exports.groupComments = (groupId, { limit, offset }) => {
+    return dao.find({
+        limit, offset,
+        query: { 'group.id': groupId },
+    })
 }
 
-exports.update = dao.update
-
-exports.addMember = dao.createMembership
-
-exports.removeMember = dao.deleteMembership
+exports.create = comment => {
+    return dao.create(dbHelpers.uuid(comment))
+}

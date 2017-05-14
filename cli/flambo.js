@@ -9,10 +9,14 @@ const home = process.env.HOME ||
 
 const filename = path.join(home, '.flambo', 'config')
 
-console.log(home)
-console.log(filename)
+//console.log(home)
+//console.log(filename)
 
 program
     .version(pkg.version)
-    .command('groups', 'list groups')
+    .command('login',       'login')
+    .command('users',       'list users')
+    .command('groups',      'list groups')
+    .command('sources',     'list sources')
+    .command('collections', 'list collections')
     .parse(process.argv)

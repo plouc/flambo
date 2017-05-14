@@ -1,5 +1,7 @@
 const Joi = require('joi')
 
-exports.createGroup = Joi.object().keys({
-    name: Joi.string().required(),
+exports.create = Joi.object().keys({
+    first_name: Joi.string().required(),
+    last_name:  Joi.string().required(),
+    groups:     Joi.array().items(Joi.string()).unique().default([]),
 })

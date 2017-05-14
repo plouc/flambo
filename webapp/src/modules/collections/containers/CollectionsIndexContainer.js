@@ -1,16 +1,16 @@
-import { connect }               from 'react-redux'
-import { withRouter }            from 'react-router-dom'
+import { connect }                  from 'react-redux'
+import { withRouter }               from 'react-router-dom'
 
-import createCollectionSelector  from '../../../core/selectors/createCollectionSelector'
-import Index                     from '../components/GroupsIndex'
-import { fetchGroupsIfNeeded }   from '../actions'
+import createCollectionSelector     from '../../../core/selectors/createCollectionSelector'
+import Index                        from '../components/CollectionsIndex'
+import { fetchCollectionsIfNeeded } from '../actions'
 
 
-const collectionSelector = createCollectionSelector('groups')
+const collectionSelector = createCollectionSelector('collections')
 
 const mapStateToProps = state => {
     const {
-        groups: {
+        collections: {
             fetchedAt,
             isFetching,
             perPage,
@@ -26,7 +26,7 @@ const mapStateToProps = state => {
         hasBeenFetched:   !!fetchedAt,
         //hasActiveFilters: hasActiveFiltersSelector(state),
         hasActiveFilters: false,
-        groups:           collectionSelector(state),
+        collections:      collectionSelector(state),
         isFetching,
         perPage,
         page,
@@ -39,7 +39,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     fetch: options => {
-        dispatch(fetchGroupsIfNeeded(options))
+        dispatch(fetchCollectionsIfNeeded(options))
     },
 })
 

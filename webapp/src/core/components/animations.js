@@ -6,7 +6,7 @@ export const blink = keyframes`
         opacity: 1;
     }
     50% {
-        opacity: .35;
+        opacity: .5;
     }
     100% {
         opacity: 1;

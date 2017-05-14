@@ -7,10 +7,12 @@ export const FETCH_COLLECTION_SUCCESS = 'FETCH_COLLECTION_SUCCESS'
 export const FETCH_COLLECTION_FAILURE = 'FETCH_COLLECTION_FAILURE'
 export const INVALIDATE_COLLECTION    = 'INVALIDATE_COLLECTION'
 
-export const fetchCollection = id => dispatch => {
+export const fetchCollection = id => (dispatch, getState) => {
     dispatch({ type: FETCH_COLLECTION_REQUEST, id })
 
-    return get(id)
+    const { auth: { token } } = getState()
+
+    return get(token, id)
         .then(data => {
             dispatch({ type: FETCH_COLLECTION_SUCCESS, id, data })
         })

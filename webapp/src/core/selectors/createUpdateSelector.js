@@ -1,22 +1,15 @@
+import _                  from 'lodash'
 import { createSelector } from 'reselect'
 
 
-export default (collectionKey, itemKey) => {
-    const dictSelector = ({ state })  => state[collectionKey].byId
-    const idSelector   = ({ params }) => params.id
+export default namespace => {
+    const selector = state  => state[`update${_.upperFirst(namespace)}`]
 
     return createSelector(
-        dictSelector,
-        idSelector,
-        (dict, id) => {
-            const item = dict[id]
-
-            return {
-                id,
-                isFetching: item ? item.isFetching : false,
-                [itemKey]:  (item && item.data) ? item.data : null,
-                error:      item ? item.error : null,
-            }
-        }
+        selector,
+        update => ({
+            isUpdating: update.isUpdating,
+            error:      update.error,
+        })
     )
 }

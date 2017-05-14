@@ -3,7 +3,7 @@ import _            from 'lodash'
 import * as actions from '../actions'
 
 
-const group = (state = {
+const source = (state = {
     perPage:       10,
     page:          1,
     sort:          {},
@@ -17,7 +17,7 @@ const group = (state = {
     error:         null,
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_GROUP_FEED_REQUEST:
+        case actions.FETCH_SOURCE_FEED_REQUEST:
             return {
                 ...state,
                 perPage:     action.perPage,
@@ -29,7 +29,7 @@ const group = (state = {
                 error:       null,
             }
 
-        case actions.FETCH_GROUP_FEED_SUCCESS:
+        case actions.FETCH_SOURCE_FEED_SUCCESS:
             return {
                 ...state,
                 isFetching:    false,
@@ -48,7 +48,7 @@ const group = (state = {
                 },
             }
 
-        case actions.FETCH_GROUP_FEED_FAILURE:
+        case actions.FETCH_SOURCE_FEED_FAILURE:
             return {
                 ...state,
                 isFetching:    false,
@@ -56,7 +56,7 @@ const group = (state = {
                 error:         action.error,
             }
 
-        case actions.INVALIDATE_GROUP_FEED:
+        case actions.INVALIDATE_SOURCE_FEED:
             return {
                 ...state,
                 didInvalidate: true,
@@ -72,15 +72,15 @@ export default (state = {
     byId: {},
 }, action) => {
     switch (action.type) {
-        case actions.FETCH_GROUP_FEED_REQUEST:
-        case actions.FETCH_GROUP_FEED_SUCCESS:
-        case actions.FETCH_GROUP_FEED_FAILURE:
-        case actions.INVALIDATE_GROUP_FEED:
+        case actions.FETCH_SOURCE_FEED_REQUEST:
+        case actions.FETCH_SOURCE_FEED_SUCCESS:
+        case actions.FETCH_SOURCE_FEED_FAILURE:
+        case actions.INVALIDATE_SOURCE_FEED:
             return {
                 ...state,
                 byId: {
                     ...state.byId,
-                    [action.id]: group(state.byId[action.id], action),
+                    [action.id]: source(state.byId[action.id], action),
                 }
             }
 

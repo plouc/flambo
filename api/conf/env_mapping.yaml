@@ -1,0 +1,14 @@
+PORT: port
+
+STATIC_BASE_URL: static.base_url
+
+POSTGRES_HOST: db.connection.host
+POSTGRES_PORT: db.connection.port
+POSTGRES_USER: db.connection.user
+POSTGRES_PWD:  db.connection.password
+POSTGRES_DB:   db.connection.database
+
+ELASTIC_HOST: elastic.host
+ELASTIC_PORT: elastic.port
+
+MEETUP_API_KEY: meetup.api_key

@@ -1,0 +1,119 @@
+{
+	"variables": [],
+	"info": {
+		"name": "flambo",
+		"_postman_id": "ea56dc0b-7b0d-7850-3081-b0d8d63a39b7",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "groups",
+			"description": "",
+			"item": [
+				{
+					"name": "fetch groups",
+					"request": {
+						"url": "http://localhost:7000/api/v1/groups",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetch all groups"
+					},
+					"response": []
+				},
+				{
+					"name": "create group",
+					"request": {
+						"url": "http://localhost:7000/api/v1/groups",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"new group\"\n}"
+						},
+						"description": "Create new group"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "sources",
+			"description": "",
+			"item": [
+				{
+					"name": "http://localhost:7000/api/v1/sources",
+					"request": {
+						"url": "http://localhost:7000/api/v1/sources",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetch all sources"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tags",
+			"description": "",
+			"item": [
+				{
+					"name": "http://localhost:7000/api/v1/tags",
+					"request": {
+						"url": "http://localhost:7000/api/v1/tags",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetch all tags"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"description": "",
+			"item": [
+				{
+					"name": "fetch users",
+					"request": {
+						"url": "http://localhost:7000/api/v1/users",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Fetch all users"
+					},
+					"response": []
+				},
+				{
+					"name": "create user",
+					"request": {
+						"url": "http://localhost:7000/api/v1/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"first_name\": \"John\",\n\t\"last_name\": \"Doe\",\n\t\"groups\": [\n\t\t\"b2ddcd68-5c5f-49e1-85c2-a57c5c649946\",\n\t\t\"4b3992aa-3e8b-4535-8c85-e489a055906b\",\n\t\t\"e23b191c-65e7-4acf-9846-fcb346880bb0\"\n\t]\n}"
+						},
+						"description": "Create new user"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

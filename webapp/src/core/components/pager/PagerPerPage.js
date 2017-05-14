@@ -1,13 +1,19 @@
 import React, { PropTypes } from 'react'
 import { FormattedMessage } from 'react-intl'
+import styled               from 'styled-components'
+
 import PagerPerPageItem     from './PagerPerPageItem'
 
 
+const Label = styled.span`
+    margin-right: 12px;
+`
+
 const PagerPerPage = ({ perPage, options, onChange }) => (
-    <div className="pager__per-page">
-        <span className="pager__per-page__label">
-            <FormattedMessage id="pager.per_page" />&nbsp;:
-        </span>
+    <div>
+        <Label>
+            <FormattedMessage id="pager_per_page" />
+        </Label>
         {options.map(size => (
             <PagerPerPageItem
                 key={size}

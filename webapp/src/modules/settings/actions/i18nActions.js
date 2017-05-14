@@ -1,6 +1,6 @@
 import { updateIntl } from 'react-intl-redux'
 
-import translations   from '../../../../i18n'
+import translations   from '../../../i18n'
 
 
 export const switchLocale = locale => {
@@ -9,6 +9,7 @@ export const switchLocale = locale => {
             locale,
             messages: translations[locale],
         }))
+        localStorage.setItem('settings.locale', locale)
     }
 }
 

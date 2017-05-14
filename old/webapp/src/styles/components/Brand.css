@@ -1,9 +1,0 @@
-.brand {
-    display: block;
-    font-size: 24px;
-    font-weight: 900;
-    color: var(--white);
-    background: var(--darker-blue);
-    padding: 16px 20px 0 20px;
-    height: var(--header-height);
-}
