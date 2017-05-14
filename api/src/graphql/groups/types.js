@@ -7,6 +7,7 @@ const {
     GraphQLString,
     GraphQLList,
     GraphQLInt,
+    GraphQLID,
 } = require('graphql')
 
 const coreTypes     = require('../core/types')
@@ -18,7 +19,7 @@ exports.Group = new GraphQLObjectType({
     name:   'Group',
     fields: () => ({
         id: {
-            type: GraphQLString,
+            type: GraphQLID,
         },
         name: {
             type: GraphQLString,
@@ -58,6 +59,18 @@ exports.GroupOrder = new GraphQLInputObjectType({
         },
         direction: {
             type: new GraphQLNonNull(coreTypes.orderDirection),
+        },
+    },
+})
+
+exports.CreateGroupInput = new GraphQLInputObjectType({
+    name: 'CreateGroupInput',
+    fields: {
+        name: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
+        description: {
+            type: GraphQLString,
         },
     },
 })

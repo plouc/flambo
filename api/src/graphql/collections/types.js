@@ -7,6 +7,7 @@ const {
     GraphQLString,
     GraphQLList,
     GraphQLInt,
+    GraphQLID,
 } = require('graphql')
 
 const coreTypes = require('../core/types')
@@ -17,7 +18,7 @@ exports.Collection = new GraphQLObjectType({
     name:   'Collection',
     fields: () => ({
         id: {
-            type: GraphQLString,
+            type: GraphQLID,
         },
         name: {
             type: GraphQLString,
@@ -59,3 +60,16 @@ exports.CollectionOrder = new GraphQLInputObjectType({
         },
     },
 })
+
+exports.CreateCollectionInput = new GraphQLInputObjectType({
+    name: 'CreateCollectionInput',
+    fields: {
+        name: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
+        description: {
+            type: GraphQLString,
+        },
+    },
+})
+

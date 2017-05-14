@@ -4,6 +4,7 @@ const {
     GraphQLString,
     GraphQLList,
     GraphQLInt,
+    GraphQLID,
 } = require('graphql')
 
 const userTypes     = require('./types')
@@ -29,7 +30,9 @@ module.exports = () => ({
     user: {
         type: userTypes.User,
         args: {
-            id: { type: GraphQLString },
+            id: {
+                type: GraphQLID,
+            },
         },
         resolve: userResolvers.resolveUser,
     },

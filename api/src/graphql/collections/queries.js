@@ -1,10 +1,11 @@
 const {
-    GraphQLObjectType,
-    GraphQLString,
     GraphQLInputObjectType,
+    GraphQLObjectType,
     GraphQLBoolean,
+    GraphQLString,
     GraphQLInt,
     GraphQLList,
+    GraphQLID,
 } = require('graphql')
 
 const collectionTypes     = require('./types')
@@ -30,7 +31,9 @@ module.exports = () => ({
     collection: {
         type: collectionTypes.Collection,
         args: {
-            id: { type: GraphQLString },
+            id: {
+                type: GraphQLID,
+            },
         },
         resolve: collectionResolvers.resolveCollection,
     },

@@ -10,8 +10,7 @@ module.exports = async (login, password) => {
         .then(([u]) => u)
 
     const token = jwt.sign({
-        id:   user.id,
-        role: user.role,
+        id: user.id,
     }, config.get('jwt.secret'))
 
     return { user, token }

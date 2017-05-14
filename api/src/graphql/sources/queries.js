@@ -5,6 +5,7 @@ const {
     GraphQLBoolean,
     GraphQLInt,
     GraphQLList,
+    GraphQLID,
 } = require('graphql')
 
 const sourceTypes     = require('./types')
@@ -31,7 +32,7 @@ module.exports = () => ({
         type: sourceTypes.Source,
         args: {
             id: {
-                type: GraphQLString,
+                type: GraphQLID,
             },
         },
         resolve: sourceResolvers.resolveSource,

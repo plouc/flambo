@@ -6,6 +6,7 @@ const {
     GraphQLString,
     GraphQLList,
     GraphQLInt,
+    GraphQLID,
 } = require('graphql')
 
 const coreTypes           = require('../core/types')
@@ -21,7 +22,7 @@ exports.User = new GraphQLObjectType({
     name:   'User',
     fields: () => ({
         id: {
-            type: GraphQLString,
+            type: GraphQLID,
         },
         first_name: {
             type: GraphQLString,

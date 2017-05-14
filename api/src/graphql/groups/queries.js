@@ -5,6 +5,7 @@ const {
     GraphQLBoolean,
     GraphQLInt,
     GraphQLList,
+    GraphQLID,
 } = require('graphql')
 
 const groupTypes     = require('./types')
@@ -30,7 +31,9 @@ module.exports = () => ({
     group: {
         type: groupTypes.Group,
         args: {
-            id: { type: GraphQLString },
+            id: {
+                type: GraphQLID,
+            },
         },
         resolve: groupResolvers.resolveGroup,
     },

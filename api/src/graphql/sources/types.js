@@ -7,6 +7,7 @@ const {
     GraphQLString,
     GraphQLList,
     GraphQLInt,
+    GraphQLID,
 } = require('graphql')
 
 const coreTypes = require('../core/types')
@@ -17,7 +18,7 @@ exports.Source = new GraphQLObjectType({
     name:   'Source',
     fields: () => ({
         id: {
-            type: GraphQLString,
+            type: GraphQLID,
         },
         name: {
             type: GraphQLString,
