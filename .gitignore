@@ -10,6 +10,7 @@ terraform.tfstate.backup
 
 # bot
 hubot.conf
+.hubot_history
 
 # IDE
 .idea
