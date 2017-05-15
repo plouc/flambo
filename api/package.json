@@ -10,7 +10,7 @@
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
     "load-data": "knex seed:run",
-    "bdd": "cucumber-js",
+    "bdd": "cucumber-js --require tests/functional/support tests/functional/features",
     "eslint": "eslint .",
     "collect": "node collect.js",
     "init-es": "node scripts/initElastic.js",
@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "cucumber": "1.2.0",
+    "cucumber": "^2.1.0",
     "docdash": "0.4.0",
     "eslint": "3.0.0",
     "faker": "^4.1.0",

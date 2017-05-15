@@ -1,4 +1,4 @@
-const nest = require('../../../src/core/database/nest')
+const nest = require('../../../../src/core/database/nest')
 
 
 it('should return selected columns', () => {
