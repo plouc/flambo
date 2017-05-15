@@ -85,12 +85,14 @@ const Group = ({ group, match }) => {
                             group={group}
                             style={{ marginRight: 12 }}
                         />
-                        <Button
-                            label="edit"
-                            to={`/groups/${group.id}/edit`}
-                            primary
-                            raised
-                        />
+                        {(group.viewer_is_owner || group.viewer_is_administrator) && (
+                            <Button
+                                label="edit"
+                                to={`/groups/${group.id}/edit`}
+                                primary
+                                raised
+                            />
+                        )}
                     </div>
                 </Bar>
             ) : <Bar/>}
