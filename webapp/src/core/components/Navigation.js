@@ -15,6 +15,14 @@ const Header = styled.div`
     margin-bottom: 12px;
 `
 
+const BrandName = styled.span`
+    font-family:    Montserrat, sans-serif;
+    text-transform: uppercase;
+    font-weight:    500;
+    margin-left:    12px;
+    color:          ${props => props.theme.primaryColor};
+`
+
 const Item = styled.div`
     height:        36px;
     padding:       0 24px 0 20px;
@@ -52,8 +60,9 @@ export default class Navigation extends Component {
     render() {
         return (
             <div>
-                <Header title={PRODUCT_NAME}>
+                <Header>
                     <LogoPicto size={30} spacing={1}/>
+                    <BrandName>{PRODUCT_NAME}</BrandName>
                 </Header>
                 <NavigationItem label="groups" to="/groups"/>
                 <NavigationItem label="users" to="/users"/>

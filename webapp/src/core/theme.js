@@ -3,24 +3,29 @@ import Color from 'color'
 
 export const themes = {
     groups: {
-        primaryColor:  '#70615a',
-        disabledColor: '#eff0f4',
+        primaryColor:      '#70615a',
+        disabledColor:     '#eff0f4',
+        logoTertiaryColor: '#b7c69d',
     },
     users: {
-        primaryColor:  '#516752',
-        disabledColor: '#eff0f4',
+        primaryColor:      '#516752',
+        disabledColor:     '#eff0f4',
+        logoTertiaryColor: '#bc9e96',
     },
     sources: {
-        primaryColor:  '#5a5262',
-        disabledColor: '#eff0f4',
+        primaryColor:      '#5a5262',
+        disabledColor:     '#eff0f4',
+        logoTertiaryColor: '#d6d399',
     },
     collections: {
-        primaryColor:  '#82655e',
-        disabledColor: '#eff0f4',
+        primaryColor:      '#825d52',
+        disabledColor:     '#eff0f4',
+        logoTertiaryColor: '#b7dbab',
     },
     default: {
-        primaryColor:  '#383f54',
-        disabledColor: '#eff0f4',
+        primaryColor:      '#383f54',
+        disabledColor:     '#eff0f4',
+        logoTertiaryColor: '#dbbc9e',
     },
 }
 

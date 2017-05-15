@@ -1,5 +1,6 @@
 import React, { PropTypes }                         from 'react'
 import range                                        from 'lodash/range'
+import styled                                       from 'styled-components'
 
 import Helmet                                       from '../../../core/components/HelmetIntl'
 import Pager                                        from '../../../core/components/pager/Pager'
@@ -9,13 +10,16 @@ import { Grid }                                     from '../../../core/componen
 import GroupsIndexItem, { GroupsIndexItemSkeleton } from './GroupsIndexItem'
 
 
+const Container = styled.div`
+`
+
 const GroupsIndex = ({
     isFetching,
     groups,
     page, perPage, hasNextPage, paginate,
     match, history,
 }) => (
-    <div>
+    <Container>
         <Helmet title="groups"/>
         <TopBar>
             <Pager
@@ -49,7 +53,7 @@ const GroupsIndex = ({
                 />
             ))}
         </Grid>
-    </div>
+    </Container>
 )
 
 GroupsIndex.propTypes = {
