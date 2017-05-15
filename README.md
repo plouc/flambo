@@ -2,115 +2,32 @@
 
 [![Travis CI][travis-image]][travis-url]
 
+*flambo* helps managing your technical watch.
+
 ## Features
 
-- Collect data from several data sources:
-    - Twitter
+- Groups to help grouping data by topic
+- Collections to let users manage their very own feed
+- Sources pull data from various providers, for now:
     - RSS feeds
     - Meetup
-    - …
-- Create topics and attach data sources
-- Create custom collections
+    - hoping to add more in the future (contributions are welcome :))
+
+## Components
+
+*flambo* is made up of several components
+
+- an *API* `/api`
+- a *bot* `/bot`
+- a *cli* `/cli`
+- a *webapp* `/webapp`
+- Node.js packages on which top level components depend
 
 ## Requirements
 
-- Docker
+- docker
 - docker-compose
-- Node 6 (only for development)
-
-## Stack/Tools/Libs
-
-- Postgres
-- elasticsearch
-- rabbitmq
-- Node.js
-- Koa
-- Reactjs
-- Redux
-- …
-
-## Run it
-
-First, you'll have to provide twitter API tokens in order to be able to use the twitter source.
-Simply copy `.env.sample` (inside `api/`directory and rename it to `.env`, and replace the required properties. 
-
-```sh
-make run
-```
-
-Now you can acces the app at [http://localhost:3000/](http://localhost:3000/)
-
-```
-login: admin@flambo.io
-password: admin
-```
-
-## Development mode
-
-Launch rethinkdb, elasticsearch and the api and start the webapp dev server.
-
-```sh
-make run-dev
-```
-
-You should now be able to access the api at [http://localhost:3000/](http://localhost:3000/) and the webapp at [http://localhost:8081/](http://localhost:8081/)
-
-## Accessing services
-
-- **rethinkdb ui** [http://localhost:8080/](http://localhost:8080/)
-- **elasticsearch** [http://localhost:9200/](http://localhost:9200/), I strongly encourage you to install the [sense chrome extension](https://chrome.google.com/webstore/detail/sense-beta/lhjgkmllcaadmopgmanpapmpjgmfcfig)
-- **rabbitmq management console** [http://localhost:15672/](http://localhost:15672/) 
-
-## Swagger
-
-This repository provides a swagger file to play with the API, `flambo-api.yml`.
-
-
-## Operations
-
-Reloading default data:
-
-```sh
-make data-reset
-```
-
-Collecting and indexing from existing sources
-
-```sh
-docker-compose exec api /bin/ash -c "cd /flambo/api && node collect.js"
-```
-
-Running api functional tests
-
-```sh
-make test-api-bdd
-```
-
-You can also manually run it from api container
-
-```sh
-docker-compose exec api /bin/ash
-cd /flambo/api
-../node_modules/.bin/cucumberjs
-
-# if you only want to run tests having given tags
-../node_modules/.bin/cucumberjs --tags @topics --tags @delete
-
-# enabling debug while running tests
-DEBUG=* ../node_modules/.bin/cucumberjs
-```
-
-
-## Documentation
-
-You can generate several documentations (Node.js required on the host):
-
-- **API** `make doc-api`
-- **CSS styleguide** `make doc-css-styleguide`
-- **webapp** `make doc-webapp`
-
-If you want to build all docs at once `make doc`
-
+- Node 7.6
 
 [travis-image]: https://img.shields.io/travis/plouc/flambo.svg?style=flat-square
 [travis-url]: https://travis-ci.org/plouc/flambo
