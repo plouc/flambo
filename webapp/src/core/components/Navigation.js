@@ -4,19 +4,15 @@ import { Link, Route }      from 'react-router-dom'
 import styled               from 'styled-components'
 
 import { PRODUCT_NAME }     from '../../config'
+import LogoPicto                 from './LogoPicto'
 
 
-const Brand = styled.div`
-    height:         60px;
-    display:        flex;
-    align-items:    center;
-    padding:        0 24px;
-    margin-bottom:  12px;
-    text-transform: uppercase;
-    font-weight:    700;
-    font-size:      20px;
-    font-family:    'Montserrat';
-    color:          ${props => props.theme.primaryColor};
+const Header = styled.div`
+    height:        60px;
+    display:       flex;
+    align-items:   center;
+    padding:       0 24px;
+    margin-bottom: 12px;
 `
 
 const Item = styled.div`
@@ -56,9 +52,9 @@ export default class Navigation extends Component {
     render() {
         return (
             <div>
-                <Brand>
-                    {PRODUCT_NAME}
-                </Brand>
+                <Header title={PRODUCT_NAME}>
+                    <LogoPicto size={30} spacing={1}/>
+                </Header>
                 <NavigationItem label="groups" to="/groups"/>
                 <NavigationItem label="users" to="/users"/>
                 <NavigationItem label="sources" to="/sources"/>

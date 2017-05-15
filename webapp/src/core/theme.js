@@ -3,7 +3,7 @@ import Color from 'color'
 
 export const themes = {
     groups: {
-        primaryColor:  '#8c7d73',
+        primaryColor:  '#70615a',
         disabledColor: '#eff0f4',
     },
     users: {
@@ -11,7 +11,7 @@ export const themes = {
         disabledColor: '#eff0f4',
     },
     sources: {
-        primaryColor:  '#666e7d',
+        primaryColor:  '#5a5262',
         disabledColor: '#eff0f4',
     },
     collections: {
@@ -41,6 +41,16 @@ export const themeFromPath = path => {
     }
     if (!theme.disabledTextColor) {
         theme.disabledTextColor = Color(theme.disabledColor).darken(.25).string()
+    }
+
+    if (!theme.logoPrimaryColor) {
+        theme.logoPrimaryColor = theme.primaryColor
+    }
+    if (!theme.logoSecondaryColor) {
+        theme.logoSecondaryColor = Color(theme.primaryColor).lighten(.5).string()
+    }
+    if (!theme.logoTertiaryColor) {
+        theme.logoTertiaryColor = Color(theme.primaryColor).rotate(180).desaturate(.2).lighten(1.1).string()
     }
 
     return theme

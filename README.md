@@ -1,8 +1,8 @@
-# flambo
+![flambo](./assets/flambo_logo.png)
 
 [![Travis CI][travis-image]][travis-url]
 
-*flambo* helps managing your technical watch.
+**flambo** is a content reader/aggregator.
 
 ## Features
 
@@ -15,7 +15,7 @@
 
 ## Components
 
-*flambo* is made up of several components
+**flambo** is made up of several components
 
 - an *API* `/api`
 - a *bot* `/bot`
