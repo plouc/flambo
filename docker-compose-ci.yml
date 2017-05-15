@@ -1,63 +1,30 @@
 version: '2'
 services:
-  modules:
-    build:
-      context: .
-      dockerfile: ./docker/modules/Dockerfile
-    volumes:
-      - /flambo/node_modules
-
-  rethink:
-    image: rethinkdb:2.3.4
+  postgres:
+    image: postgres:9.6.2-alpine
+    environment:
+      POSTGRES_DB:       flambo
+      POSTGRES_USER:     pg
+      POSTGRES_PASSWORD: pg
 
   elastic:
-    image: elasticsearch
-
-  rabbit:
-    image: rabbitmq:3
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.3.0
+    environment:
+      http.host:              0.0.0.0
+      xpack.security.enabled: 'false'
 
   api:
-    build: ./docker/api
+    build: ./api
     depends_on:
-      - modules
-      - rethink
+      - postgres
       - elastic
-      - rabbit
-    ports:
-      - "3000:3000"
     environment:
-      NODE_ENV:           ${NODE_ENV}
-      APP_PORT:           3000
-      ELASTIC_HOST:       elastic
-      ELASTIC_PORT:       9200
-      RABBITMQ_HOST:      rabbit
-      RETHINKDB_HOST:     rethink
-      RETHINKDB_PORT:     28015
-      RETHINKDB_AUTH_KEY: ""
-      RETHINKDB_DB:       flambo
-      JWT_SECRET:         s0S3Kr33tZ
-    volumes:
-      - ./api:/flambo/api
-    volumes_from:
-      - modules
-
-  worker:
-    build: ./docker/worker
-    depends_on:
-      - modules
-      - rethink
-      - elastic
-      - rabbit
-    environment:
-      NODE_ENV:           ${NODE_ENV}
-      ELASTIC_HOST:       elastic
-      ELASTIC_PORT:       9200
-      RABBITMQ_HOST:      rabbit
-      RETHINKDB_HOST:     rethink
-      RETHINKDB_PORT:     28015
-      RETHINKDB_AUTH_KEY: ""
-      RETHINKDB_DB:       flambo
-    volumes:
-      - ./api:/flambo/worker
-    volumes_from:
-      - modules
+      PORT:            80
+      STATIC_BASE_URL: http://localhost:80/static
+      POSTGRES_HOST:   postgres
+      POSTGRES_PORT:   5432
+      POSTGRES_USER:   pg
+      POSTGRES_PWD:    pg
+      POSTGRES_DB:     flambo
+      ELASTIC_HOST:    http://elastic
+      ELASTIC_PORT:    9200

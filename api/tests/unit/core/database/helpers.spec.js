@@ -1,4 +1,4 @@
-const helpers = require('../../../src/core/database/helpers')
+const helpers = require('../../../../src/core/database/helpers')
 
 
 describe('prefix', () => {

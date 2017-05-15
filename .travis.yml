@@ -1,0 +1,46 @@
+sudo: true
+dist: trusty
+
+language: node_js
+node_js:
+  - "7.6"
+
+# this is automatically included into test stage
+before_script:
+  - cd api
+  - yarn install
+script:
+  - yarn run test-unit
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.13.0
+
+_install_docker: &_install_docker
+  - sudo apt-get remove docker docker-engine
+  - sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce
+
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+  # https://github.com/docker-library/elasticsearch/issues/111
+  - sudo sysctl -w vm.max_map_count=262144
+
+jobs:
+  include:
+    - stage: test
+      before_script:
+        *_install_docker
+      script:
+        - docker-compose -f docker-compose-ci.yml build
+        - make up --no-print-directory
+        - sleep 10 # required to ensure seeds are loaded
+        - make log-api --no-print-directory
+        - COMMAND="API_BASE_URL=http://localhost:80 yarn run bdd" make run-in-api --no-print-directory
+        - make clean --no-print-directory
+
