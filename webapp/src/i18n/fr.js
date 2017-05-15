@@ -111,12 +111,16 @@ export default {
     collection_created_by: 'une collection de {user}',
     collection_subscribers: 'abonnés',
     collection_subscribe: `s'abonner`,
+    collection_subscribers_none: 'aucun abonné à cette collection pour le moment',
     collection_subscribed_since: `s'est abonné {since}`,
     collection_subscribers_count: `{count, plural,
         =0 {aucun abonné pour le moment}
         one {{count} abonné}
         other {{count} abonnés}
     }`,
+    collection_subscriber: 'abonné',
+    collection_contributor: 'contributeur',
+    collection_owner: `c'est à vous`,
 
     // Feed
     feed_empty: 'aucun élément pour le moment',

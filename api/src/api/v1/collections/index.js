@@ -20,12 +20,20 @@ router.get(
     Pagination.middleware(),
     async ctx => {
         const { pagination } = ctx.state
-        const collections    = await Collections.all(Object.assign({}, pagination, {
-            limit: pagination.limit + 1,
-            query: { public: true },
-        }))
+        const viewerId       = ctx.state.user.id
 
-        ctx.body = Pagination.dto(pagination, dto.collections(collections))
+        try {
+            const collections    = await Collections.all(Object.assign({}, pagination, {
+                limit: pagination.limit + 1,
+                query: { public: true },
+                viewerId,
+            }))
+
+            ctx.body = Pagination.dto(pagination, dto.collections(collections, viewerId))
+        } catch (error) {
+            ctx.status = 500
+            ctx.body   = 'Internal Server Error'
+        }
     }
 )
 
@@ -34,9 +42,10 @@ router.get(
     auth.middleware,
     async ctx => {
         const collectionId = ctx.params.id
+        const viewerId     = ctx.state.user.id
 
         try {
-            const collection = await Collections.get(collectionId)
+            const collection = await Collections.get(collectionId, viewerId)
 
             if (!collection) {
                 ctx.status = 404
@@ -44,10 +53,8 @@ router.get(
                 return
             }
 
-            ctx.body = dto.collection(collection)
+            ctx.body = dto.collection(collection, viewerId)
         } catch (error) {
-            console.error(error)
-
             ctx.status = 500
             ctx.body   = 'Internal Server Error'
         }

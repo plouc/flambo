@@ -1,5 +1,7 @@
-import { fetchItemIfNeeded } from '../../../core/actions/actionsHelpers'
-import { getMe }             from '../api'
+import { fetchItemIfNeeded }   from '../../../core/actions/actionsHelpers'
+import { isUnauthorizedError } from '../../../core/errors'
+import { getMe }               from '../api'
+import { logout }              from '../../auth/actions'
 
 
 export const FETCH_ME_REQUEST = 'FETCH_ME_REQUEST'
@@ -18,6 +20,9 @@ export const fetchMe = () => (dispatch, getState) => {
         })
         .catch(error => {
             dispatch({ type: FETCH_ME_FAILURE, error })
+            if (isUnauthorizedError(error)) {
+                dispatch(logout())
+            }
         })
 }
 

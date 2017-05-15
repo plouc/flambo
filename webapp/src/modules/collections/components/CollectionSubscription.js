@@ -6,16 +6,29 @@ import { Button }           from '../../../core/components/buttons'
 
 
 const CollectionSubscription = ({
-    isSubscriber, subscribe, unsubscribe, ...props,
+    collection, subscribe, unsubscribe, ...props,
 }) => {
-    if (isSubscriber) {
+    if (collection.viewer_is_owner) {
+        return (
+            <Button
+                primary
+                {...props}
+            >
+                <FormattedMessage id="collection_owner"/>
+            </Button>
+        )
+    }
+
+    if (collection.viewer_is_subscriber) {
         return (
             <Button
                 onClick={unsubscribe}
                 primary
                 {...props}
             >
-                <FormattedMessage id="collection_subscriber"/>
+                <FormattedMessage
+                    id={collection.viewer_is_contributor ? 'collection_contributor' : 'collection_subscriber'}
+                />
                 <CheckIcon style={{ marginLeft: 6 }}/>
             </Button>
         )

@@ -3,11 +3,9 @@ const dbHelpers = require('../../core/database/helpers')
 const dao       = require('./dao')
 
 
-exports.all = ({ limit, offset, query }) => {
-    return dao.find({ limit, offset, query })
-}
+exports.all = dao.find
 
-exports.get = id => dao.findOne({ query: { id } })
+exports.get = (id, viewerId) => dao.findOne({ query: { id }, viewerId })
 
 exports.create = async collection => {
     return db('collections')

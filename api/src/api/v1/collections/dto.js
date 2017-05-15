@@ -3,19 +3,31 @@ const _     = require('lodash')
 const Media = require('../../../modules/media')
 
 
-exports.collection = collection => {
+exports.collection = (collection, viewerId) => {
     if (!collection) return collection
 
-    if (collection.owner) {
-        collection.owner = Media.appendRelatedMediumUrl(collection.owner, 'avatar')
+    collection.viewer_is_owner = false
+    if (collection.owner !== null) {
+        collection.viewer_is_owner = viewerId === collection.owner.id
+        collection.owner = Object.assign(_.omit(collection.owner, 'avatar'), {
+            avatar_url: collection.owner.avatar ? Media.getMediumUrl(collection.owner.avatar) : null,
+        })
     }
 
     collection.subscribers_count = Number(collection.subscribers_count)
+    collection.picture_url       = collection.picture ? Media.getMediumUrl(collection.picture) : null
 
-    return Media.appendRelatedMediumUrl(collection, 'picture')
+    collection.viewer_is_subscriber  = false
+    collection.viewer_is_contributor = false
+    if (collection.own_subscription !== null) {
+        collection.viewer_is_subscriber  = true
+        collection.viewer_is_contributor = collection.own_subscription.is_contributor
+    }
+
+    return _.omit(collection, 'picture', 'own_subscription')
 }
 
-exports.collections = collection => collection.map(exports.collection)
+exports.collections = (collections, viewerId) => collections.map(collection => exports.collection(collection, viewerId))
 
 
 exports.comment = comment => {

@@ -49,12 +49,13 @@ const Collection = ({
             {collection && (
                 <div>
                     <Header>
-                        <Picture url={collection.picture ? collection.picture.url : null}/>
+                        <Picture url={collection.picture_url}/>
                         {collection && <Title>{collection.name}</Title>}
                     </Header>
                     <Bar>
                         <RelatedUser
                             user={collection.owner}
+                            avatarUrlKey="avatar_url"
                             messageId="collection_created_by"
                         />
                         <Tabs>

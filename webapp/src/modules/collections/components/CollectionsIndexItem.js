@@ -61,12 +61,10 @@ export const CollectionsIndexItemSkeleton = () => (
 )
 
 const CollectionsIndexItem = ({ url, collection }) => {
-    const { picture } = collection
-
     return (
         <Cell style={cellStyle}>
             <Link to={`${url}/${collection.id}`}>
-                <Picture url={picture ? picture.url : null}/>
+                <Picture url={collection.picture_url}/>
             </Link>
             <Info>
                 <div>
@@ -81,7 +79,10 @@ const CollectionsIndexItem = ({ url, collection }) => {
                     </Subscribers>
                 </div>
                 <Footer>
-                    <CollectionSubscription collection={collection} size="small"/>
+                    <CollectionSubscription
+                        collection={collection}
+                        size="small"
+                    />
                 </Footer>
             </Info>
         </Cell>

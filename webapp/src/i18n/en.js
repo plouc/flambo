@@ -124,7 +124,9 @@ export default {
         one {{count} subscriber}
         other {{count} subscribers}
     }`,
+    collection_subscriber: 'subscriber',
     collection_contributor: 'contributor',
+    collection_owner: `it's yours`,
 
     // Feed
     feed_empty: 'this feed does not contain any item yet',

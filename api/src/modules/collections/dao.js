@@ -14,11 +14,17 @@ exports.columns = [
     'updated_at',
 ]
 
-exports.find = ({ offset, limit, query = {} } = {}) => {
+exports.find = ({
+    offset, limit, viewerId, query = {},
+} = {}) => {
     const nesting = nest('collections', exports.columns, { extra: ['subscribers_count'] })
-        .one('picture', Media.dao.columns)
-        .one('owner',   Users.dao.relatedColumns)
-        .one('avatar',  Media.dao.columns, { parent: 'owner' })
+        .one('picture',          Media.dao.columns)
+        .one('owner',            Users.dao.relatedColumns)
+        .one('avatar',           Media.dao.columns, { parent: 'owner' })
+
+    if (viewerId !== undefined) {
+        nesting.one('own_subscription', ['collection_id', 'user_id', 'is_contributor'])
+    }
 
     const queryKeys = Object.keys(query)
 
@@ -29,12 +35,24 @@ exports.find = ({ offset, limit, query = {} } = {}) => {
             if (limit  !== undefined) qb.limit(limit)
             if (offset !== undefined) qb.offset(offset)
 
+            const groupBy = ['collections.id', 'picture.id', 'owner.id', 'avatar.id']
+
             const hasOwnerFilter = !!queryKeys.find(key => key.startsWith('owner'))
             qb[hasOwnerFilter ? 'innerJoin' : 'leftJoin']('users AS owner', 'owner.id', 'collections.owner_id')
 
             const hasSubscriptionFilter = !!queryKeys.find(key => key.startsWith('subscription'))
             if (hasSubscriptionFilter) {
                 qb.innerJoin('collections_subscribers AS subscription', 'subscription.collection_id', 'collections.id')
+            }
+
+            if (viewerId) {
+                qb.leftJoin('collections_subscribers as own_subscription', function () {
+                    this.on('own_subscription.collection_id', '=', 'collections.id')
+                        .andOn('own_subscription.user_id', db.raw('?', [viewerId]))
+                })
+                groupBy.push('own_subscription.collection_id')
+                groupBy.push('own_subscription.user_id')
+                groupBy.push('own_subscription.is_contributor')
             }
 
             queryKeys.filter(key => !key.includes('.'))
@@ -46,17 +64,23 @@ exports.find = ({ offset, limit, query = {} } = {}) => {
                 .forEach(key => {
                     qb.where(key, query[key])
                 })
+
+            qb.groupBy(groupBy)
         })
         .orderBy('collections.name')
         .leftJoin('collections_subscribers AS subscribers', 'subscribers.collection_id', 'collections.id')
         .leftJoin('media AS avatar',  'avatar.id',  'owner.avatar_id')
         .leftJoin('media AS picture', 'picture.id', 'collections.picture_id')
-        .groupBy('collections.id', 'picture.id', 'owner.id', 'avatar.id')
+        .then(res => {
+            console.log(res)
+
+            return res
+        })
         .then(nesting.rollup.bind(nesting))
 }
 
-exports.findOne = ({ query = {} } = {}) => {
-    return exports.find({ limit: 1, query })
+exports.findOne = ({ query = {}, viewerId } = {}) => {
+    return exports.find({ limit: 1, query, viewerId })
         .then(([row]) => row)
 }
 

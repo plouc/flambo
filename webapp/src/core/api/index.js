@@ -8,6 +8,7 @@ import {
     ENTITY_NOT_FOUND,
     INTERNAL_SERVER_ERROR,
     SERVICE_UNAVAILABLE_ERROR,
+    UNAUTHORIZED_ERROR,
 } from '../errors'
 
 export * from './caller'
@@ -53,6 +54,14 @@ const interceptApiError = (status, errorContext = {}, data = {}) => {
             { details: data.errors }
         ))
     }
+
+    if (status === 401) {
+        return Promise.reject(namedError(
+            UNAUTHORIZED_ERROR,
+            'unauthorized'
+        ))
+    }
+
 
     if (status === 404) {
         return Promise.reject(namedError(
