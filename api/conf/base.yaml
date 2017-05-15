@@ -8,7 +8,7 @@ jwt:
 
 db:
   client:     pg
-  debug:      true
+  debug:      false
   connection:
     host:     localhost
     port:     5444

@@ -39,7 +39,7 @@ jobs:
       script:
         - docker-compose -f docker-compose-ci.yml build
         - make up --no-print-directory
-        - sleep 20 # required to ensure seeds are loaded
+        - sleep 10 # required to ensure seeds are loaded
         - make log-api --no-print-directory
         - COMMAND="API_BASE_URL=http://localhost:80 yarn run bdd" make run-in-api --no-print-directory
         - make clean --no-print-directory
