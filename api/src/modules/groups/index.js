@@ -2,11 +2,9 @@ const dbHelpers = require('../../core/database/helpers')
 const dao       = require('./dao')
 
 
-exports.all = ({ limit, offset }) => {
-    return dao.find({ limit, offset })
-}
+exports.all = dao.find
 
-exports.get = id => dao.findOne({ query: { id } })
+exports.get = (id, viewerId) => dao.findOne({ query: { id }, viewerId })
 
 exports.getGroupSourceIds = id => {
     return dao.findSourceIds(id)

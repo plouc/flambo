@@ -6,8 +6,6 @@ const Media = require('../../../modules/media')
 exports.user = user => {
     if (!user) return user
 
-    console.log(user)
-
     user.groups = user.memberships.map(membership => {
         return Object.assign(
             _.omit(membership.group, 'picture'),

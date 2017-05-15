@@ -21,11 +21,14 @@ router.get(
     Pagination.middleware(),
     async ctx => {
         const { pagination } = ctx.state
+        const viewerId       = ctx.state.user.id
+
         const groups = await Groups.all(Object.assign({}, pagination, {
             limit: pagination.limit + 1,
+            viewerId,
         }))
 
-        ctx.body = Pagination.dto(pagination, dto.collection(groups))
+        ctx.body = Pagination.dto(pagination, dto.groups(groups, viewerId))
     }
 )
 
@@ -33,24 +36,18 @@ router.get(
     '/:id',
     auth.middleware,
     async ctx => {
-        const groupId = ctx.params.id
+        const groupId  = ctx.params.id
+        const viewerId = ctx.state.user.id
 
-        try {
-            const group = await Groups.get(groupId)
+        const group = await Groups.get(groupId, viewerId)
 
-            if (!group) {
-                ctx.status = 404
-                ctx.body   = { message: `No group found for id: ${groupId}` }
-                return
-            }
-
-            ctx.body = dto.item(group)
-        } catch (error) {
-            console.error(error)
-
-            ctx.status = 500
-            ctx.body   = 'Internal Server Error'
+        if (!group) {
+            ctx.status = 404
+            ctx.body   = { message: `No group found for id: ${groupId}` }
+            return
         }
+
+        ctx.body = dto.group(group, viewerId)
     }
 )
 
@@ -96,23 +93,16 @@ router.post(
     async ctx => {
         const groupId = ctx.params.id
 
-        try {
-            const createdComment = await Comments.create(Object.assign(
-                ctx.request.body,
-                {
-                    group_id:  groupId,
-                    author_id: ctx.state.user.id,
-                }
-            ))
+        const createdComment = await Comments.create(Object.assign(
+            ctx.request.body,
+            {
+                group_id:  groupId,
+                author_id: ctx.state.user.id,
+            }
+        ))
 
-            ctx.status = 200
-            ctx.body   = createdComment
-        } catch (error) {
-            console.error(error)
-
-            ctx.status = 500
-            ctx.body   = 'Internal Server Error'
-        }
+        ctx.status = 200
+        ctx.body   = createdComment
     }
 )
 
@@ -185,20 +175,13 @@ router.post(
     auth.hasRole('admin'),
     validation.validateBody(schemas.create),
     async ctx => {
-        try {
-            const createdGroup = await Groups.create(Object.assign(
-                ctx.request.body,
-                { owner_id: ctx.state.user.id }
-            ))
+        const createdGroup = await Groups.create(Object.assign(
+            ctx.request.body,
+            { owner_id: ctx.state.user.id }
+        ))
 
-            ctx.status = 200
-            ctx.body   = createdGroup
-        } catch (error) {
-            console.error(error)
-
-            ctx.status = 500
-            ctx.body   = 'Internal Server Error'
-        }
+        ctx.status = 201
+        ctx.body   = createdGroup
     }
 )
 

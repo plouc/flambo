@@ -76,7 +76,7 @@ const Group = ({ group, match }) => {
                         >
                             <FormattedMessage id="group_members"/>
                             <MembersCount>
-                                {group.members}
+                                {group.members_count}
                             </MembersCount>
                         </Tab>
                     </Tabs>

@@ -10,6 +10,11 @@ const jwtMiddleware = jwt({
 })
 
 const checkUser = async (ctx, next) => {
+    if (!ctx.state.user.id) {
+        ctx.status = 401
+        return
+    }
+
     const user = await db.from('users')
         .where('id', ctx.state.user.id)
         .then(([u]) => u)

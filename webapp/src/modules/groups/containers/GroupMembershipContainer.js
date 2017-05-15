@@ -5,12 +5,7 @@ import GroupMembership           from '../components/GroupMembership'
 import { joinGroup, leaveGroup } from '../actions'
 
 
-const mapStateToProps = ({ me: { data: me } }, { group }) => {
-    let isMember = me !== null &&
-        me.groups.find(({ id }) => id === group.id) !== undefined
-
-    return { isMember }
-}
+const mapStateToProps = () => ({})
 
 const mapDispatchToProps = (dispatch, { group }) => ({
     join: () => {

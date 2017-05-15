@@ -3,23 +3,30 @@ const _     = require('lodash')
 const Media = require('../../../modules/media')
 
 
-exports.item = group => {
-    if (!group) return group
-
+exports.group = (group, viewerId) => {
+    group.viewer_is_owner = false
     if (group.owner) {
+        group.viewer_is_owner = viewerId === group.owner.id
         group.owner = Object.assign(_.omit(group.owner, 'avatar'), {
             avatar_url: group.owner.avatar ? Media.getMediumUrl(group.owner.avatar) : null,
         })
     }
 
-    group.members = Number(group.members)
+    group.members_count = Number(group.members_count)
 
     group.picture_url = group.picture ? Media.getMediumUrl(group.picture) : null
 
-    return _.omit(group, 'picture')
+    group.viewer_is_member        = false
+    group.viewer_is_administrator = false
+    if (group.own_membership !== null) {
+        group.viewer_is_member        = true
+        group.viewer_is_administrator = group.own_membership.is_administrator
+    }
+
+    return _.omit(group, 'picture', 'own_membership')
 }
 
-exports.collection = collection => collection.map(exports.item)
+exports.groups = (groups, viewerId) => groups.map(group => exports.group(group, viewerId))
 
 
 exports.comment = comment => {

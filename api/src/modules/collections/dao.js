@@ -15,12 +15,12 @@ exports.columns = [
 ]
 
 exports.find = ({
-    offset, limit, viewerId, query = {},
+    offset, limit, query = {}, viewerId,
 } = {}) => {
     const nesting = nest('collections', exports.columns, { extra: ['subscribers_count'] })
-        .one('picture',          Media.dao.columns)
-        .one('owner',            Users.dao.relatedColumns)
-        .one('avatar',           Media.dao.columns, { parent: 'owner' })
+        .one('picture', Media.dao.columns)
+        .one('owner', Users.dao.relatedColumns)
+        .one('avatar', Media.dao.columns, { parent: 'owner' })
 
     if (viewerId !== undefined) {
         nesting.one('own_subscription', ['collection_id', 'user_id', 'is_contributor'])
@@ -71,11 +71,6 @@ exports.find = ({
         .leftJoin('collections_subscribers AS subscribers', 'subscribers.collection_id', 'collections.id')
         .leftJoin('media AS avatar',  'avatar.id',  'owner.avatar_id')
         .leftJoin('media AS picture', 'picture.id', 'collections.picture_id')
-        .then(res => {
-            console.log(res)
-
-            return res
-        })
         .then(nesting.rollup.bind(nesting))
 }
 

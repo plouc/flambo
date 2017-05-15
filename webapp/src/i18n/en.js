@@ -73,13 +73,14 @@ export default {
     group_created_by: 'created by {user}',
     group_members: 'members',
     group_members_none: 'this group does not have any member yet',
-    group_member: 'member',
     group_member_since: 'joined {since}',
     group_members_count: `{count, plural,
         =0 {no members yet}
         one {{count} member}
         other {{count} members}
     }`,
+    group_owner: `it's yours`,
+    group_member: 'member',
     group_administrator: 'admin',
     group_comments: 'discussions',
     group_comments_none: 'this group does not have any comment yet',

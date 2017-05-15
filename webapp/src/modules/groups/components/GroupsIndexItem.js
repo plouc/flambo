@@ -73,7 +73,7 @@ const GroupsIndexItem = ({ url, group }) => {
                     <Members>
                         <FormattedMessage
                             id="group_members_count"
-                            values={{ count: group.members }}
+                            values={{ count: group.members_count }}
                         />
                     </Members>
                 </div>
