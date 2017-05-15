@@ -8,6 +8,11 @@ const helpers               = require('./helpers')
 
 
 defineSupportCode(function ({ Given, When, Then }) {
+    Given(/^I set request body$/, function (step) {
+        console.log(step.rowsHash())
+        this.apiTester.setBody(step.rowsHash())
+    })
+
     When(/^I (GET|POST|PUT|DELETE) (.*)$/, function (method, path) {
         return this.apiTester.makeRequest(method, path, this.context.apiBaseUrl)
     })
@@ -25,9 +30,7 @@ module.exports = function() {
     // GIVEN
     // —————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-    this.Given(/^I set request body to$/, step => {
-        this.apiTester.setBody(step.rowsHash())
-    })
+    this
 
     this.Given(/^I set request query to$/, step => {
         this.apiTester.setQuery(step.rowsHash())

@@ -3,6 +3,7 @@ const Joi = require('joi')
 
 exports.create = Joi.object().keys({
     name:        Joi.string().required(),
+    slug:        Joi.string().required(),
     description: Joi.string().allow(null),
     picture_id:  Joi.string().allow(null),
 })

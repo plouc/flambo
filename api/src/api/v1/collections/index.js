@@ -166,24 +166,17 @@ router.post(
     auth.middleware,
     validation.validateBody(schemas.create),
     async ctx => {
-        try {
-            const createdCollection = await Collections.create(Object.assign(
-                ctx.request.body,
-                {
-                    owner_id:  ctx.state.user.id,
-                    selection: { ids: [] },
-                    public:    true,
-                }
-            ))
+        const createdCollection = await Collections.create(Object.assign(
+            ctx.request.body,
+            {
+                owner_id:  ctx.state.user.id,
+                selection: { ids: [] },
+                public:    true,
+            }
+        ))
 
-            ctx.status = 200
-            ctx.body   = createdCollection
-        } catch (error) {
-            console.error(error)
-
-            ctx.status = 500
-            ctx.body   = 'Internal Server Error'
-        }
+        ctx.status = 201
+        ctx.body   = createdCollection
     }
 )
 
