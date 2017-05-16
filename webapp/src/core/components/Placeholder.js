@@ -3,7 +3,7 @@ import styled    from 'styled-components'
 import { blink } from './animations'
 
 
-export default styled.span`
+export default styled.div`
     background:    #eee;
     width:         ${props => props.width};
     height:        ${props => props.height};

@@ -1,82 +1,56 @@
 import React, { PropTypes }   from 'react'
-import styled                 from 'styled-components'
 import { Link }               from 'react-router-dom'
 import { FormattedMessage }   from 'react-intl'
 
-import { Cell }               from '../../../core/components/Grid'
-import { Name }               from '../../../core/components/card'
 import CollectionSubscription from '../containers/CollectionSubscriptionContainer'
+import Placeholder            from '../../../core/components/Placeholder'
 import {
-    Name as SkeletonName,
-    Description as SkeletonDescription,
-} from '../../../core/components/skeleton'
+    ItemContainer,
+    Picture,
+    Info,
+    Title,
+    Footer,
+    Meta,
+} from '../../../core/components/IndexGrid'
 
 
-const Picture = styled.div`
-    background-size:     contain;
-    background-color:    #fff;
-    background-repeat:   no-repeat;
-    background-position: center center;
-    background-image:    ${props => props.url ? `url(${props.url})` : 'none'};
-    width:               160px;
-    height:              160px;
-    border:              12px solid white;
-`
-
-const Info = styled.div`
-    display:         flex;
-    flex-direction:  column;
-    flex:            1;
-    padding:         18px 24px;
-    justify-content: space-between;
-`
-
-const Subscribers = styled.div`
-    font-size: 13px;
-    color:     #999;
-`
-
-const Footer = styled.div`
-    display:         flex;
-    justify-content: flex-end;
-    font-size:       13px;
-    color:           #999;
-`
-
-const cellStyle = {
-    height:          160,
-    backgroundColor: 'white',
-    boxShadow:       '0 1px 2px rgba(0,0,0,0.07)',
-    flexDirection:   'row',
-}
-
-export const CollectionsIndexItemSkeleton = () => (
-    <Cell style={cellStyle}>
+export const CollectionsIndexLoadingItem = () => (
+    <ItemContainer>
         <Picture style={{ backgroundColor: '#eee' }}/>
         <Info>
-            <SkeletonName/>
-            <SkeletonDescription/>
+            <div>
+                <Placeholder
+                    width="120px" height="20px"
+                    style={{ marginBottom: '9px' }}
+                />
+                <Placeholder width="180px" height="14px"/>
+            </div>
+            <Footer>
+                <Placeholder width="80px" height="28px"/>
+            </Footer>
         </Info>
-    </Cell>
+    </ItemContainer>
 )
 
 const CollectionsIndexItem = ({ url, collection }) => {
     return (
-        <Cell style={cellStyle}>
+        <ItemContainer>
             <Link to={`${url}/${collection.id}`}>
-                <Picture url={collection.picture_url}/>
+                <Picture url={collection.picture_url}>
+                    {!collection.picture_url && <span>{collection.name.charAt(0)}</span>}
+                </Picture>
             </Link>
             <Info>
                 <div>
                     <Link to={`${url}/${collection.id}`}>
-                        <Name>{collection.name}</Name>
+                        <Title>{collection.name}</Title>
                     </Link>
-                    <Subscribers>
+                    <Meta>
                         <FormattedMessage
                             id="collection_subscribers_count"
                             values={{ count: collection.subscribers_count }}
                         />
-                    </Subscribers>
+                    </Meta>
                 </div>
                 <Footer>
                     <CollectionSubscription
@@ -85,7 +59,7 @@ const CollectionsIndexItem = ({ url, collection }) => {
                     />
                 </Footer>
             </Info>
-        </Cell>
+        </ItemContainer>
     )
 }
 

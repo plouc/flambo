@@ -1,12 +1,14 @@
-import React, { PropTypes }                         from 'react'
-import range                                        from 'lodash/range'
-import styled                                       from 'styled-components'
+import React, { PropTypes } from 'react'
+import range                from 'lodash/range'
+import styled               from 'styled-components'
 
-import Helmet                                       from '../../../core/components/HelmetIntl'
-import { TopBar }                                   from '../../../core/components/page'
-import { Button }                                   from '../../../core/components/buttons'
-import { Grid }                                     from '../../../core/components/Grid'
-import GroupsIndexItem, { GroupsIndexItemSkeleton } from './GroupsIndexItem'
+import Helmet               from '../../../core/components/HelmetIntl'
+import { TopBar }           from '../../../core/components/page'
+import { Button }           from '../../../core/components/buttons'
+import { Grid }             from '../../../core/components/Grid'
+import GroupsIndexItem, {
+    GroupsIndexLoadingItem,
+} from './GroupsIndexItem'
 
 
 const Container = styled.div`
@@ -19,13 +21,6 @@ const LoadMore = styled.div`
     background-color: ${props => props.theme.logoSecondaryColor};
     box-shadow:       0 1px 2px rgba(0, 0, 0, .35);
 `
-
-/*
- {isFetching && range(perPage).map(i => (
- <GroupsIndexItemSkeleton key={i}/>
- ))}
-
- */
 
 const GroupsIndex = ({
     isFetching,
@@ -57,6 +52,9 @@ const GroupsIndex = ({
                     history={history}
                     group={group}
                 />
+            ))}
+            {isFetching && range(perPage).map(i => (
+                <GroupsIndexLoadingItem key={i}/>
             ))}
             {hasNextPage && (
                 <LoadMore onClick={fetchNext}>

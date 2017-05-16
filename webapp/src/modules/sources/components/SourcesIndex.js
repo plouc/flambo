@@ -5,25 +5,11 @@ import styled                          from 'styled-components'
 import Helmet                          from '../../../core/components/HelmetIntl'
 import { TopBar }                      from '../../../core/components/page'
 import { Button }                      from '../../../core/components/buttons'
-import { Grid, Cell }                  from '../../../core/components/Grid'
-import SourcesIndexItem                from './SourcesIndexItem'
-import { Name, Description }           from '../../../core/components/skeleton'
+import { Grid }                        from '../../../core/components/Grid'
+import SourcesIndexItem, {
+    SourcesIndexLoadingItem,
+} from './SourcesIndexItem'
 
-
-const SourceItemSkeleton = () => (
-    <Cell
-        style={{
-            padding:         24,
-            height:          200,
-            backgroundColor: 'white',
-            boxShadow:       '0 1px 2px rgba(0,0,0,0.07)',
-            cursor:          'pointer',
-        }}
-    >
-        <Name/>
-        <Description/>
-    </Cell>
-)
 
 const Container = styled.div`
     background: ${props => props.theme.primaryColor};
@@ -44,17 +30,10 @@ export default class SourcesIndex extends Component {
         match:            PropTypes.shape({
             url: PropTypes.string.isRequired,
         }).isRequired,
-        history:          PropTypes.shape({
-            push: PropTypes.func.isRequired,
-        }).isRequired,
     }
 
     componentDidMount() {
         this.props.fetch()
-    }
-
-    handlePagerUpdate = (page, perPage) => {
-        this.props.fetch({ page, perPage })
     }
 
     render() {
@@ -63,7 +42,6 @@ export default class SourcesIndex extends Component {
             perPage,
             sources,
             match,
-            history,
         } = this.props
 
         return (
@@ -84,16 +62,15 @@ export default class SourcesIndex extends Component {
                         paddingTop: 96,
                     }}
                 >
-                    {isFetching && range(perPage).map(i => (
-                        <SourceItemSkeleton key={i}/>
-                    ))}
-                    {!isFetching && sources.map(source => (
+                    {sources.map(source => (
                         <SourcesIndexItem
                             key={source.id}
                             url={match.url}
-                            history={history}
                             source={source}
                         />
+                    ))}
+                    {isFetching && range(perPage).map(i => (
+                        <SourcesIndexLoadingItem key={i}/>
                     ))}
                 </Grid>
             </Container>

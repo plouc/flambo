@@ -1,89 +1,65 @@
 import React, { PropTypes } from 'react'
-import styled               from 'styled-components'
 import { Link }             from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
 
-import { Cell }             from '../../../core/components/Grid'
-import { Name }             from '../../../core/components/card'
 import GroupMembership      from '../containers/GroupMembershipContainer'
+import Placeholder          from '../../../core/components/Placeholder'
 import {
-    Name as SkeletonName,
-    Description as SkeletonDescription,
-} from '../../../core/components/skeleton'
+    ItemContainer,
+    Picture,
+    Info,
+    Title,
+    Footer,
+    Meta,
+} from '../../../core/components/IndexGrid'
 
 
-const Picture = styled.div`
-    background-size:     contain;
-    background-color:    #fff;
-    background-repeat:   no-repeat;
-    background-position: center center;
-    background-image:    ${props => props.url ? `url(${props.url})` : 'none'};
-    width:               160px;
-    height:              160px;
-    border:              12px solid white;
-`
-
-const Info = styled.div`
-    display:         flex;
-    flex-direction:  column;
-    flex:            1;
-    padding:         18px 24px;
-    justify-content: space-between;
-`
-
-
-const Members = styled.div`
-    font-size: 13px;
-    color:     #999;
-`
-
-const Join = styled.div`
-    display:         flex;
-    justify-content: flex-end;
-`
-
-const cellStyle = {
-    height:          160,
-    backgroundColor: 'white',
-    boxShadow:       '0 1px 2px rgba(0, 0, 0, .35)',
-    flexDirection:   'row',
-    borderRadius:    '2px',
-    overflow:        'hidden',
-}
-
-export const GroupsIndexItemSkeleton = () => (
-    <Cell style={cellStyle}>
-        <Picture style={{ backgroundColor: '#eee' }}/>
+export const GroupsIndexLoadingItem = () => (
+    <ItemContainer>
+        <Placeholder
+            width="136px" height="136px"
+            style={{ margin: 12 }}
+        />
         <Info>
-            <SkeletonName/>
-            <SkeletonDescription lineCount={1}/>
+            <div>
+                <Placeholder
+                    width="120px" height="20px"
+                    style={{ marginBottom: '9px' }}
+                />
+                <Placeholder width="180px" height="14px"/>
+            </div>
+            <Footer>
+                <Placeholder width="80px" height="28px"/>
+            </Footer>
         </Info>
-    </Cell>
+    </ItemContainer>
 )
 
 const GroupsIndexItem = ({ url, group }) => {
     return (
-        <Cell style={cellStyle}>
+        <ItemContainer>
             <Link to={`${url}/${group.id}`}>
-                <Picture url={group.picture_url}/>
+                <Picture url={group.picture_url}>
+                    {!group.picture_url && <span>{group.name.charAt(0)}</span>}
+                </Picture>
             </Link>
             <Info>
                 <div>
                     <Link to={`${url}/${group.id}`}>
-                        <Name>{group.name}</Name>
+                        <Title>{group.name}</Title>
                     </Link>
-                    <Members>
+                    <Meta>
                         <FormattedMessage
                             id="group_members_count"
                             values={{ count: group.members_count }}
                         />
-                    </Members>
+                    </Meta>
                 </div>
-                <Join>
+                <Footer>
                     <GroupMembership group={group} size="small"/>
-                </Join>
+                </Footer>
             </Info>
-        </Cell>
+        </ItemContainer>
     )
 }
 

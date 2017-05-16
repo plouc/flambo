@@ -3,15 +3,15 @@ import { Link }             from 'react-router-dom'
 import styled               from 'styled-components'
 //import { FormattedMessage } from 'react-intl'
 
-import { Name }             from '../../../core/components/card'
-import Placeholder          from '../../../core/components/Placeholder'
+import { Info, Title, Meta } from '../../../core/components/IndexGrid'
+import Placeholder           from '../../../core/components/Placeholder'
 
 
 const ListItem = styled.div`
-    display:     flex;
-    padding:     12px 24px;
-    align-items: flex-start;
-    border-top:  1px solid #f3f4f8;
+    display:          flex;
+    padding:          0 24px;
+    align-items:      flex-start;
+    border-top:       1px solid #f3f4f8;
     background-color: #FFF;
     
     &:first-child {
@@ -22,25 +22,28 @@ const ListItem = styled.div`
 const Avatar = styled.div`
     width:               60px;
     height:              60px;
-    margin-right:        24px;
-    background-color:    #f3f4f8;
+    margin-top:          12px;
+    opacity:             ${props => props.url ? 1 : .6};
+    background-color:    ${props => props.url ? '#f3f4f8' : props.theme.logoSecondaryColor};
     background-repeat:   no-repeat;
     background-size:     cover;
     background-position: center center;
     background-image:    ${props => props.url ? `url(${props.url})` : 'none'};
     border:              1px solid rgba(0, 0, 0, .1);
-`
-
-const Info = styled.div`
-    display:        flex;
-    flex-direction: column;
+    color:               white;
+    display:             flex;
+    justify-content:     center;
+    align-items:         center;
+    font-size:           26px;
+    font-family:         'Rajdhani', sans-serif;
+    font-weight:         300;
 `
 
 export const UsersIndexLoadingItem = props => (
     <ListItem {...props}>
         <Placeholder
             width="60px" height="60px"
-            style={{ marginRight: '24px' }}
+            style={{ marginTop: '12px' }}
         />
         <Info>
             <Placeholder
@@ -55,12 +58,15 @@ export const UsersIndexLoadingItem = props => (
 const UsersIndexItem = ({ url, user, ...props }) => (
     <ListItem {...props}>
         <Link to={`${url}/${user.id}`}>
-            <Avatar url={user.avatar_url}/>
+            <Avatar url={user.avatar_url}>
+                {!user.avatar_url && <span>{user.last_name.charAt(0)}</span>}
+            </Avatar>
         </Link>
         <Info>
             <Link to={`${url}/${user.id}`}>
-                <Name>{user.last_name}&nbsp;{user.first_name}</Name>
+                <Title>{user.last_name}&nbsp;{user.first_name}</Title>
             </Link>
+            <Meta>joined on…</Meta>
         </Info>
     </ListItem>
 )

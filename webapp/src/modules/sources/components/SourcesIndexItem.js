@@ -1,47 +1,71 @@
 import React, { PropTypes } from 'react'
+import { Link }             from 'react-router-dom'
 import styled               from 'styled-components'
 
-import { Cell }             from '../../../core/components/Grid'
-import { Name }             from '../../../core/components/card'
 import typeImages           from './typeImages'
+import Placeholder          from '../../../core/components/Placeholder'
+import {
+    ItemContainer,
+    Title,
+    Meta,
+} from '../../../core/components/IndexGrid'
 
-
-const Description = styled.div`
-    font-size: 14px;
-`
 
 const TypeIcon = styled.div`
     position:            absolute;
-    width:               48px;
-    height:              48px;
-    top:                 6px;
-    right:               6px;
+    width:               36px;
+    height:              36px;
+    top:                 9px;
+    right:               9px;
     background-image:    ${props => `url(${typeImages[props.type]})`};
     background-size:     contain;
     background-repeat:   no-repeat;
     background-position: center center;
 `
 
-const cellStyle = {
-    height:          160,
-    padding:         24,
-    backgroundColor: 'white',
-    boxShadow:       '0 1px 2px rgba(0,0,0,0.07)',
-    cursor:          'pointer',
-    position:        'relative',
+const styles = {
+    container: {
+        padding:        '18px 24px',
+        flexDirection:  'column',
+        justifyContent: 'space-between',
+    },
 }
 
-const SourcesIndexItem = ({ url, history, source }) => (
-    <Cell
-        onClick={() => history.push(`${url}/${source.id}`)}
-        style={cellStyle}
-    >
-        <Name>{source.name}</Name>
-        <TypeIcon type={source.type}/>
-        <Description>
+export const SourcesIndexLoadingItem = () => (
+    <ItemContainer style={styles.container}>
+        <div>
+            <Placeholder
+                width="120px" height="20px"
+                style={{ marginBottom: '9px' }}
+            />
+            <Placeholder
+                width="36px" height="36px"
+                style={{
+                    position: 'absolute',
+                    top:      9,
+                    right:    9,
+                }}
+            />
+        </div>
+        <div>
+            <Placeholder width="100%" height="14px" style={{ marginBottom: 9 }}/>
+            <Placeholder width="66%" height="14px" style={{ marginBottom: 5 }}/>
+        </div>
+    </ItemContainer>
+)
+
+const SourcesIndexItem = ({ url, source }) => (
+    <ItemContainer style={styles.container}>
+        <div>
+            <Link to={`${url}/${source.id}`}>
+                <Title>{source.name}</Title>
+            </Link>
+            <TypeIcon type={source.type}/>
+        </div>
+        <Meta>
             {source.description || ''}
-        </Description>
-    </Cell>
+        </Meta>
+    </ItemContainer>
 )
 
 SourcesIndexItem.propTypes = {

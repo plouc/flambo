@@ -7,7 +7,7 @@ import { TopBar }                      from '../../../core/components/page'
 import { Grid }                        from '../../../core/components/Grid'
 import { Button }                      from '../../../core/components/buttons'
 import CollectionsIndexItem, {
-    CollectionsIndexItemSkeleton,
+    CollectionsIndexLoadingItem,
 } from './CollectionsIndexItem'
 
 
@@ -70,16 +70,16 @@ export default class CollectionsIndex extends Component {
                         paddingTop: 96,
                     }}
                 >
-                    {isFetching && range(perPage).map(i => (
-                        <CollectionsIndexItemSkeleton key={i}/>
-                    ))}
-                    {!isFetching && collections.map(collection => (
+                    {collections.map(collection => (
                         <CollectionsIndexItem
                             key={collection.id}
                             url={match.url}
                             history={history}
                             collection={collection}
                         />
+                    ))}
+                    {isFetching && range(perPage).map(i => (
+                        <CollectionsIndexLoadingItem key={i}/>
                     ))}
                 </Grid>
             </Container>
