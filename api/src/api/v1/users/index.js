@@ -34,6 +34,16 @@ router.get(
 )
 
 router.get(
+    '/stats/total',
+    auth.middleware,
+    async ctx => {
+        const total = await Users.userCount()
+
+        ctx.body = { total }
+    }
+)
+
+router.get(
     '/me',
     auth.middleware,
     async ctx => {

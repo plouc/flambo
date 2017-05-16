@@ -12,6 +12,8 @@ exports.all = ({ limit, offset }) => {
     return dao.find({ limit, offset })
 }
 
+exports.userCount = dao.total
+
 exports.allByGroup = (groupId, { limit, offset }) => {
     return dao.findByGroupId(groupId, { limit, offset })
 }

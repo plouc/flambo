@@ -55,6 +55,12 @@ exports.findOne = ({ query = {} } = {}) => {
         .then(([row]) => row)
 }
 
+exports.total = () => {
+    return db.from('users')
+        .count('* AS total')
+        .then(([{ total }]) => Number(total))
+}
+
 exports.findByGroupId = (id, { offset, limit, query = {} } = {}) => {
     const nesting = nest('users', exports.relatedColumns)
         .one('avatar', Media.dao.columns)
