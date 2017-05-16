@@ -27,7 +27,7 @@ exports.find = ({ offset, limit, after, query = {} } = {}) => {
         .select(nesting.selection())
         .modify(qb => {
             if (after !== undefined) {
-                qb.where(`comments.serial`, '>', after)
+                qb.where(`comments.serial`, '<', after.serial)
             } else if (offset !== undefined) {
                 qb.offset(offset)
             }

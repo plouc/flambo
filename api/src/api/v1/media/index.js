@@ -13,14 +13,14 @@ const router     = Router()
 router.get(
     '/',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const media = await Media.all(Object.assign({}, pagination, {
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(pagination, media)
+        ctx.body = Pagination.dto.withPage(pagination, media)
     }
 )
 

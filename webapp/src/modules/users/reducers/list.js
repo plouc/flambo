@@ -53,9 +53,8 @@ const user = (state = {
 }
 
 export default function users(state = {
-    sort:          {},
-    filters:       {},
-    hasMore:       false,
+    first:         10,
+    hasNextPage:   false,
     fetchedAt:     null,
     isFetching:    false,
     didInvalidate: true,
@@ -63,6 +62,7 @@ export default function users(state = {
     byIndex:       {},
     currentIds:    [],
     error:         null,
+    endCursor:     null,
 }, action) {
     switch (action.type) {
         case FETCH_USERS_REQUEST:
@@ -76,20 +76,29 @@ export default function users(state = {
             }
 
         case FETCH_USERS_SUCCESS:
+            let currentIds = action.edges.map(({ node }) => node.id)
+            if (state.didInvalidate === false) {
+                currentIds = [
+                    ...state.currentIds,
+                    ...currentIds,
+                ]
+            }
+
             return {
                 ...state,
                 isFetching:    false,
                 fetchedAt:     action.fetchedAt,
                 didInvalidate: false,
                 error:         null,
-                hasMore:       action.has_more !== null,
-                currentIds:    action.items.map(({ id }) => id),
+                hasNextPage:   action.pageInfo.hasNextPage,
+                endCursor:     action.pageInfo.endCursor,
+                currentIds,
                 byId:          {
                     ...state.byId,
-                    ..._.keyBy(action.items.map(i => ({
-                        id:         i.id,
+                    ..._.keyBy(action.edges.map(({ node }) => ({
+                        id:         node.id,
                         isFetching: false,
-                        data:       i,
+                        data:       node,
                     })), 'id'),
                 },
             }

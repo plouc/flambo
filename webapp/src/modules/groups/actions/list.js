@@ -1,5 +1,3 @@
-import isEqual       from 'lodash/isEqual'
-
 import { list }      from '../api'
 import { fetchTime } from '../../../core/actions/actionsHelpers'
 
@@ -42,7 +40,7 @@ export const fetchGroups = (_options = {}) => (dispatch, getState) => {
 }
 
 export const fetchNextGroups = () => (dispatch, getState) => {
-    const { groups: { perPage, page } } = getState()
+    const { groups: { page } } = getState()
 
     dispatch(fetchGroups({ page: page + 1 }))
 }

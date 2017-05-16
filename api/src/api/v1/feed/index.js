@@ -11,7 +11,7 @@ const router      = Router()
 router.get(
     '/',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const items = await Feed.search(Object.assign({}, pagination))

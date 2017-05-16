@@ -20,6 +20,13 @@ const LoadMore = styled.div`
     box-shadow:       0 1px 2px rgba(0, 0, 0, .35);
 `
 
+/*
+ {isFetching && range(perPage).map(i => (
+ <GroupsIndexItemSkeleton key={i}/>
+ ))}
+
+ */
+
 const GroupsIndex = ({
     isFetching,
     groups,
@@ -43,10 +50,7 @@ const GroupsIndex = ({
                 paddingTop: 96,
             }}
         >
-            {isFetching && range(perPage).map(i => (
-                <GroupsIndexItemSkeleton key={i}/>
-            ))}
-            {!isFetching && groups.map(group => (
+            {groups.map(group => (
                 <GroupsIndexItem
                     key={group.id}
                     url={match.url}

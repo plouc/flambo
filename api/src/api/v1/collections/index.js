@@ -17,7 +17,7 @@ const router      = Router()
 router.get(
     '/',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const viewerId       = ctx.state.user.id
@@ -28,7 +28,7 @@ router.get(
             viewerId,
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.collections(collections, viewerId))
+        ctx.body = Pagination.dto.withPage(pagination, dto.collections(collections, viewerId))
     }
 )
 
@@ -54,7 +54,7 @@ router.get(
 router.get(
     '/:id/feed',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const collection = await Collections.get(ctx.params.id)
 
@@ -76,7 +76,7 @@ router.get(
 router.get(
     '/:id/comments',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const comments = await Comments.all(Object.assign({}, pagination, {
@@ -86,7 +86,7 @@ router.get(
             },
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.comments(comments))
+        ctx.body = Pagination.dto.withPage(pagination, dto.comments(comments))
     }
 )
 
@@ -113,14 +113,14 @@ router.post(
 router.get(
     '/:id/subscribers',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const subscribers = await Users.allByCollection(ctx.params.id, Object.assign({}, pagination, {
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.subscribers(subscribers))
+        ctx.body = Pagination.dto.withPage(pagination, dto.subscribers(subscribers))
     }
 )
 

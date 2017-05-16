@@ -13,22 +13,16 @@ const mapStateToProps = state => {
         users: {
             fetchedAt,
             isFetching,
-            sort,
-            filters,
-            hasMore,
+            hasNextPage,
             error,
         },
     } = state
 
     return {
-        hasBeenFetched:   !!fetchedAt,
-        //hasActiveFilters: hasActiveFiltersSelector(state),
-        hasActiveFilters: false,
-        users:            collectionSelector(state),
-        isFetching:       isFetching,
-        sort,
-        hasMore,
-        filters,
+        hasBeenFetched: !!fetchedAt,
+        users:          collectionSelector(state),
+        isFetching:     isFetching,
+        hasNextPage,
         error,
     }
 }

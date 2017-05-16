@@ -1,14 +1,7 @@
 const _ = require('lodash')
 
-const {
-    PAGINATION_TYPE_PAGE,
-    PAGINATION_TYPE_EXPLICIT,
-    PAGINATION_TYPE_CURSOR,
-    ensureValidType,
-} = require('./index')
 
-
-const pageDto = () => ({ per_page, page }, _items) => {
+exports.withPage = ({ per_page, page }, _items) => {
     let items = _items
 
     const output = {
@@ -28,7 +21,7 @@ const pageDto = () => ({ per_page, page }, _items) => {
     return output
 }
 
-const explicitDto = () => ({ offset, limit }, _items) => {
+exports.withOffsetLimit = ({ offset, limit }, _items) => {
     let items = _items
 
     const output = {
@@ -52,44 +45,45 @@ const explicitDto = () => ({ offset, limit }, _items) => {
  *
  * @param {string} cursor - The field to use for cursor
  */
-const cursorDto = ({ cursor }) => ({ first }, _items) => {
-    let items = _items
+exports.withCursor = ({ cursor }) => {
+    const computeCursor = item => {
+        const cursorObject = {}
+        cursor.forEach(key => {
+            cursorObject[key] = item[key]
+        })
 
-    const pageInfo = {
-        endCursor:   null,
-        hasNextPage: false,
+        console.log('computed cursor', cursorObject)
+
+        return Buffer.from(JSON.stringify(cursorObject)).toString('base64')
     }
 
-    if (items.length > first) {
-        items = _items.slice(0, first)
-        pageInfo.hasNextPage = true
-    }
+    return ({ first }, _items) => {
+        let items = _items
 
-    const edges = items.map(item => {
-        return {
-            node:   item,
-            cursor: Buffer.from(item[cursor]).toString('base64'),
+        const pageInfo = {
+            endCursor:   null,
+            hasNextPage: false,
         }
-    })
 
-    if (items.length > 0) {
-        pageInfo.endCursor = _.last(edges).cursor
+        if (items.length > first) {
+            items = _items.slice(0, first)
+            pageInfo.hasNextPage = true
+        }
+
+        const edges = items.map(item => {
+            return {
+                node:   item,
+                cursor: computeCursor(item),
+            }
+        })
+
+        if (items.length > 0) {
+            pageInfo.endCursor = _.last(edges).cursor
+        }
+
+        return {
+            edges,
+            pageInfo,
+        }
     }
-
-    return {
-        edges,
-        pageInfo,
-    }
-}
-
-const dtoByType = {
-    [PAGINATION_TYPE_PAGE]:     pageDto,
-    [PAGINATION_TYPE_EXPLICIT]: explicitDto,
-    [PAGINATION_TYPE_CURSOR]:   cursorDto,
-}
-
-module.exports = (type, ...args) => {
-    ensureValidType(type)
-
-    return dtoByType[type](...args)
 }

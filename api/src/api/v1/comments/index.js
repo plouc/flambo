@@ -1,18 +1,16 @@
-const Router         = require('koa-router')
+const Router     = require('koa-router')
 
-const auth           = require('../../../core/auth')
-const Pagination     = require('../../../core/pagination')
-const Comments       = require('../../../modules/comments')
+const auth       = require('../../../core/auth')
+const Pagination = require('../../../core/pagination')
+const Comments   = require('../../../modules/comments')
 
 
-const router         = Router()
+const router     = Router()
 
 router.get(
     '/',
     auth.middleware,
-    Pagination.middleware({
-        type: Pagination.PAGINATION_TYPE_CURSOR,
-    }),
+    Pagination.middleware.usingCursor(),
     async ctx => {
         const { pagination } = ctx.state
         const comments       = await Comments.all(Object.assign({}, pagination, {
@@ -20,8 +18,8 @@ router.get(
             after: pagination.after,
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_CURSOR, {
-            cursor: 'serial',
+        ctx.body = Pagination.dto.withCursor({
+            cursor: ['serial'],
         })(pagination, comments)
     }
 )

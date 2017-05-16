@@ -14,13 +14,13 @@ import {
 
 const endpoint = `${apiBaseUrl}/groups`
 
-export const list = (token, { perPage, page, sort: _sort = {}, filters: _filters = {} }) => {
+export const list = (token, { perPage, page }) => {
     const query = new URLSearchParams()
 
     query.append(API_PAGINATION_PER_PAGE, perPage)
     query.append(API_PAGINATION_PAGE,     page)
 
-    return apiGet(query ? `${endpoint}?${query}` : endpoint, { token })
+    return apiGet(`${endpoint}?${query}`, { token })
         .then(checkApiResponse())
 }
 

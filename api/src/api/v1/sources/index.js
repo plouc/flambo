@@ -15,14 +15,14 @@ const router     = Router()
 router.get(
     '/',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const sources        = await Sources.all(Object.assign({}, pagination, {
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.collection(sources))
+        ctx.body = Pagination.dto.withPage(pagination, dto.collection(sources))
     }
 )
 
@@ -51,7 +51,7 @@ router.put(
 router.get(
     '/:id/feed',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const items = await Feed.search(Object.assign({}, pagination, {
@@ -65,14 +65,14 @@ router.get(
 router.get(
     '/:id/jobs',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const jobs           = await Sources.getSourceJobs(ctx.params.id, Object.assign({}, pagination, {
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, jobs)
+        ctx.body = Pagination.dto.withPage(pagination, jobs)
     }
 )
 

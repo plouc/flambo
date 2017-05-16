@@ -9,18 +9,15 @@ export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS'
 export const FETCH_USERS_FAILURE = 'FETCH_USERS_FAILURE'
 export const INVALIDATE_USERS    = 'INVALIDATE_USERS'
 
-export const fetchUsers = (_options = {}) => (dispatch, getState) => {
+export const fetchUsers = () => (dispatch, getState) => {
     const {
-        users: { sort, filters },
+        users: { didInvalidate, first, endCursor },
         auth:  { token },
     } = getState()
 
-    const options = {
-        sort,
-        filters,
-        offset: 0,
-        limit:  10,
-        ..._options,
+    const options = { first }
+    if (!didInvalidate && endCursor !== null) {
+        options.after = endCursor
     }
 
     dispatch({ type: FETCH_USERS_REQUEST, ...options })

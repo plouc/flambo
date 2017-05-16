@@ -7,12 +7,80 @@
   content:    Node.js just announced v8.0.0 will be delayed
 
 - author:     raph
+  group:      nodejs
+  content:    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit amet ipsum et quam cursus gravida. Maecenas pretium in dolor non luctus. Suspendisse at imperdiet odio. Nunc dignissim magna sed est viverra posuere. Nunc enim libero, vehicula luctus porta in, dapibus in justo. Mauris vulputate rhoncus consequat. Nam semper ante eu porttitor sagittis. Vivamus et molestie magna.
+
+- author:     raph
+  group:      nodejs
+  content:    Integer et massa semper, tincidunt nibh sit amet, finibus libero. Nam et libero maximus, eleifend orci sed, volutpat purus. Nullam viverra ipsum gravida lorem facilisis commodo. Pellentesque faucibus, orci eget aliquet volutpat, odio orci maximus urna, et lobortis est velit id risus. Duis a lectus et libero auctor euismod id nec arcu. Cras tempus velit in risus euismod, vel semper massa commodo. In quis sodales dolor. Nulla facilisi. Phasellus at erat rhoncus, sagittis sem vitae, mollis nulla. Nullam maximus viverra nisl, eget dapibus ante feugiat et. Duis sed rhoncus justo, non blandit mi. Quisque quis fringilla ipsum, non maximus urna. Fusce turpis risus, luctus ac dignissim sit amet, mattis vitae sem. Duis eu massa molestie dolor viverra fermentum finibus vitae arcu.
+
+- author:     raph
+  group:      nodejs
+  content:    Donec ullamcorper dolor at neque volutpat, gravida imperdiet magna placerat. Etiam a urna id lorem ultrices aliquam. Nunc eleifend eros ipsum, condimentum interdum enim ullamcorper nec. Interdum et malesuada fames ac ante ipsum primis in faucibus. Quisque vitae nibh leo. Vivamus non diam lorem. Curabitur nec accumsan ligula, ut congue ante. Nam a justo vitae orci interdum dapibus auctor eget leo. Duis suscipit tortor nec ullamcorper mollis. Nulla facilisi. Etiam imperdiet nibh et sodales facilisis. Morbi vel urna ac purus ullamcorper feugiat vel et diam. Vestibulum consequat augue tincidunt nisi porttitor rhoncus. Pellentesque tempor tincidunt ligula, eget malesuada leo tincidunt non. Nullam finibus massa nec lorem rhoncus, at consectetur sapien convallis. Donec et gravida velit, ut fermentum sapien.
+
+- author:     raph
+  group:      nodejs
+  content:    Etiam tortor est, dictum quis euismod at, dignissim eget magna. Nullam bibendum nisl eu felis mattis ultrices. Aliquam scelerisque nisl nec maximus rhoncus. Donec vestibulum tortor id malesuada consectetur. Nam in sodales justo. Curabitur sit amet justo in tellus porttitor tempus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce at est vel lectus dignissim semper.
+
+- author:     raph
+  group:      nodejs
+  content:    Nulla facilisi. Cras quis nisl et lacus varius varius vel id tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque eget lorem ac enim imperdiet interdum aliquam eget nisi. Aliquam eget justo ultrices, eleifend ligula quis, blandit velit. Etiam in eleifend ipsum. In at tellus eu odio consequat varius pretium in magna. Phasellus varius consectetur tincidunt.
+
+- author:     raph
+  group:      nodejs
+  content:    Suspendisse potenti. Praesent eu pellentesque dolor. Praesent leo leo, semper eu interdum eu, tincidunt et lorem. Ut aliquet augue eget sapien vulputate condimentum. Proin ac tellus ac neque gravida dictum sed sed sem. Nulla non faucibus augue, ut suscipit sem. Suspendisse iaculis sem scelerisque, congue ipsum ac, consequat erat. Quisque eu fringilla arcu, nec convallis lacus. Cras facilisis erat quis nibh volutpat interdum in ac metus. Aliquam porttitor sapien eget magna tincidunt, id varius erat dictum. Aenean ac urna nec velit sagittis laoreet eget ut risus. Ut viverra, velit interdum elementum venenatis, urna diam laoreet arcu, eu dictum lorem magna sed ante. Quisque nec egestas neque. Nunc lobortis auctor vulputate. Nam pretium vulputate ipsum, nec mollis metus elementum non.
+
+- author:     raph
+  group:      nodejs
+  content:    Integer scelerisque magna nec dolor fringilla eleifend. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque vehicula orci sit amet mauris mollis malesuada. Aenean lobortis porttitor efficitur. Fusce iaculis aliquam magna, non rhoncus mi auctor eu. Fusce feugiat sapien ac velit volutpat, et tincidunt risus imperdiet. Aliquam volutpat ultricies metus id laoreet. Nunc pharetra elit id nunc fringilla, in gravida leo blandit. Morbi nec auctor neque, vel feugiat urna. Morbi eleifend mattis orci in laoreet. Morbi tristique sollicitudin arcu, eget gravida purus varius id. Sed pretium sem sed ligula placerat condimentum. Curabitur faucibus varius orci id dignissim. Etiam venenatis consectetur ornare.
+
+- author:     raph
+  group:      nodejs
+  content:    Nam consectetur sit amet velit in ullamcorper. Aenean sodales est vel neque luctus, non tincidunt arcu lobortis. Nam ultrices consequat accumsan. Aliquam interdum tristique orci a malesuada. Cras nulla ex, gravida eget venenatis sed, tempor quis nulla. Nullam ullamcorper sodales molestie. Nam metus dolor, dignissim in cursus ac, fringilla ac justo. Sed fringilla risus ac nunc aliquet, eu gravida elit finibus. Nullam nisl turpis, hendrerit imperdiet faucibus aliquam, efficitur sollicitudin odio. Fusce sit amet egestas ipsum. Maecenas id neque at ex dictum pellentesque.
+
+- author:     raph
+  group:      nodejs
+  content:    Fusce in ante ac nulla pharetra consequat. In pellentesque mi ac mattis ullamcorper. Vivamus sagittis massa tellus, eu volutpat odio volutpat dictum. Integer posuere lorem vel metus semper, vitae tincidunt magna laoreet. Nullam auctor iaculis nisl, fermentum semper nibh sagittis quis. Phasellus dictum purus et porttitor euismod. Nullam nec purus ipsum. Ut pharetra quis magna semper accumsan. Nulla facilisi. Morbi mollis sapien id nulla iaculis sagittis.
+
+- author:     raph
+  group:      nodejs
+  content:    Sed nec vulputate quam, a pharetra neque. Vestibulum at lacus nec magna cursus maximus. Duis vitae est eros. Proin volutpat quis arcu sit amet lacinia. Duis egestas bibendum tristique. Nulla tortor nunc, maximus cursus est rhoncus, scelerisque iaculis ex. Praesent laoreet tempus leo, quis varius nisi viverra ac. Aliquam vestibulum, ante accumsan blandit ornare, elit metus ullamcorper augue, nec sagittis ligula augue et leo. Quisque vel eros justo. Ut feugiat sagittis tincidunt. Nullam erat leo, fringilla quis vehicula sed, tristique quis est. Aliquam blandit elit fermentum, egestas nunc id, maximus tellus. Aliquam elementum dictum mauris, ac cursus velit mollis id. Vestibulum tempus felis at nisi tristique varius. Nunc imperdiet scelerisque est, vitae rhoncus purus condimentum et. In hac habitasse platea dictumst.
+
+- author:     raph
+  group:      nodejs
+  content:    Aenean eget purus lobortis, posuere nulla in, auctor ante. Morbi semper dictum eros, id egestas nisi convallis vel. Ut vehicula porttitor velit in congue. Morbi elit augue, aliquam sed purus ut, aliquet mollis ante. Morbi ante turpis, lacinia et risus et, sollicitudin pulvinar lacus. Donec faucibus mollis justo, ut pharetra sem gravida at. Aenean sed commodo tortor, vel venenatis magna. Aenean quam elit, dapibus sed nisl nec, pretium aliquam risus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin pulvinar purus at odio egestas luctus. Nunc pulvinar est fermentum augue aliquet, ut vehicula dui dictum. Morbi quis blandit ipsum, at pharetra leo. Duis lacus erat, vulputate id leo in, maximus sagittis nunc. Proin ultricies sollicitudin condimentum. Sed ultricies lacus eget turpis lacinia ornare.
+
+- author:     raph
+  group:      nodejs
+  content:    Integer efficitur quam viverra, pretium sem et, congue lectus. Maecenas porta vulputate turpis sit amet bibendum. Nullam mollis magna at nisl dignissim condimentum. In venenatis est eu malesuada commodo. Aenean feugiat, erat ac lobortis rutrum, lectus justo tristique eros, ac dictum diam mi in augue. Nam quam lectus, tincidunt a pulvinar mattis, lobortis eget ex. Ut eget eleifend diam, nec varius quam. Ut vitae nunc tempor, faucibus magna sit amet, molestie quam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent vestibulum ante ut velit sagittis, at placerat quam consequat. Praesent eu luctus justo, vitae efficitur felis. In in scelerisque massa. Quisque bibendum purus nec odio sagittis, a iaculis arcu fermentum. Sed vulputate turpis a efficitur lacinia. Pellentesque blandit venenatis maximus.
+
+- author:     raph
+  group:      nodejs
+  content:    Mauris arcu velit, gravida et felis a, tempus mattis ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc quis dapibus lacus. Praesent vitae augue velit. Quisque eget felis ac tellus vehicula mattis. Fusce varius, elit sit amet pulvinar mollis, eros est viverra dui, eu cursus felis sem laoreet ipsum. Nullam tincidunt nunc vitae convallis mattis. Suspendisse nec dapibus justo, eu egestas justo. Curabitur quis neque elementum nunc elementum tincidunt. Pellentesque vestibulum ut ipsum in condimentum.
+
+- author:     raph
   group:      reactjs
   content:    React rocks!
 
 - author:     raph
   group:      reactjs
   content:    It's hard to have all your depdendecies using new external `prop-types` package…
+
+- author:     marcel
+  group:      reactjs
+  content:    Donec ullamcorper dolor at neque volutpat, gravida imperdiet magna placerat. Etiam a urna id lorem ultrices aliquam. Nunc eleifend eros ipsum, condimentum interdum enim ullamcorper nec. Interdum et malesuada fames ac ante ipsum primis in faucibus. Quisque vitae nibh leo. Vivamus non diam lorem. Curabitur nec accumsan ligula, ut congue ante. Nam a justo vitae orci interdum dapibus auctor eget leo. Duis suscipit tortor nec ullamcorper mollis. Nulla facilisi. Etiam imperdiet nibh et sodales facilisis. Morbi vel urna ac purus ullamcorper feugiat vel et diam. Vestibulum consequat augue tincidunt nisi porttitor rhoncus. Pellentesque tempor tincidunt ligula, eget malesuada leo tincidunt non. Nullam finibus massa nec lorem rhoncus, at consectetur sapien convallis. Donec et gravida velit, ut fermentum sapien.
+
+- author:     marcel
+  group:      reactjs
+  content:    Etiam tortor est, dictum quis euismod at, dignissim eget magna. Nullam bibendum nisl eu felis mattis ultrices. Aliquam scelerisque nisl nec maximus rhoncus. Donec vestibulum tortor id malesuada consectetur. Nam in sodales justo. Curabitur sit amet justo in tellus porttitor tempus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce at est vel lectus dignissim semper.
+
+- author:     marcel
+  group:      reactjs
+  content:    Nulla facilisi. Cras quis nisl et lacus varius varius vel id tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque eget lorem ac enim imperdiet interdum aliquam eget nisi. Aliquam eget justo ultrices, eleifend ligula quis, blandit velit. Etiam in eleifend ipsum. In at tellus eu odio consequat varius pretium in magna. Phasellus varius consectetur tincidunt.
+
+- author:     marcel
+  group:      reactjs
+  content:    Suspendisse potenti. Praesent eu pellentesque dolor. Praesent leo leo, semper eu interdum eu, tincidunt et lorem. Ut aliquet augue eget sapien vulputate condimentum. Proin ac tellus ac neque gravida dictum sed sed sem. Nulla non faucibus augue, ut suscipit sem. Suspendisse iaculis sem scelerisque, congue ipsum ac, consequat erat. Quisque eu fringilla arcu, nec convallis lacus. Cras facilisis erat quis nibh volutpat interdum in ac metus. Aliquam porttitor sapien eget magna tincidunt, id varius erat dictum. Aenean ac urna nec velit sagittis laoreet eget ut risus. Ut viverra, velit interdum elementum venenatis, urna diam laoreet arcu, eu dictum lorem magna sed ante. Quisque nec egestas neque. Nunc lobortis auctor vulputate. Nam pretium vulputate ipsum, nec mollis metus elementum non.
 
 - author:     raph
   collection: alton_public_java

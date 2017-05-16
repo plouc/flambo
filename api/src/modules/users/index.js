@@ -8,9 +8,7 @@ const dao       = require('./dao')
 
 exports.dao = dao
 
-exports.all = ({ limit, offset }) => {
-    return dao.find({ limit, offset })
-}
+exports.all = dao.find
 
 exports.userCount = dao.total
 

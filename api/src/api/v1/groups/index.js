@@ -18,7 +18,7 @@ const router       = Router()
 router.get(
     '/',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const viewerId       = ctx.state.user.id
@@ -28,7 +28,7 @@ router.get(
             viewerId,
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.groups(groups, viewerId))
+        ctx.body = Pagination.dto.withPage(pagination, dto.groups(groups, viewerId))
     }
 )
 
@@ -54,7 +54,7 @@ router.get(
 router.get(
     '/:id/feed',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const sourceIds = await Groups.getGroupSourceIds(ctx.params.id)
 
@@ -75,14 +75,14 @@ router.get(
 router.get(
     '/:id/comments',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const comments = await Comments.groupComments(ctx.params.id, Object.assign({}, pagination, {
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.comments(comments))
+        ctx.body = Pagination.dto.withPage(pagination, dto.comments(comments))
     }
 )
 
@@ -109,21 +109,21 @@ router.post(
 router.get(
     '/:id/members',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const members = await Users.allByGroup(ctx.params.id, Object.assign({}, pagination, {
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.members(members))
+        ctx.body = Pagination.dto.withPage(pagination, dto.members(members))
     }
 )
 
 router.get(
     '/:id/sources',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const sources = await Sources.all(Object.assign({}, pagination, {
@@ -133,7 +133,7 @@ router.get(
             }
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, sources)
+        ctx.body = Pagination.dto.withPage(pagination, sources)
     }
 )
 

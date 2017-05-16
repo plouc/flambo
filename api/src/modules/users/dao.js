@@ -20,33 +20,29 @@ const userColumns = [
     'updated_at',
 ]
 
-exports.find = ({ offset, limit, query = {} } = {}) => {
-    const nesting = nest('u', userColumns)
+exports.find = ({
+    offset, limit, after, query = {},
+} = {}) => {
+    const nesting = nest('users', userColumns)
         .one('avatar', Media.dao.columns)
-        .many('memberships', ['is_administrator'])
-        .one('group', ['id', 'name'], { parent: 'memberships' })
-        .one('picture', Media.dao.columns, { parent: 'memberships.group' })
 
-    return db.from(function () {
-        this.select('*')
-            .from('users')
-            .orderBy('users.last_name')
-            .modify(qb => {
-                if (limit  !== undefined) qb.limit(limit)
-                if (offset !== undefined) qb.offset(offset)
-
-                Object.keys(query).forEach(key => {
-                    qb.where(key, query[key])
-                })
-            })
-            .as('u')
-    })
+    return db.from('users')
         .select(nesting.selection())
-        .orderBy('u.last_name')
-        .leftJoin('users_groups AS memberships', 'u.id', 'memberships.user_id')
-        .leftJoin('groups AS group', 'memberships.group_id', 'group.id')
-        .leftJoin('media AS picture', 'picture.id', 'group.picture_id')
-        .leftJoin('media AS avatar', 'u.avatar_id', 'avatar.id')
+        .orderBy('users.last_name')
+        .modify(qb => {
+            if (after !== undefined) {
+                qb.where('users.last_name', '>=', after.last_name)
+                    .whereNot('users.id', after.id)
+            } else if (offset !== undefined) {
+                qb.offset(offset)
+            }
+            if (limit !== undefined) qb.limit(limit)
+
+            Object.keys(query).forEach(key => {
+                qb.where(key, query[key])
+            })
+        })
+        .leftJoin('media AS avatar', 'users.avatar_id', 'avatar.id')
         .then(nesting.rollup.bind(nesting))
 }
 

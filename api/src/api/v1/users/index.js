@@ -18,17 +18,16 @@ const router     = Router()
 router.get(
     '/',
     auth.middleware,
-    Pagination.middleware({
-        type: Pagination.PAGINATION_TYPE_CURSOR,
-    }),
+    Pagination.middleware.usingCursor(),
     async ctx => {
         const { pagination } = ctx.state
         const users          = await Users.all(Object.assign({}, pagination, {
             limit: pagination.first + 1,
+            after: pagination.after,
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_CURSOR, {
-            cursor: 'last_name',
+        ctx.body = Pagination.dto.withCursor({
+            cursor: ['id', 'last_name'],
         })(pagination, dto.users(users))
     }
 )
@@ -70,7 +69,7 @@ router.get(
 router.get(
     '/:id/feed',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         //ctx.params.id,
@@ -83,7 +82,7 @@ router.get(
 router.get(
     '/:id/comments',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const comments = await Comments.all(Object.assign({}, pagination, {
@@ -93,14 +92,14 @@ router.get(
             },
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.comments(comments))
+        ctx.body = Pagination.dto.withPage(pagination, dto.comments(comments))
     }
 )
 
 router.get(
     '/:id/collections/public',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const collections = await Collections.all(Object.assign({}, pagination, {
@@ -111,14 +110,14 @@ router.get(
             },
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, collectionsDto.collections(collections))
+        ctx.body = Pagination.dto.withPage(pagination, collectionsDto.collections(collections))
     }
 )
 
 router.get(
     '/:id/collections/subscriptions',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware.usingPage(),
     async ctx => {
         const { pagination } = ctx.state
         const collections = await Collections.all(Object.assign({}, pagination, {
@@ -129,7 +128,7 @@ router.get(
             },
         }))
 
-        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, collectionsDto.collections(collections))
+        ctx.body = Pagination.dto.withPage(pagination, collectionsDto.collections(collections))
     }
 )
 

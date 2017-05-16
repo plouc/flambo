@@ -3,7 +3,7 @@ exports.up = knex => {
 
     return Promise.all([
         // this is used to generate unique serials used for cursor based pagination
-        knex.raw(`CREATE SEQUENCE "serial_seq"`),
+        knex.raw(`CREATE SEQUENCE IF NOT EXISTS "serial_seq"`),
         knex.schema.createTable('groups', t => {
             t.uuid('id').primary()
             t.string('slug').notNullable()
@@ -105,10 +105,8 @@ exports.up = knex => {
             t.uuid('collection_id').nullable()
             t.foreign('collection_id').references('collections.id')
             t.text('content').notNullable()
-
             t.text('serial').notNullable().defaultTo(serialDefault)
             t.unique('serial')
-
             t.timestamp('created_at').defaultTo(knex.fn.now())
             t.timestamp('updated_at').defaultTo(knex.fn.now())
         })

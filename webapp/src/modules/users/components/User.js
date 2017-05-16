@@ -15,7 +15,7 @@ import Helmet                   from '../../../core/components/HelmetIntl'
 import Feed                     from '../containers/UserFeedContainer'
 import Comments                 from '../containers/UserCommentsContainer'
 import Collections              from '../containers/UserCollectionsContainer'
-import Groups                   from './UserGroups'
+//import Groups                   from './UserGroups'
 import {
     Header,
     Title,
@@ -107,9 +107,11 @@ const User = ({
                     </Switch>
                 )}
             </div>
+            {/*
             <div>
                 {user && <Groups groups={user.groups}/>}
             </div>
+            */}
         </Content>
     </div>
 )

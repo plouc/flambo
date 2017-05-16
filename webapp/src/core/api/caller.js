@@ -19,11 +19,11 @@ const send = method => (url, { data, ...options } = {}) => {
     })
 }
 
-//export const apiGet = (url, options) => new Promise(resolve => {
-//    setTimeout(() => resolve(call('GET')(url, options)), 1200)
-//})
+export const apiGet = (url, options) => new Promise(resolve => {
+    setTimeout(() => resolve(call('GET')(url, options)), 4000)
+})
 
-export const apiGet = call('GET')
+//export const apiGet = call('GET')
 
 export const apiPost = send('POST')
 
