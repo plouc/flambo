@@ -2,7 +2,7 @@ import React, { PropTypes }                    from 'react'
 import styled                                  from 'styled-components'
 import { Link }                                from 'react-router-dom'
 import { FormattedRelative, FormattedMessage } from 'react-intl'
-import DiscussionsIcon                         from 'react-icons/lib/md/chat'
+import DiscussionsIcon                         from 'react-icons/lib/go/comment-discussion'
 
 import Loader                                  from '../../../core/components/Loader'
 import Form                                    from '../containers/CommentFormContainer'

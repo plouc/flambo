@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Route, Switch }               from 'react-router-dom'
 import styled                          from 'styled-components'
-import FeedIcon                        from 'react-icons/lib/md/featured-play-list'
+import FeedIcon                        from 'react-icons/lib/go/radio-tower'
 import {
     FormattedMessage,
     FormattedRelative,

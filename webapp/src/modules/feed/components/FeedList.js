@@ -2,7 +2,7 @@ import React, { PropTypes }  from 'react'
 import styled                from 'styled-components'
 import { Link }              from 'react-router-dom'
 import ExternalLinkIcon      from 'react-icons/lib/fa/external-link'
-import FeedIcon              from 'react-icons/lib/md/featured-play-list'
+import FeedIcon              from 'react-icons/lib/go/radio-tower'
 import {
     FormattedMessage,
     FormattedDate,

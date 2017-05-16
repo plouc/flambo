@@ -1,8 +1,8 @@
 import React, { PropTypes }   from 'react'
 import styled                 from 'styled-components'
 import { Switch, Route }      from 'react-router-dom'
-import FeedIcon               from 'react-icons/lib/md/featured-play-list'
-import DiscussionsIcon        from 'react-icons/lib/md/chat'
+import FeedIcon               from 'react-icons/lib/go/radio-tower'
+import DiscussionsIcon        from 'react-icons/lib/go/comment-discussion'
 import SubscribersIcon        from 'react-icons/lib/md/group'
 import {
     FormattedMessage,
