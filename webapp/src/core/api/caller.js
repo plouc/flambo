@@ -20,7 +20,7 @@ const send = method => (url, { data, ...options } = {}) => {
 }
 
 export const apiGet = (url, options) => new Promise(resolve => {
-    setTimeout(() => resolve(call('GET')(url, options)), 1000)
+    setTimeout(() => resolve(call('GET')(url, options)), 0)
 })
 
 //export const apiGet = call('GET')

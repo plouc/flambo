@@ -29,7 +29,7 @@ const Sidebar = styled.div`
 
 const Content = styled.div`
     position:   fixed;
-    top:        0;
+    top:        60px;
     right:      0;
     bottom:     0;
     left:       240px;
@@ -37,11 +37,29 @@ const Content = styled.div`
     overflow-y: auto;
 `
 
+const AppBar = styled.div`
+    position:    fixed;
+    top:         0;
+    right:       0;
+    left:        240px;
+    width:       100%;
+    height:      60px;
+    background:  ${props => props.theme.secondaryColor};
+    z-index:     9;
+    box-shadow:  0 1px 2px rgba(0, 0, 0, .35);
+    display:     flex;
+    padding:     0 60px;
+    align-items: center;
+    color:       white;
+    transition:  background 800ms;
+`
+
 const AuthenticatedApp = () => (
     <Wrapper>
         <Sidebar>
             <Navigation/>
         </Sidebar>
+        <AppBar/>
         <Content>
             <Switch>
                 <Route path="/"            component={Home} exact/>

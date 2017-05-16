@@ -7,7 +7,7 @@ import Create            from '../containers/CreateGroupContainer'
 
 
 export default ({ match }) => (
-    <div>
+    <div style={{ height: '100%', width: '100%' }}>
         <Route path={match.url} component={Index} exact/>
         <Switch>
             <Route path={`${match.url}/create`} component={Create}/>

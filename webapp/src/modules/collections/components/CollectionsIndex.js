@@ -15,6 +15,8 @@ import CollectionsIndexItem, {
 
 const Container = styled.div`
     background: ${props => props.theme.primaryColor};
+    height:     100%;
+    overflow:   auto;
 `
 
 export default class CollectionsIndex extends Component {

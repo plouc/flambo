@@ -4,29 +4,29 @@ import Color from 'color'
 
 export const themes = _.mapValues({
     groups: {
-        primaryColor:      '#70615a',
+        primaryColor:      '#17385d',
         disabledColor:     '#eff0f4',
-        logoTertiaryColor: '#b7c69d',
+        logoTertiaryColor: '#92c691',
     },
     users: {
-        primaryColor:      '#516752',
+        primaryColor:      '#2a4735',
         disabledColor:     '#eff0f4',
-        logoTertiaryColor: '#bc9e96',
+        logoTertiaryColor: '#d4b472',
     },
     sources: {
-        primaryColor:      '#5a5262',
+        primaryColor:      '#413455',
         disabledColor:     '#eff0f4',
-        logoTertiaryColor: '#d6d399',
+        logoTertiaryColor: '#d6d27e',
     },
     collections: {
-        primaryColor:      '#825d52',
+        primaryColor:      '#254e55',
         disabledColor:     '#eff0f4',
         logoTertiaryColor: '#b7dbab',
     },
     default: {
-        primaryColor:      '#383f54',
+        primaryColor:      '#2e3954',
         disabledColor:     '#eff0f4',
-        logoTertiaryColor: '#dbbc9e',
+        logoTertiaryColor: '#dbba91',
     },
 }, theme => {
     if (!theme.primaryTextColor) {
@@ -34,6 +34,12 @@ export const themes = _.mapValues({
     }
     if (!theme.disabledTextColor) {
         theme.disabledTextColor = Color(theme.disabledColor).darken(.25).string()
+    }
+    if (!theme.secondaryColor) {
+        theme.secondaryColor = Color(theme.primaryColor).lighten(.5).string()
+    }
+    if (!theme.accentColor) {
+        theme.accentColor = Color(theme.primaryColor).rotate(180).desaturate(.2).lighten(1.1).string()
     }
 
     if (!theme.logoPrimaryColor) {

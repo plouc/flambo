@@ -15,6 +15,8 @@ import GroupsIndexItem, {
 
 const Container = styled.div`
     background: ${props => props.theme.primaryColor};
+    height:     100%;
+    overflow:   auto;    
 `
 
 const GroupsIndex = ({

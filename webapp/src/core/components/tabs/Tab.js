@@ -26,7 +26,7 @@ const Container = styled.div`
 const Icon = styled.span`
     margin-right: 9px;
     font-size:    16px;
-    color:        ${props => props.active ? props.theme.primaryColor : '#ddd'};
+    color:        ${props => props.active ? props.theme.secondaryColor : '#ddd'};
 `
 
 const Tab = ({ label, icon, children, to, exact = false }) => {

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { Link }             from 'react-router-dom'
 import styled               from 'styled-components'
 import { FormattedMessage } from 'react-intl'
-import CollectionsIcon      from 'react-icons/lib/md/collections-bookmark'
+import CollectionsIcon      from 'react-icons/lib/md/folder-open'
 
 import Loader               from '../../../core/components/Loader'
 
