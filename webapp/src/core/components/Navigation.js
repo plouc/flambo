@@ -9,17 +9,8 @@ import CollectionsIcon      from 'react-icons/lib/md/folder-open'
 import SourcesIcon          from 'react-icons/lib/fa/bolt'
 import AboutIcon            from 'react-icons/lib/md/info-outline'
 
-import { PRODUCT_NAME }     from '../../config'
-import LogoPicto            from './LogoPicto'
+import { Picto, Typo }      from './Logo'
 
-
-const BrandName = styled.span`
-    font-family:    Montserrat, sans-serif;
-    text-transform: uppercase;
-    font-weight:    500;
-    margin-left:    12px;
-    color:          ${props => props.theme.primaryColor};
-`
 
 const Item = styled.div`
     height:          36px;
@@ -78,8 +69,8 @@ export default class Navigation extends Component {
         return (
             <div>
                 <Link to="/" style={styles.header}>
-                    <LogoPicto size={30} spacing={1}/>
-                    <BrandName>{PRODUCT_NAME}</BrandName>
+                    <Picto size={30} spacing={1}/>
+                    <Typo/>
                 </Link>
                 <NavigationItem label="groups"      to="/groups"      icon={GroupsIcon}/>
                 <NavigationItem label="users"       to="/users"       icon={UsersIcon}/>
