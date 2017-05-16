@@ -83,7 +83,7 @@ export default class InfoPage extends Component {
                     <Title
                         style={{
                             color:    'white',
-                            fontSize: '22px',
+                            fontSize: '20px',
                             margin:   '0 0 0 12px',
                         }}
                     >

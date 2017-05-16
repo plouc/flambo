@@ -73,9 +73,9 @@ export default class Navigation extends Component {
                     <Typo/>
                 </Link>
                 <NavigationItem label="groups"      to="/groups"      icon={GroupsIcon}/>
-                <NavigationItem label="users"       to="/users"       icon={UsersIcon}/>
-                <NavigationItem label="sources"     to="/sources"     icon={SourcesIcon}/>
                 <NavigationItem label="collections" to="/collections" icon={CollectionsIcon}/>
+                <NavigationItem label="sources"     to="/sources"     icon={SourcesIcon}/>
+                <NavigationItem label="users"       to="/users"       icon={UsersIcon}/>
                 <NavigationItem label="settings"    to="/settings"    icon={SettingsIcon}/>
                 <NavigationItem label="about"       to="/about"       icon={AboutIcon}/>
             </div>

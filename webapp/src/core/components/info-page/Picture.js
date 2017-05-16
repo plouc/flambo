@@ -18,7 +18,7 @@ const Picture = styled.div`
     color:               ${props => props.theme.primaryColor};
     font-family:         'Rajdhani', sans-serif;
     font-weight:         300;
-    font-size:           ${props => props.size / 1.5 }px;
+    font-size:           ${props => props.size / 1.5}px;
 `
 
 Picture.propTypes = {
