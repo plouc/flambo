@@ -69,20 +69,24 @@ const LoadMoreContainer = styled.div`
     color:           #fff;
     border-radius:   2px;
     border:          1px solid white;
-    opacity:         .35;
+    opacity:         .5;
     
     &:hover {
-        opacity: .9;
+        opacity: 1;
     }
 `
 
 const LoadMorePicture = styled.div`
-    width:         136px;
-    height:        136px;
-    background:    white;
-    margin:        12px;
-    opacity:       .25;
-    border-radius: 2px;
+    width:           136px;
+    height:          136px;
+    background:      rgba(255, 255, 255, .25);
+    margin:          12px;
+    border-radius:   2px;
+    display:         flex;
+    justify-content: center;
+    align-items:     center;
+    font-size:       60px;
+    color:           ${props => props.theme.primaryColor};
 `
 
 const LoadMoreTitle = styled.div`
@@ -97,9 +101,11 @@ const LoadMoreButton = styled.div`
     opacity:       .25;
 `
 
-export const LoadMore = ({ title, withButton, ...props }) => (
+export const LoadMore = ({ title, icon, withButton, ...props }) => (
     <LoadMoreContainer {...props}>
-        <LoadMorePicture/>
+        <LoadMorePicture>
+            {icon && React.createElement(icon)}
+        </LoadMorePicture>
         <Info>
             <LoadMoreTitle>
                 <FormattedMessage id={title}/>
@@ -114,6 +120,7 @@ export const LoadMore = ({ title, withButton, ...props }) => (
 LoadMore.propTypes = {
     title:      PropTypes.string.isRequired,
     withButton: PropTypes.bool.isRequired,
+    icon:       PropTypes.func,
 }
 
 LoadMore.defaultProps = {

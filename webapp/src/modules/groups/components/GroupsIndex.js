@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import range                from 'lodash/range'
 import styled               from 'styled-components'
+import GroupsIcon           from 'react-icons/lib/md/people-outline'
 
 import Helmet               from '../../../core/components/HelmetIntl'
 import { TopBar }           from '../../../core/components/page'
@@ -54,6 +55,7 @@ const GroupsIndex = ({
                 <LoadMore
                     onClick={fetchNext}
                     title="groups_load_more"
+                    icon={GroupsIcon}
                     withButton={true}
                 />
             )}

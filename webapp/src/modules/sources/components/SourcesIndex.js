@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import range                           from 'lodash/range'
 import styled                          from 'styled-components'
+import SourcesIcon                     from 'react-icons/lib/fa/bolt'
 
 import Helmet                          from '../../../core/components/HelmetIntl'
 import { TopBar }                      from '../../../core/components/page'
@@ -75,6 +76,7 @@ export default class SourcesIndex extends Component {
                     ))}
                     <LoadMore
                         title="sources_load_more"
+                        icon={SourcesIcon}
                     />
                 </Grid>
             </Container>

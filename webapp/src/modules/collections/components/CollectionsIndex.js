@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import range                           from 'lodash/range'
 import styled                          from 'styled-components'
+import CollectionsIcon                 from 'react-icons/lib/md/folder-open'
 
 import Helmet                          from '../../../core/components/HelmetIntl'
 import { TopBar }                      from '../../../core/components/page'
@@ -84,6 +85,7 @@ export default class CollectionsIndex extends Component {
                     ))}
                     <LoadMore
                         title="collections_load_more"
+                        icon={CollectionsIcon}
                         withButton={true}
                     />
                 </Grid>
