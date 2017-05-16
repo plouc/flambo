@@ -16,7 +16,7 @@ export const ItemContainer = styled.div`
 
 export const Picture = styled.div`
     background-size:     contain;
-    background-color:    ${props => props.url ? '#f3f4f8' : props.theme.logoSecondaryColor};
+    background-color:    ${props => props.url ? '#f3f4f8' : props.theme.accentColor};
     opacity:             ${props => props.url ? 1 : .6};
     background-repeat:   no-repeat;
     background-position: center center;
@@ -28,7 +28,7 @@ export const Picture = styled.div`
     display:             flex;
     justify-content:     center;
     align-items:         center;
-    font-size:           42px;
+    font-size:           90px;
     font-family:         'Rajdhani', sans-serif;
     font-weight:         300;
 `

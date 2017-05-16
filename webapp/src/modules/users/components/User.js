@@ -1,29 +1,20 @@
-import React, { PropTypes }     from 'react'
-import { Switch, Route }        from 'react-router-dom'
-import styled                   from 'styled-components'
-import FeedIcon                 from 'react-icons/lib/go/radio-tower'
-import CollectionsIcon          from 'react-icons/lib/md/folder-open'
-import CommentsIcon             from 'react-icons/lib/go/comment-discussion'
+import React, { PropTypes } from 'react'
+import { Switch, Route }    from 'react-router-dom'
+import styled               from 'styled-components'
+import FeedIcon             from 'react-icons/lib/go/radio-tower'
+import CollectionsIcon      from 'react-icons/lib/md/folder-open'
+import CommentsIcon         from 'react-icons/lib/go/comment-discussion'
 import {
     FormattedMessage,
     FormattedRelative,
 } from 'react-intl'
 
-import { Label, Value }         from '../../../core/components/Grid'
-import { Tabs, Tab }            from '../../../core/components/tabs'
-import Helmet                   from '../../../core/components/HelmetIntl'
-import Feed                     from '../containers/UserFeedContainer'
-import Comments                 from '../containers/UserCommentsContainer'
-import Collections              from '../containers/UserCollectionsContainer'
-//import Groups                   from './UserGroups'
-import {
-    Header,
-    Title,
-    Bar,
-    Content,
-    Sidebar,
-    Picture,
-} from '../../../core/components/info-page'
+import { Label, Value }     from '../../../core/components/Grid'
+import Feed                 from '../containers/UserFeedContainer'
+import Comments             from '../containers/UserCommentsContainer'
+import Collections          from '../containers/UserCollectionsContainer'
+//import Groups               from './UserGroups'
+import { InfoPage }          from '../../../core/components/info-page'
 
 
 const Intro = styled.div`
@@ -31,90 +22,76 @@ const Intro = styled.div`
     margin-bottom: 12px;
 `
 
-const User = ({
-    user, match,
-}) => (
-    <div>
-        <Helmet
-            title={user ? 'user_with_name' : 'user'}
-            titleValues={user ? { user: `${user.first_name} ${user.last_name}` } : {}}
-        />
-        <Header>
-            {user && <Picture url={user.avatar_url}/>}
-            {user && <Title>{user.last_name} {user.first_name}</Title>}
-        </Header>
-        <Bar>
-            <span/>
-            {user && (
-                <Tabs>
-                    <Tab
-                        label="user_feed"
-                        icon={FeedIcon}
-                        to={`/users/${user.id}`}
-                        exact
-                    />
-                    <Tab
-                        label="user_comments"
-                        icon={CommentsIcon}
-                        to={`/users/${user.id}/comments`}
-                    />
-                    <Tab
-                        label="user_collections"
-                        icon={CollectionsIcon}
-                        to={`/users/${user.id}/collections`}
-                    />
-                </Tabs>
-            )}
-        </Bar>
-        <Content>
-            <Sidebar>
-                {user && (
-                    <div>
-                        {user.intro && <Intro>{user.intro}</Intro>}
-                        <Label>
-                            <FormattedMessage id="user_created_at"/>
-                        </Label>
-                        <Value>
-                            <FormattedRelative
-                                value={user.created_at}
-                                updateInterval={10000}
-                            />
-                        </Value>
-                        <Label>
-                            <FormattedMessage id="user_updated_at"/>
-                        </Label>
-                        <Value>
-                            <FormattedRelative
-                                value={user.updated_at}
-                                updateInterval={10000}
-                            />
-                        </Value>
-                    </div>
-                )}
-            </Sidebar>
-            <div style={{ overflow: 'hidden' }}>
-                {user && (
-                    <Switch>
-                        <Route path={`${match.url}`} exact render={() => (
-                            <Feed user={user}/>
-                        )}/>
-                        <Route path={`${match.url}/comments`} render={() => (
-                            <Comments user={user}/>
-                        )}/>
-                        <Route path={`${match.url}/collections`} render={() => (
-                            <Collections user={user}/>
-                        )}/>
-                    </Switch>
-                )}
-            </div>
-            {/*
+const User = ({ user, match }) => {
+    
+    let pageProps
+    if (user) {
+        const sidebar = (
             <div>
-                {user && <Groups groups={user.groups}/>}
+                {user.intro && <Intro>{user.intro}</Intro>}
+                <Label>
+                    <FormattedMessage id="user_created_at"/>
+                </Label>
+                <Value>
+                    <FormattedRelative
+                        value={user.created_at}
+                        updateInterval={10000}
+                    />
+                </Value>
+                <Label>
+                    <FormattedMessage id="user_updated_at"/>
+                </Label>
+                <Value>
+                    <FormattedRelative
+                        value={user.updated_at}
+                        updateInterval={10000}
+                    />
+                </Value>
             </div>
-            */}
-        </Content>
-    </div>
-)
+        )
+
+        pageProps = {
+            pageTitle:       'user_with_name',
+            pageTitleValues: { user: `${user.first_name} ${user.last_name}` },
+            pictureUrl:      user.avatar_url,
+            title:           `${user.last_name} ${user.first_name}`,
+            tabs:            [
+                { label: 'user_feed', icon: FeedIcon, to: `/users/${user.id}`, exact: true },
+                { label: 'user_comments', icon: CommentsIcon, to: `/users/${user.id}/comments` },
+                { label: 'user_collections', icon: CollectionsIcon, to: `/users/${user.id}/collections` },
+            ],
+            sidebar,
+        }
+    } else {
+        pageProps = {
+            pageTitle: 'user',
+        }
+    }
+
+    /*
+     <div>
+     {user && <Groups groups={user.groups}/>}
+     </div>
+     */
+
+    return (
+        <InfoPage {...pageProps}>
+            {user && (
+                <Switch>
+                    <Route path={`${match.url}`} exact render={() => (
+                        <Feed user={user}/>
+                    )}/>
+                    <Route path={`${match.url}/comments`} render={() => (
+                        <Comments user={user}/>
+                    )}/>
+                    <Route path={`${match.url}/collections`} render={() => (
+                        <Collections user={user}/>
+                    )}/>
+                </Switch>
+            )}
+        </InfoPage>
+    )
+}
 
 User.propTypes = {
     id:         PropTypes.string.isRequired,

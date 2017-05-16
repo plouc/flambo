@@ -4,29 +4,29 @@ import Color from 'color'
 
 export const themes = _.mapValues({
     groups: {
-        primaryColor:      '#17385d',
-        disabledColor:     '#eff0f4',
-        logoTertiaryColor: '#92c691',
+        primaryColor:  '#17385d',
+        disabledColor: '#eff0f4',
+        accentColor:   '#92c691',
     },
     users: {
-        primaryColor:      '#2a4735',
-        disabledColor:     '#eff0f4',
-        logoTertiaryColor: '#d4b472',
+        primaryColor:  '#2a4735',
+        disabledColor: '#eff0f4',
+        accentColor:   '#d4b472',
     },
     sources: {
-        primaryColor:      '#413455',
-        disabledColor:     '#eff0f4',
-        logoTertiaryColor: '#d6d27e',
+        primaryColor:  '#413455',
+        disabledColor: '#eff0f4',
+        accentColor:   '#d6d27e',
     },
     collections: {
-        primaryColor:      '#254e55',
-        disabledColor:     '#eff0f4',
-        logoTertiaryColor: '#b7dbab',
+        primaryColor:  '#254e55',
+        disabledColor: '#eff0f4',
+        accentColor:   '#b7dbab',
     },
     default: {
-        primaryColor:      '#2e3954',
-        disabledColor:     '#eff0f4',
-        logoTertiaryColor: '#dbba91',
+        primaryColor:  '#2e3954',
+        disabledColor: '#eff0f4',
+        accentColor:   '#dbba91',
     },
 }, theme => {
     if (!theme.primaryTextColor) {

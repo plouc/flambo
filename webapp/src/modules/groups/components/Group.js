@@ -9,10 +9,8 @@ import {
     FormattedRelative,
 } from 'react-intl'
 
-import Helmet               from '../../../core/components/HelmetIntl'
 import { Label, Value }     from '../../../core/components/Grid'
 import { Button }           from '../../../core/components/buttons'
-import { Tabs, Tab }        from '../../../core/components/tabs'
 import RelatedUser          from '../../users/components/RelatedUser'
 import Edit                 from '../containers/EditGroupContainer'
 import GroupMembership      from '../containers/GroupMembershipContainer'
@@ -20,14 +18,7 @@ import Feed                 from '../containers/GroupFeedContainer'
 import Members              from '../containers/GroupMembersContainer'
 import Comments             from '../containers/GroupCommentsContainer'
 import Sources              from '../containers/GroupSourcesContainer'
-import {
-    Header,
-    Title,
-    Bar,
-    Content,
-    Sidebar,
-    Picture,
-} from '../../../core/components/info-page'
+import { InfoPage }         from '../../../core/components/info-page'
 
 
 const Description = styled.div`
@@ -35,120 +26,113 @@ const Description = styled.div`
     margin-bottom: 12px;
 `
 
+/*
+@todo need to be re-integrated
 const MembersCount = styled.span`
     margin-left: 9px;
     font-weight: 700;
 `
+<MembersCount>
+    {group.members_count}
+</MembersCount>
+ */
 
 const Group = ({ group, match }) => {
-    return (
-        <div>
-            <Helmet
-                title={group ? 'group_with_name' : 'group'}
-                titleValues={group ? { group: group.name } : {}}
-            />
-            <Header>
-                {group && <Picture url={group.picture_url}/>}
-                {group && <Title>{group.name}</Title>}
-            </Header>
-            {group ? (
-                <Bar>
-                    <RelatedUser
-                        user={group.owner}
-                        messageId="group_created_by"
-                        avatarUrlKey="avatar_url"
+    let pageProps
+    if (group) {
+        const sidebar = (
+            <div>
+                {group.description && (
+                    <Description>
+                        {group.description}
+                    </Description>
+                )}
+                <Label>
+                    <FormattedMessage id="created_at"/>
+                </Label>
+                <Value>
+                    <FormattedRelative
+                        value={group.created_at}
+                        updateInterval={10000}
                     />
-                    <Tabs>
-                        <Tab
-                            to={`${match.url}`}
-                            label="group_feed"
-                            icon={FeedIcon}
-                            exact
-                        />
-                        <Tab
-                            to={`${match.url}/comments`}
-                            label="group_comments"
-                            icon={CommentsIcon}
-                        />
-                        <Tab
-                            to={`${match.url}/members`}
-                            icon={MembersIcon}
-                        >
-                            <FormattedMessage id="group_members"/>
-                            <MembersCount>
-                                {group.members_count}
-                            </MembersCount>
-                        </Tab>
-                    </Tabs>
-                    <div>
-                        <GroupMembership
-                            group={group}
-                            style={{ marginRight: 12 }}
-                        />
-                        {(group.viewer_is_owner || group.viewer_is_administrator) && (
-                            <Button
-                                label="edit"
-                                to={`/groups/${group.id}/edit`}
-                                primary
-                                raised
-                            />
-                        )}
-                    </div>
-                </Bar>
-            ) : <Bar/>}
-            <Content>
-                <Sidebar>
-                    {group && (
-                        <div>
-                            {group.description && (
-                                <Description>
-                                    {group.description}
-                                </Description>
-                            )}
-                            <Label>
-                                <FormattedMessage id="created_at"/>
-                            </Label>
-                            <Value>
-                                <FormattedRelative
-                                    value={group.created_at}
-                                    updateInterval={10000}
-                                />
-                            </Value>
-                            <Label>
-                                <FormattedMessage id="updated_at"/>
-                            </Label>
-                            <Value>
-                                <FormattedRelative
-                                    value={group.updated_at}
-                                    updateInterval={10000}
-                                />
-                            </Value>
-                        </div>
-                    )}
-                </Sidebar>
-                <div style={{ overflow: 'visible' }}>
-                    {group && (
-                        <Switch>
-                            <Route path={`${match.url}`} exact render={() => (
-                                <Feed group={group}/>
-                            )}/>
-                            <Route path={`${match.url}/members`} render={() => (
-                                <Members group={group}/>
-                            )}/>
-                            <Route path={`${match.url}/comments`} exact render={() => (
-                                <Comments group={group}/>
-                            )}/>
-                            <Route path={`${match.url}/edit`} exact render={() => (
-                                <Edit group={group}/>
-                            )}/>
-                        </Switch>
-                    )}
-                </div>
-                <div>
-                    {group && <Sources group={group}/>}
-                </div>
-            </Content>
-        </div>
+                </Value>
+                <Label>
+                    <FormattedMessage id="updated_at"/>
+                </Label>
+                <Value>
+                    <FormattedRelative
+                        value={group.updated_at}
+                        updateInterval={10000}
+                    />
+                </Value>
+            </div>
+        )
+
+        const barInfo = (
+            <RelatedUser
+                user={group.owner}
+                messageId="group_created_by"
+                avatarUrlKey="avatar_url"
+            />
+        )
+
+        const controls = (
+            <div>
+                <GroupMembership
+                    group={group}
+                    style={{ marginRight: 12 }}
+                />
+                {(group.viewer_is_owner || group.viewer_is_administrator) && (
+                    <Button
+                        label="edit"
+                        to={`/groups/${group.id}/edit`}
+                        primary
+                        raised
+                    />
+                )}
+            </div>
+        )
+
+        pageProps = {
+            pageTitle:       'group_with_name',
+            pageTitleValues: { group: group.name },
+            pictureUrl:      group.picture_url,
+            title:           group.name,
+            aside:           <Sources group={group}/>,
+            tabs:            [
+                { label: 'group_feed', icon: FeedIcon, to: match.url, exact: true },
+                { label: 'group_comments', icon: CommentsIcon, to: `${match.url}/comments` },
+                { label: 'group_members', icon: MembersIcon, to: `${match.url}/members` },
+            ],
+            sidebar,
+            controls,
+            barInfo,
+        }
+    } else {
+        pageProps = {
+            pageTitle: 'group',
+        }
+    }
+
+    return (
+        <InfoPage {...pageProps}>
+            {group && (
+                <Switch>
+                    <Route path={`${match.url}`} exact render={() => (
+                        <Feed group={group}/>
+                    )}/>
+                    <Route path={`${match.url}/members`} render={() => (
+                        <Members group={group}/>
+                    )}/>
+                    <Route path={`${match.url}/comments`} exact render={() => (
+                        <Comments group={group}/>
+                    )}/>
+                    <Route path={`${match.url}/edit`} exact render={() => (
+                        <Edit group={group}/>
+                    )}/>
+                </Switch>
+            )}
+        </InfoPage>
     )
 }
 

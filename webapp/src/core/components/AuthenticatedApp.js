@@ -35,6 +35,7 @@ const Content = styled.div`
     left:       240px;
     overflow-x: hidden;
     overflow-y: auto;
+    z-index:    9;
 `
 
 const AppBar = styled.div`
@@ -45,13 +46,13 @@ const AppBar = styled.div`
     width:       100%;
     height:      60px;
     background:  ${props => props.theme.secondaryColor};
-    z-index:     9;
+    z-index:     8;
     box-shadow:  0 1px 2px rgba(0, 0, 0, .35);
     display:     flex;
     padding:     0 60px;
     align-items: center;
     color:       white;
-    transition:  background 800ms;
+    transition:  background 400ms;
 `
 
 const AuthenticatedApp = () => (

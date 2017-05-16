@@ -24,7 +24,7 @@ const Avatar = styled.div`
     height:              60px;
     margin-top:          12px;
     opacity:             ${props => props.url ? 1 : .6};
-    background-color:    ${props => props.url ? '#f3f4f8' : props.theme.logoSecondaryColor};
+    background-color:    ${props => props.url ? '#f3f4f8' : props.theme.accentColor};
     background-repeat:   no-repeat;
     background-size:     cover;
     background-position: center center;
@@ -34,7 +34,7 @@ const Avatar = styled.div`
     display:             flex;
     justify-content:     center;
     align-items:         center;
-    font-size:           26px;
+    font-size:           40px;
     font-family:         'Rajdhani', sans-serif;
     font-weight:         300;
 `

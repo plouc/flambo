@@ -7,17 +7,17 @@ import { PRODUCT_NAME } from '../../config'
 const transition = 'fill 800ms'
 
 const PictoTopPart = styled.path`
-    fill:       ${props => props.theme.logoPrimaryColor};
+    fill:       ${props => props.theme.primaryColor};
     transition: ${transition};
 `
 
 const PictoLeftPart = styled.path`
-    fill:       ${props => props.theme.logoSecondaryColor};
+    fill:       ${props => props.theme.secondaryColor};
     transition: ${transition};
 `
 
 const PictoRightPart = styled.path`
-    fill:       ${props => props.theme.logoTertiaryColor};
+    fill:       ${props => props.theme.accentColor};
     transition: ${transition};
 `
 
