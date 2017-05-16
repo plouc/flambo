@@ -67,6 +67,7 @@ export default {
 
     // Groups
     groups: 'groups',
+    groups_load_more: 'discover more groups',
     group: 'group',
     group_create: 'create group',
     group_with_name: 'group: {group}',
@@ -91,6 +92,7 @@ export default {
 
     // Sources
     sources: 'sources',
+    sources_load_more: 'load more sources',
     source: 'source',
     source_with_name: 'source: {source}',
     source_create: 'create source',
@@ -107,6 +109,7 @@ export default {
 
     // Collections
     collections: 'collections',
+    collections_load_more: 'discover more collections',
     collection: 'collection',
     collection_create: 'create collection',
     collection_with_name: 'collection: {collection}',

@@ -6,6 +6,7 @@ import Helmet                          from '../../../core/components/HelmetIntl
 import { TopBar }                      from '../../../core/components/page'
 import { Button }                      from '../../../core/components/buttons'
 import { Grid }                        from '../../../core/components/Grid'
+import { LoadMore }                    from '../../../core/components/IndexGrid'
 import SourcesIndexItem, {
     SourcesIndexLoadingItem,
 } from './SourcesIndexItem'
@@ -72,6 +73,9 @@ export default class SourcesIndex extends Component {
                     {isFetching && range(perPage).map(i => (
                         <SourcesIndexLoadingItem key={i}/>
                     ))}
+                    <LoadMore
+                        title="sources_load_more"
+                    />
                 </Grid>
             </Container>
         )

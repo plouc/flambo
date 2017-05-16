@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import React, { PropTypes } from 'react'
+import { FormattedMessage } from 'react-intl'
+import styled               from 'styled-components'
 
 
 export const ItemContainer = styled.div`
@@ -57,3 +59,63 @@ export const Meta = styled.div`
     font-size: 13px;
     color:     #777;
 `
+
+const LoadMoreContainer = styled.div`
+    cursor:          pointer;
+    height:          160px;
+    display:         flex;
+    flex-direction:  row;
+    justify-content: flex-start;
+    color:           #fff;
+    border-radius:   2px;
+    border:          1px solid white;
+    opacity:         .35;
+    
+    &:hover {
+        opacity: .9;
+    }
+`
+
+const LoadMorePicture = styled.div`
+    width:         136px;
+    height:        136px;
+    background:    white;
+    margin:        12px;
+    opacity:       .25;
+    border-radius: 2px;
+`
+
+const LoadMoreTitle = styled.div`
+    font-size: 14px;
+`
+
+const LoadMoreButton = styled.div`
+    width:         80px;
+    height:        28px;
+    background:    white;
+    border-radius: 2px;
+    opacity:       .25;
+`
+
+export const LoadMore = ({ title, withButton, ...props }) => (
+    <LoadMoreContainer {...props}>
+        <LoadMorePicture/>
+        <Info>
+            <LoadMoreTitle>
+                <FormattedMessage id={title}/>
+            </LoadMoreTitle>
+            <Footer>
+                {withButton && <LoadMoreButton/>}
+            </Footer>
+        </Info>
+    </LoadMoreContainer>
+)
+
+LoadMore.propTypes = {
+    title:      PropTypes.string.isRequired,
+    withButton: PropTypes.bool.isRequired,
+}
+
+LoadMore.defaultProps = {
+    withButton: false,
+}

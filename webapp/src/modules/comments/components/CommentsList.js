@@ -9,14 +9,14 @@ import Form                                    from '../containers/CommentFormCo
 
 
 const Container = styled.div`
-    background-color: #fff;
+    background-color: white;
     box-shadow:       0 1px 2px rgba(0, 0, 0, .07);
     min-height:       260px;
+    position:         relative;
 `
 
 const List = styled.div`
     padding:  12px 24px;
-    position: relative;
 `
 
 const ListItem = styled.div`

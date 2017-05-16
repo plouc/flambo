@@ -6,6 +6,7 @@ import Helmet               from '../../../core/components/HelmetIntl'
 import { TopBar }           from '../../../core/components/page'
 import { Button }           from '../../../core/components/buttons'
 import { Grid }             from '../../../core/components/Grid'
+import { LoadMore }         from '../../../core/components/IndexGrid'
 import GroupsIndexItem, {
     GroupsIndexLoadingItem,
 } from './GroupsIndexItem'
@@ -13,13 +14,6 @@ import GroupsIndexItem, {
 
 const Container = styled.div`
     background: ${props => props.theme.primaryColor};
-`
-
-const LoadMore = styled.div`
-    cursor:           pointer;
-    height:           160px;
-    background-color: ${props => props.theme.logoSecondaryColor};
-    box-shadow:       0 1px 2px rgba(0, 0, 0, .35);
 `
 
 const GroupsIndex = ({
@@ -57,9 +51,11 @@ const GroupsIndex = ({
                 <GroupsIndexLoadingItem key={i}/>
             ))}
             {hasNextPage && (
-                <LoadMore onClick={fetchNext}>
-                    load next page
-                </LoadMore>
+                <LoadMore
+                    onClick={fetchNext}
+                    title="groups_load_more"
+                    withButton={true}
+                />
             )}
         </Grid>
     </Container>

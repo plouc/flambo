@@ -6,6 +6,7 @@ import Helmet                          from '../../../core/components/HelmetIntl
 import { TopBar }                      from '../../../core/components/page'
 import { Grid }                        from '../../../core/components/Grid'
 import { Button }                      from '../../../core/components/buttons'
+import { LoadMore }                    from '../../../core/components/IndexGrid'
 import CollectionsIndexItem, {
     CollectionsIndexLoadingItem,
 } from './CollectionsIndexItem'
@@ -81,6 +82,10 @@ export default class CollectionsIndex extends Component {
                     {isFetching && range(perPage).map(i => (
                         <CollectionsIndexLoadingItem key={i}/>
                     ))}
+                    <LoadMore
+                        title="collections_load_more"
+                        withButton={true}
+                    />
                 </Grid>
             </Container>
         )

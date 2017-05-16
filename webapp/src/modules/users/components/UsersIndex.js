@@ -19,7 +19,7 @@ const Wrapper = styled.div`
     top:            60px;
     right:          0;
     bottom:         0;
-    left:           220px;
+    left:           240px;
     background:     ${props => props.theme.primaryColor};
 `
 

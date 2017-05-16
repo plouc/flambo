@@ -6,65 +6,65 @@ import typeImages           from './typeImages'
 import Placeholder          from '../../../core/components/Placeholder'
 import {
     ItemContainer,
+    Picture,
+    Info,
     Title,
     Meta,
 } from '../../../core/components/IndexGrid'
 
 
 const TypeIcon = styled.div`
-    position:            absolute;
-    width:               36px;
-    height:              36px;
-    top:                 9px;
-    right:               9px;
+    width:               72px;
+    height:              72px;
     background-image:    ${props => `url(${typeImages[props.type]})`};
     background-size:     contain;
     background-repeat:   no-repeat;
     background-position: center center;
 `
 
-const styles = {
-    container: {
-        padding:        '18px 24px',
-        flexDirection:  'column',
-        justifyContent: 'space-between',
-    },
-}
-
 export const SourcesIndexLoadingItem = () => (
-    <ItemContainer style={styles.container}>
-        <div>
+    <ItemContainer>
+        <Placeholder
+            width="136px" height="136px"
+            style={{ margin: 12 }}
+        />
+        <Info>
             <Placeholder
                 width="120px" height="20px"
                 style={{ marginBottom: '9px' }}
             />
-            <Placeholder
-                width="36px" height="36px"
-                style={{
-                    position: 'absolute',
-                    top:      9,
-                    right:    9,
-                }}
-            />
-        </div>
-        <div>
-            <Placeholder width="100%" height="14px" style={{ marginBottom: 9 }}/>
-            <Placeholder width="66%" height="14px" style={{ marginBottom: 5 }}/>
-        </div>
+            <div>
+                <Placeholder width="100%" height="14px" style={{ marginBottom: 9 }}/>
+                <Placeholder width="66%" height="14px" style={{ marginBottom: 5 }}/>
+            </div>
+        </Info>
     </ItemContainer>
 )
 
 const SourcesIndexItem = ({ url, source }) => (
-    <ItemContainer style={styles.container}>
-        <div>
+    <ItemContainer>
+        <Link to={`${url}/${source.id}`}>
+            <Picture
+                style={{
+                    backgroundColor: '#f3f4f8',
+                }}
+            >
+                <TypeIcon type={source.type}/>
+            </Picture>
+        </Link>
+        <Info>
             <Link to={`${url}/${source.id}`}>
                 <Title>{source.name}</Title>
             </Link>
-            <TypeIcon type={source.type}/>
-        </div>
-        <Meta>
-            {source.description || ''}
-        </Meta>
+            <Meta
+                style={{
+                    maxHeight: 60,
+                    overflow:  'hidden',
+                }}
+            >
+                {source.description || ''}
+            </Meta>
+        </Info>
     </ItemContainer>
 )
 
