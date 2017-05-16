@@ -17,6 +17,8 @@ export const apiBaseUrl              = process.env.REACT_APP_API_URL
 
 export const API_PAGINATION_PAGE     = 'page'
 export const API_PAGINATION_PER_PAGE = 'per_page'
+export const API_PAGINATION_OFFSET   = 'offset'
+export const API_PAGINATION_LIMIT    = 'limit'
 export const API_SORT                = 'sort'
 
 export const commonHeaders           = {

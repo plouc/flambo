@@ -68,16 +68,6 @@ const EmptyMessage = styled.div`
     font-size:  14px;
 `
 
-const Contributor = styled.span`
-    display:       inline-block;
-    margin-left:   9px;
-    font-size:     12px;
-    border-radius: 2px;
-    border:        1px solid ${props => props.primaryColor};
-    line-height:   1em;
-    padding:       3px 6px;
-    color:         ${props => props.primaryTextColor};
-`
 
 const CollectionSubscribers = ({
     hasBeenFetched,

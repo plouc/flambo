@@ -1,31 +1,21 @@
-import React, { Component, PropTypes }       from 'react'
-import range                                 from 'lodash/range'
-import { Link }                              from 'react-router-dom'
-import styled                                from 'styled-components'
-import { FormattedMessage }                  from 'react-intl'
+import React, { Component, PropTypes }     from 'react'
+import { Link }                            from 'react-router-dom'
+import styled                              from 'styled-components'
+import { FormattedMessage }                from 'react-intl'
+import { InfiniteLoader, AutoSizer, List } from 'react-virtualized'
 
-import { Name as SkeletonName, Description } from '../../../core/components/skeleton'
-import Helmet                                from '../../../core/components/HelmetIntl'
-import Pager                                 from '../../../core/components/pager/Pager'
-import { TopBar }                            from '../../../core/components/page'
-import { Cell }                              from '../../../core/components/Grid'
-import { Name }                              from '../../../core/components/card'
-import RelatedGroups                         from '../../groups/components/RelatedGroups'
+import Helmet                              from '../../../core/components/HelmetIntl'
+import { Name }                            from '../../../core/components/card'
+import RelatedGroups                       from '../../groups/components/RelatedGroups'
+import Placeholder                         from '../../../core/components/Placeholder'
 
-
-const List = styled.div`
-    margin:     96px 60px 60px;
-    background: white;
-    boxShadow:  0 1px 2px rgba(0,0,0,0.07);
-    padding:    12px 24px;
-`
 
 const ListItem = styled.div`
     display:     flex;
-    height:      84px;
-    padding:     12px 0;
+    padding:     12px 24px;
     align-items: flex-start;
     border-top:  1px solid #f3f4f8;
+    background-color: #FFF;
     
     &:first-child {
         border-width: 0;
@@ -35,7 +25,7 @@ const ListItem = styled.div`
 const Avatar = styled.div`
     width:               60px;
     height:              60px;
-    margin-right:        12px;
+    margin-right:        24px;
     background-color:    #f3f4f8;
     background-repeat:   no-repeat;
     background-size:     cover;
@@ -58,8 +48,8 @@ const GroupsLabel = styled.span`
     font-weight: 500;
 `
 
-const UserItem = ({ url, user }) => (
-    <ListItem>
+const UserItem = ({ url, user, ...props }) => (
+    <ListItem {...props}>
         <Link to={`${url}/${user.id}`}>
             <Avatar url={user.avatar_url}/>
         </Link>
@@ -80,28 +70,41 @@ const UserItem = ({ url, user }) => (
     </ListItem>
 )
 
-const UserItemSkeleton = () => (
-    <Cell
-        style={{
-            padding:         24,
-            height:          200,
-            backgroundColor: 'white',
-            boxShadow:       '0 1px 2px rgba(0,0,0,0.07)',
-            cursor:          'pointer',
-        }}
-    >
-        <SkeletonName/>
-        <Description lineCount={1}/>
-    </Cell>
+const UserItemSkeleton = props => (
+    <ListItem {...props}>
+        <Placeholder
+            width="60px" height="60px"
+            style={{ marginRight: '24px' }}
+        />
+        <Info>
+            <Placeholder
+                width="120px" height="20px"
+                style={{ marginBottom: '9px' }}
+            />
+            <Placeholder width="180px" height="14px"/>
+        </Info>
+    </ListItem>
 )
+
+
+
+const Wrapper = styled.div`
+    display:        flex;
+    flex-direction: column;
+    overflow:       hidden;
+    position:       fixed;
+    top:            0;
+    right:          0;
+    bottom:         0;
+    left:           220px;
+    background:     ${props => props.theme.primaryColor};
+`
 
 export default class UsersIndex extends Component {
     static propTypes = {
         hasBeenFetched:   PropTypes.bool.isRequired,
         fetch:            PropTypes.func.isRequired,
-        perPage:          PropTypes.number.isRequired,
-        page:             PropTypes.number.isRequired,
-        hasNextPage:      PropTypes.bool.isRequired,
+        hasMore:          PropTypes.bool.isRequired,
         filters:          PropTypes.object.isRequired,
         hasActiveFilters: PropTypes.bool.isRequired,
         users:            PropTypes.array.isRequired,
@@ -109,9 +112,6 @@ export default class UsersIndex extends Component {
         error:            PropTypes.object,
         match:            PropTypes.shape({
             url: PropTypes.string.isRequired,
-        }).isRequired,
-        history:          PropTypes.shape({
-            push: PropTypes.func.isRequired,
         }).isRequired,
     }
 
@@ -123,48 +123,83 @@ export default class UsersIndex extends Component {
         this.props.fetch({ page, perPage })
     }
 
-    handleSort = (field, dir) => {
-        this.props.fetch({ sort: { [field]: dir } })
+    renderRow = ({ index, key, style }) => {
+        const { users, match } = this.props
+
+        const user = users[index]
+
+        if (!this.isRowLoaded({ index })) {
+            return (
+                <UserItemSkeleton
+                    key={key}
+                    style={style}
+                />
+            )
+        }
+
+        return (
+            <UserItem
+                style={style}
+                key={key}
+                user={user}
+                url={match.url}
+            />
+        )
     }
 
-    handleFilter = filters => {
-        this.props.fetch({ filters })
+    isRowLoaded = ({ index }) => {
+        const { hasMore, users } = this.props
+
+        return !!users[index]// &&!hasMore || index < users.length
+    }
+
+    loadMore = ({ startIndex, stopIndex }) => {
+        console.log(`loadMore, start: ${startIndex}, stop: ${stopIndex}`)
+        return this.props.fetch({
+            offset: startIndex,
+            limit:  stopIndex - startIndex + 1,
+        })
     }
 
     render() {
         const {
             isFetching,
-            perPage,
-            page,
-            hasNextPage,
+            hasBeenFetched,
+            hasMore,
             users,
-            match,
         } = this.props
 
+        const userCount = users.length
+        const rowCount  = hasMore ? userCount + 10 : userCount
+
+        const loadMoreRows = (isFetching || !hasBeenFetched) ? () => {} : this.loadMore
+
         return (
-            <div>
+            <Wrapper>
                 <Helmet title="users"/>
-                <TopBar>
-                    <Pager
-                        page={page}
-                        perPage={perPage}
-                        hasNext={hasNextPage}
-                        onChange={this.handlePagerUpdate}
-                    />
-                </TopBar>
-                <List>
-                    {isFetching && range(perPage).map(i => (
-                        <UserItemSkeleton key={i}/>
-                    ))}
-                    {!isFetching && users.map(user => (
-                        <UserItem
-                            key={user.id}
-                            url={match.url}
-                            user={user}
-                        />
-                    ))}
-                </List>
-            </div>
+                <InfiniteLoader
+                    isRowLoaded={this.isRowLoaded}
+                    loadMoreRows={loadMoreRows}
+                    rowCount={rowCount}
+                >
+                    {({ onRowsRendered, registerChild }) => (
+                        <AutoSizer>
+                            {({ width, height }) => (
+                                <List
+                                    style={{ padding: '36px 60px' }}
+                                    ref={registerChild}
+                                    width={width}
+                                    height={height}
+                                    onRowsRendered={onRowsRendered}
+                                    rowCount={rowCount}
+                                    rowHeight={84}
+                                    rowRenderer={this.renderRow}
+                                />
+                            )}
+                        </AutoSizer>
+                    )}
+                </InfiniteLoader>
+            </Wrapper>
         )
     }
 }

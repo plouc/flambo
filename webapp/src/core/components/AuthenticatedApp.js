@@ -8,6 +8,7 @@ import Groups               from '../../modules/groups/components/Groups'
 import Sources              from '../../modules/sources/components/Sources'
 import Collections          from '../../modules/collections/components/Collections'
 import Settings             from '../../modules/settings/containers/SettingsContainer'
+import About                from '../../modules/about/components/About'
 import PageNotFound         from './PageNotFound'
 import Navigation           from './Navigation'
 
@@ -49,6 +50,7 @@ const AuthenticatedApp = () => (
                 <Route path="/sources"     component={Sources}/>
                 <Route path="/collections" component={Collections}/>
                 <Route path="/settings"    component={Settings}/>
+                <Route path="/about"       component={About}/>
                 <Route                     component={PageNotFound}/>
             </Switch>
         </Content>

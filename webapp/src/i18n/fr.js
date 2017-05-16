@@ -10,6 +10,7 @@ export default {
     created_at: 'créé',
     updated_at: 'modifié',
     settings: 'réglages',
+    about: 'à propos',
     url: 'URL',
     picture: 'image',
     owner: 'propriétaire',

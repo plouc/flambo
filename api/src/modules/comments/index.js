@@ -2,9 +2,7 @@ const dbHelpers = require('../../core/database/helpers')
 const dao       = require('./dao')
 
 
-exports.all = ({ limit, offset, query }) => {
-    return dao.find({ limit, offset, query })
-}
+exports.all = dao.find
 
 exports.groupComments = (groupId, { limit, offset }) => {
     return dao.find({

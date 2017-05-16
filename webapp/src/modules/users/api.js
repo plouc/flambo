@@ -4,6 +4,8 @@ import {
     apiBaseUrl,
     API_PAGINATION_PAGE,
     API_PAGINATION_PER_PAGE,
+    API_PAGINATION_OFFSET,
+    API_PAGINATION_LIMIT,
     checkApiResponse,
     apiGet,
 } from '../../core/api'
@@ -11,13 +13,13 @@ import {
 
 const endpoint = `${apiBaseUrl}/users`
 
-export const list = (token, { perPage, page, sort: _sort = {}, filters: _filters = {} }) => {
+export const list = (token, { offset, limit, sort: _sort = {}, filters: _filters = {} }) => {
     const query = new URLSearchParams()
 
-    query.append(API_PAGINATION_PER_PAGE, perPage)
-    query.append(API_PAGINATION_PAGE,     page)
+    query.append(API_PAGINATION_OFFSET, offset)
+    query.append(API_PAGINATION_LIMIT,  limit)
 
-    return apiGet(query ? `${endpoint}?${query}` : endpoint, { token })
+    return apiGet(`${endpoint}?${query}`, { token })
         .then(checkApiResponse())
 }
 

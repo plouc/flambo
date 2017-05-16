@@ -7,14 +7,6 @@ import { PRODUCT_NAME }     from '../../config'
 import LogoPicto                 from './LogoPicto'
 
 
-const Header = styled.div`
-    height:        60px;
-    display:       flex;
-    align-items:   center;
-    padding:       0 24px;
-    margin-bottom: 12px;
-`
-
 const BrandName = styled.span`
     font-family:    Montserrat, sans-serif;
     text-transform: uppercase;
@@ -42,6 +34,16 @@ const Item = styled.div`
     }
 `
 
+const styles = {
+    header: {
+        height:       '60px',
+        display:      'flex',
+        alignItems:   'center',
+        padding:      '0 24px',
+        marginBottom: '12px',
+    },
+}
+
 const NavigationItem = ({ label, to, exact }) => (
     <Route
         path={to}
@@ -60,15 +62,16 @@ export default class Navigation extends Component {
     render() {
         return (
             <div>
-                <Header>
+                <Link to="/" style={styles.header}>
                     <LogoPicto size={30} spacing={1}/>
                     <BrandName>{PRODUCT_NAME}</BrandName>
-                </Header>
+                </Link>
                 <NavigationItem label="groups" to="/groups"/>
                 <NavigationItem label="users" to="/users"/>
                 <NavigationItem label="sources" to="/sources"/>
                 <NavigationItem label="collections" to="/collections"/>
                 <NavigationItem label="settings" to="/settings"/>
+                <NavigationItem label="about" to="/about"/>
             </div>
         )
     }

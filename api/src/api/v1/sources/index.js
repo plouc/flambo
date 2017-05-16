@@ -22,7 +22,7 @@ router.get(
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(pagination, dto.collection(sources))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.collection(sources))
     }
 )
 
@@ -72,7 +72,7 @@ router.get(
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(pagination, jobs)
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, jobs)
     }
 )
 
@@ -94,20 +94,13 @@ router.post(
     auth.hasRole('admin'),
     validation.validateBody(schemas.create),
     async ctx => {
-        try {
-            const createdSource = await Sources.create(Object.assign(
-                ctx.request.body,
-                { owner_id: ctx.state.user.id }
-            ))
+        const createdSource = await Sources.create(Object.assign(
+            ctx.request.body,
+            { owner_id: ctx.state.user.id }
+        ))
 
-            ctx.status = 201
-            ctx.body   = createdSource
-        } catch (error) {
-            console.error(error)
-
-            ctx.status = 500
-            ctx.body   = 'Internal Server Error'
-        }
+        ctx.status = 201
+        ctx.body   = createdSource
     }
 )
 

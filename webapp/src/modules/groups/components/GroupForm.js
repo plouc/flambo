@@ -6,7 +6,7 @@ import styled                                  from 'styled-components'
 
 import { Grid, Cell, Label }                   from '../../../core/components/Grid'
 import FormActions                             from '../../../core/components/form/FormActions'
-import DropzoneInput                           from '../../../core/components/form/inputs/DropzoneInput'
+//import DropzoneInput                           from '../../../core/components/form/inputs/DropzoneInput'
 import { FORM_NAME }                           from '../constants'
 
 
@@ -40,6 +40,13 @@ const GroupForm = ({
                     <Field id="name" name="name" component="input" type="text"/>
                 </Cell>
                 <Cell>
+                    <Label htmlFor="slug">
+                        <FormattedMessage id="slug"/>
+                    </Label>
+                    <Field id="slug" name="slug" component="input" type="text"/>
+                </Cell>
+                {/*
+                <Cell>
                     <Label>
                         <FormattedMessage id="picture"/>
                     </Label>
@@ -49,6 +56,7 @@ const GroupForm = ({
                         selectText="file_select_picture"
                     />
                 </Cell>
+                */}
                 <Cell x="1" xSpan="2">
                     <Label htmlFor="description">
                         <FormattedMessage id="description"/>

@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import range                           from 'lodash/range'
+import styled                          from 'styled-components'
 
 import Helmet                          from '../../../core/components/HelmetIntl'
 import { TopBar }                      from '../../../core/components/page'
 import { Button }                      from '../../../core/components/buttons'
-import Pager                           from '../../../core/components/pager/Pager'
 import { Grid, Cell }                  from '../../../core/components/Grid'
 import SourcesIndexItem                from './SourcesIndexItem'
 import { Name, Description }           from '../../../core/components/skeleton'
@@ -24,6 +24,10 @@ const SourceItemSkeleton = () => (
         <Description/>
     </Cell>
 )
+
+const Container = styled.div`
+    background: ${props => props.theme.primaryColor};
+`
 
 export default class SourcesIndex extends Component {
     static propTypes = {
@@ -53,35 +57,20 @@ export default class SourcesIndex extends Component {
         this.props.fetch({ page, perPage })
     }
 
-    handleSort = (field, dir) => {
-        this.props.fetch({ sort: { [field]: dir } })
-    }
-
-    handleFilter = filters => {
-        this.props.fetch({ filters })
-    }
-
     render() {
         const {
             isFetching,
             perPage,
-            page,
-            hasNextPage,
             sources,
             match,
             history,
         } = this.props
 
         return (
-            <div>
+            <Container>
                 <Helmet title="sources"/>
                 <TopBar>
-                    <Pager
-                        page={page}
-                        perPage={perPage}
-                        hasNext={hasNextPage}
-                        onChange={this.handlePagerUpdate}
-                    />
+                    <span/>
                     <Button
                         label="create"
                         to={`${match.url}/create`}
@@ -107,7 +96,7 @@ export default class SourcesIndex extends Component {
                         />
                     ))}
                 </Grid>
-            </div>
+            </Container>
         )
     }
 }

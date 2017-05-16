@@ -1,3 +1,9 @@
+demo:
+  first_name:  flambo
+  last_name:   demo
+  role:        admin
+  intro:       This is the default account to test flambo.
+
 raph:
   first_name:  Raphaël
   last_name:   Benitte
@@ -54,3 +60,43 @@ josiane:
 sabine:
   first_name: Sabine
   last_name:  Lefebvre
+
+john:
+  first_name: John
+  last_name:  Doe
+
+jane:
+  first_name: Jane
+  last_name:  Doe
+
+hiroko:
+   first_name: Hiroko
+   last_name:  Matsumoto
+
+lyu:
+   first_name: Lyu
+   last_name:  Kobayashi
+
+raoul:
+   first_name: Raoul
+   last_name:  Bocuse
+
+jean:
+   first_name: Jean
+   last_name:  Héhin
+
+josy:
+   first_name: Josy
+   last_name:  Josette
+
+georgette:
+  first_name: Georgette
+  last_name:  Gaillard
+
+marcelin:
+  first_name: Marcelin
+  last_name:  Rouillard
+
+eleonore:
+  first_name: Eleonore
+  last_name:  Herpin

@@ -13,11 +13,9 @@ const mapStateToProps = state => {
         users: {
             fetchedAt,
             isFetching,
-            perPage,
-            page,
             sort,
             filters,
-            hasNextPage,
+            hasMore,
             error,
         },
     } = state
@@ -27,11 +25,9 @@ const mapStateToProps = state => {
         //hasActiveFilters: hasActiveFiltersSelector(state),
         hasActiveFilters: false,
         users:            collectionSelector(state),
-        isFetching,
-        perPage,
-        page,
+        isFetching:       isFetching,
         sort,
-        hasNextPage,
+        hasMore,
         filters,
         error,
     }
@@ -39,7 +35,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     fetch: options => {
-        dispatch(fetchUsersIfNeeded(options))
+        return dispatch(fetchUsersIfNeeded(options))
     },
 })
 

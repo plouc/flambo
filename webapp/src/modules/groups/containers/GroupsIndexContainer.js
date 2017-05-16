@@ -4,7 +4,10 @@ import { compose, lifecycle }    from 'recompose'
 
 import createCollectionSelector  from '../../../core/selectors/createCollectionSelector'
 import Index                     from '../components/GroupsIndex'
-import { fetchGroupsIfNeeded }   from '../actions'
+import {
+    fetchGroupsIfNeeded,
+    fetchNextGroups,
+} from '../actions'
 
 
 const collectionSelector = createCollectionSelector('groups')
@@ -38,18 +41,12 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
     fetch: options => {
         dispatch(fetchGroupsIfNeeded(options))
     },
-    paginate: (page, perPage) => {
-        dispatch(fetchGroupsIfNeeded({ page, perPage }))
-    },
-    sort: (field, dir) => {
-        dispatch(fetchGroupsIfNeeded({ sort: { [field]: dir } }))
-    },
-    filter: filters => {
-        dispatch(fetchGroupsIfNeeded({ filters }))
+    fetchNext: () => {
+        dispatch(fetchNextGroups())
     },
 })
 

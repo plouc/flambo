@@ -11,15 +11,13 @@ export const INVALIDATE_GROUPS    = 'INVALIDATE_GROUPS'
 
 export const fetchGroups = (_options = {}) => (dispatch, getState) => {
     const {
-        groups: { perPage, page, sort, filters },
+        groups: { perPage, page },
         auth:   { token },
     } = getState()
 
     const options = {
         perPage,
         page,
-        sort,
-        filters,
         ..._options,
     }
 
@@ -43,16 +41,20 @@ export const fetchGroups = (_options = {}) => (dispatch, getState) => {
         })
 }
 
+export const fetchNextGroups = () => (dispatch, getState) => {
+    const { groups: { perPage, page } } = getState()
+
+    dispatch(fetchGroups({ page: page + 1 }))
+}
+
 const shouldFetchGroups = (
-    { groups: { isFetching, didInvalidate, perPage, page, sort, filters } },
+    { groups: { isFetching, didInvalidate, perPage, page } },
     options = {},
 ) => {
     if (isFetching) return false
 
-    if (options.perPage !== undefined && options.perPage !== perPage)        return true
-    if (options.page    !== undefined && options.page    !== page)           return true
-    if (options.sort    !== undefined && !isEqual(options.sort, sort))       return true
-    if (options.filters !== undefined && !isEqual(options.filters, filters)) return true
+    if (options.perPage !== undefined && options.perPage !== perPage) return true
+    if (options.page    !== undefined && options.page    !== page)    return true
 
     return didInvalidate
 }

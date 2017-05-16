@@ -22,18 +22,13 @@ router.get(
         const { pagination } = ctx.state
         const viewerId       = ctx.state.user.id
 
-        try {
-            const collections    = await Collections.all(Object.assign({}, pagination, {
-                limit: pagination.limit + 1,
-                query: { public: true },
-                viewerId,
-            }))
+        const collections    = await Collections.all(Object.assign({}, pagination, {
+            limit: pagination.limit + 1,
+            query: { public: true },
+            viewerId,
+        }))
 
-            ctx.body = Pagination.dto(pagination, dto.collections(collections, viewerId))
-        } catch (error) {
-            ctx.status = 500
-            ctx.body   = 'Internal Server Error'
-        }
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.collections(collections, viewerId))
     }
 )
 
@@ -44,20 +39,15 @@ router.get(
         const collectionId = ctx.params.id
         const viewerId     = ctx.state.user.id
 
-        try {
-            const collection = await Collections.get(collectionId, viewerId)
+        const collection = await Collections.get(collectionId, viewerId)
 
-            if (!collection) {
-                ctx.status = 404
-                ctx.body   = { message: `No collection found for id: ${collectionId}` }
-                return
-            }
-
-            ctx.body = dto.collection(collection, viewerId)
-        } catch (error) {
-            ctx.status = 500
-            ctx.body   = 'Internal Server Error'
+        if (!collection) {
+            ctx.status = 404
+            ctx.body   = { message: `No collection found for id: ${collectionId}` }
+            return
         }
+
+        ctx.body = dto.collection(collection, viewerId)
     }
 )
 
@@ -96,7 +86,7 @@ router.get(
             },
         }))
 
-        ctx.body = Pagination.dto(pagination, dto.comments(comments))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.comments(comments))
     }
 )
 
@@ -107,23 +97,16 @@ router.post(
     async ctx => {
         const collectionId = ctx.params.id
 
-        try {
-            const createdComment = await Comments.create(Object.assign(
-                ctx.request.body,
-                {
-                    collection_id: collectionId,
-                    author_id:     ctx.state.user.id,
-                }
-            ))
+        const createdComment = await Comments.create(Object.assign(
+            ctx.request.body,
+            {
+                collection_id: collectionId,
+                author_id:     ctx.state.user.id,
+            }
+        ))
 
-            ctx.status = 200
-            ctx.body   = createdComment
-        } catch (error) {
-            console.error(error)
-
-            ctx.status = 500
-            ctx.body   = 'Internal Server Error'
-        }
+        ctx.status = 201
+        ctx.body   = createdComment
     }
 )
 
@@ -137,7 +120,7 @@ router.get(
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(pagination, dto.subscribers(subscribers))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.subscribers(subscribers))
     }
 )
 

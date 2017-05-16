@@ -3,7 +3,6 @@ import range                                        from 'lodash/range'
 import styled                                       from 'styled-components'
 
 import Helmet                                       from '../../../core/components/HelmetIntl'
-import Pager                                        from '../../../core/components/pager/Pager'
 import { TopBar }                                   from '../../../core/components/page'
 import { Button }                                   from '../../../core/components/buttons'
 import { Grid }                                     from '../../../core/components/Grid'
@@ -11,23 +10,26 @@ import GroupsIndexItem, { GroupsIndexItemSkeleton } from './GroupsIndexItem'
 
 
 const Container = styled.div`
+    background: ${props => props.theme.primaryColor};
+`
+
+const LoadMore = styled.div`
+    cursor:           pointer;
+    height:           160px;
+    background-color: ${props => props.theme.logoSecondaryColor};
+    box-shadow:       0 1px 2px rgba(0, 0, 0, .35);
 `
 
 const GroupsIndex = ({
     isFetching,
     groups,
-    page, perPage, hasNextPage, paginate,
+    perPage, hasNextPage, fetchNext,
     match, history,
 }) => (
     <Container>
         <Helmet title="groups"/>
         <TopBar>
-            <Pager
-                page={page}
-                perPage={perPage}
-                hasNext={hasNextPage}
-                onChange={paginate}
-            />
+            <span/>
             <Button
                 label="create"
                 to={`${match.url}/create`}
@@ -52,27 +54,27 @@ const GroupsIndex = ({
                     group={group}
                 />
             ))}
+            {hasNextPage && (
+                <LoadMore onClick={fetchNext}>
+                    load next page
+                </LoadMore>
+            )}
         </Grid>
     </Container>
 )
 
 GroupsIndex.propTypes = {
-    hasBeenFetched:   PropTypes.bool.isRequired,
-    fetch:            PropTypes.func.isRequired,
-    perPage:          PropTypes.number.isRequired,
-    page:             PropTypes.number.isRequired,
-    paginate:         PropTypes.func.isRequired,
-    hasNextPage:      PropTypes.bool.isRequired,
-    filters:          PropTypes.object.isRequired,
-    hasActiveFilters: PropTypes.bool.isRequired,
-    groups:           PropTypes.array.isRequired,
-    isFetching:       PropTypes.bool.isRequired,
-    error:            PropTypes.object,
-    match:            PropTypes.shape({
+    hasBeenFetched: PropTypes.bool.isRequired,
+    fetch:          PropTypes.func.isRequired,
+    fetchNext:      PropTypes.func.isRequired,
+    perPage:        PropTypes.number.isRequired,
+    page:           PropTypes.number.isRequired,
+    hasNextPage:    PropTypes.bool.isRequired,
+    groups:         PropTypes.array.isRequired,
+    isFetching:     PropTypes.bool.isRequired,
+    error:          PropTypes.object,
+    match:          PropTypes.shape({
         url: PropTypes.string.isRequired,
-    }).isRequired,
-    history:          PropTypes.shape({
-        push: PropTypes.func.isRequired,
     }).isRequired,
 }
 

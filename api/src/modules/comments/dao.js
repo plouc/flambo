@@ -6,12 +6,13 @@ const Users = require('../users')
 
 exports.columns = [
     'id',
+    'serial',
     'content',
     'created_at',
     'updated_at',
 ]
 
-exports.find = ({ offset, limit, query = {} } = {}) => {
+exports.find = ({ offset, limit, after, query = {} } = {}) => {
     const nesting = nest('comments', exports.columns)
         .one('author', Users.dao.relatedColumns)
         .one('avatar', Media.dao.columns, { parent: 'author' })
@@ -25,8 +26,12 @@ exports.find = ({ offset, limit, query = {} } = {}) => {
     return db.from('comments')
         .select(nesting.selection())
         .modify(qb => {
-            if (limit  !== undefined) qb.limit(limit)
-            if (offset !== undefined) qb.offset(offset)
+            if (after !== undefined) {
+                qb.where(`comments.serial`, '>', after)
+            } else if (offset !== undefined) {
+                qb.offset(offset)
+            }
+            if (limit !== undefined) qb.limit(limit)
 
             const hasAuthorFilter = !!queryKeys.find(key => key.startsWith('author'))
             qb[hasAuthorFilter ? 'innerJoin' : 'leftJoin']('users as author', 'author.id', 'comments.author_id')
@@ -50,7 +55,7 @@ exports.find = ({ offset, limit, query = {} } = {}) => {
         .leftJoin('media as avatar', 'avatar.id', 'author.avatar_id')
         .leftJoin('media as group_picture', 'group_picture.id', 'group.picture_id')
         .leftJoin('media as collection_picture', 'collection_picture.id', 'collection.picture_id')
-        .orderBy('comments.created_at', 'desc')
+        .orderBy('comments.serial', 'desc')
         .then(nesting.rollup.bind(nesting))
 }
 

@@ -1,7 +1,8 @@
+import _     from 'lodash'
 import Color from 'color'
 
 
-export const themes = {
+export const themes = _.mapValues({
     groups: {
         primaryColor:      '#70615a',
         disabledColor:     '#eff0f4',
@@ -27,20 +28,7 @@ export const themes = {
         disabledColor:     '#eff0f4',
         logoTertiaryColor: '#dbbc9e',
     },
-}
-
-export const themeFromPath = path => {
-    let theme = themes.default
-    if (path.startsWith('/groups')) {
-        theme = themes.groups
-    } else if (path.startsWith('/users')) {
-        theme = themes.users
-    } else if (path.startsWith('/sources')) {
-        theme = themes.sources
-    } else if (path.startsWith('/collections')) {
-        theme = themes.collections
-    }
-
+}, theme => {
     if (!theme.primaryTextColor) {
         theme.primaryTextColor = Color(theme.primaryColor).darken(.15).string()
     }
@@ -56,6 +44,21 @@ export const themeFromPath = path => {
     }
     if (!theme.logoTertiaryColor) {
         theme.logoTertiaryColor = Color(theme.primaryColor).rotate(180).desaturate(.2).lighten(1.1).string()
+    }
+
+    return theme
+})
+
+export const themeFromPath = path => {
+    let theme = themes.default
+    if (path.startsWith('/groups')) {
+        theme = themes.groups
+    } else if (path.startsWith('/users')) {
+        theme = themes.users
+    } else if (path.startsWith('/sources')) {
+        theme = themes.sources
+    } else if (path.startsWith('/collections')) {
+        theme = themes.collections
     }
 
     return theme

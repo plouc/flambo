@@ -11,15 +11,15 @@ export const INVALIDATE_USERS    = 'INVALIDATE_USERS'
 
 export const fetchUsers = (_options = {}) => (dispatch, getState) => {
     const {
-        users: { perPage, page, sort, filters },
+        users: { sort, filters },
         auth:  { token },
     } = getState()
 
     const options = {
-        perPage,
-        page,
         sort,
         filters,
+        offset: 0,
+        limit:  10,
         ..._options,
     }
 
@@ -41,13 +41,12 @@ export const fetchUsers = (_options = {}) => (dispatch, getState) => {
 }
 
 const shouldFetchUsers = (
-    { users: { isFetching, didInvalidate, perPage, page, sort, filters } },
+    { users: { isFetching, didInvalidate, sort, filters } },
     options = {},
 ) => {
     if (isFetching) return false
 
-    if (options.perPage !== undefined && options.perPage !== perPage)        return true
-    if (options.page    !== undefined && options.page    !== page)           return true
+    return true
     if (options.sort    !== undefined && !isEqual(options.sort, sort))       return true
     if (options.filters !== undefined && !isEqual(options.filters, filters)) return true
 

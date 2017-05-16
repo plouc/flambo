@@ -1,14 +1,19 @@
 import React, { Component, PropTypes } from 'react'
 import range                           from 'lodash/range'
+import styled                          from 'styled-components'
 
 import Helmet                          from '../../../core/components/HelmetIntl'
-import Pager                           from '../../../core/components/pager/Pager'
 import { TopBar }                      from '../../../core/components/page'
 import { Grid }                        from '../../../core/components/Grid'
 import { Button }                      from '../../../core/components/buttons'
 import CollectionsIndexItem, {
     CollectionsIndexItemSkeleton,
 } from './CollectionsIndexItem'
+
+
+const Container = styled.div`
+    background: ${props => props.theme.primaryColor};
+`
 
 export default class CollectionsIndex extends Component {
     static propTypes = {
@@ -38,35 +43,20 @@ export default class CollectionsIndex extends Component {
         this.props.fetch({ page, perPage })
     }
 
-    handleSort = (field, dir) => {
-        this.props.fetch({ sort: { [field]: dir } })
-    }
-
-    handleFilter = filters => {
-        this.props.fetch({ filters })
-    }
-
     render() {
         const {
             isFetching,
             perPage,
-            page,
-            hasNextPage,
             collections,
             match,
             history,
         } = this.props
 
         return (
-            <div>
+            <Container>
                 <Helmet title="collections"/>
                 <TopBar>
-                    <Pager
-                        page={page}
-                        perPage={perPage}
-                        hasNext={hasNextPage}
-                        onChange={this.handlePagerUpdate}
-                    />
+                    <span/>
                     <Button
                         label="create"
                         to={`${match.url}/create`}
@@ -92,7 +82,7 @@ export default class CollectionsIndex extends Component {
                         />
                     ))}
                 </Grid>
-            </div>
+            </Container>
         )
     }
 }

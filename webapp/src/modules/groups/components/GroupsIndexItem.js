@@ -45,8 +45,10 @@ const Join = styled.div`
 const cellStyle = {
     height:          160,
     backgroundColor: 'white',
-    boxShadow:       '0 1px 2px rgba(0,0,0,0.07)',
+    boxShadow:       '0 1px 2px rgba(0, 0, 0, .35)',
     flexDirection:   'row',
+    borderRadius:    '2px',
+    overflow:        'hidden',
 }
 
 export const GroupsIndexItemSkeleton = () => (

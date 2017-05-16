@@ -28,7 +28,7 @@ router.get(
             viewerId,
         }))
 
-        ctx.body = Pagination.dto(pagination, dto.groups(groups, viewerId))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.groups(groups, viewerId))
     }
 )
 
@@ -82,7 +82,7 @@ router.get(
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(pagination, dto.comments(comments))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.comments(comments))
     }
 )
 
@@ -116,7 +116,7 @@ router.get(
             limit: pagination.limit + 1,
         }))
 
-        ctx.body = Pagination.dto(pagination, dto.members(members))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.members(members))
     }
 )
 
@@ -133,7 +133,7 @@ router.get(
             }
         }))
 
-        ctx.body = Pagination.dto(pagination, sources)
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, sources)
     }
 )
 

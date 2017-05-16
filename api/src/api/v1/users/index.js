@@ -18,14 +18,18 @@ const router     = Router()
 router.get(
     '/',
     auth.middleware,
-    Pagination.middleware(),
+    Pagination.middleware({
+        type: Pagination.PAGINATION_TYPE_CURSOR,
+    }),
     async ctx => {
         const { pagination } = ctx.state
         const users          = await Users.all(Object.assign({}, pagination, {
-            limit: pagination.limit + 1,
+            limit: pagination.first + 1,
         }))
 
-        ctx.body = Pagination.dto(pagination, dto.users(users))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_CURSOR, {
+            cursor: 'last_name',
+        })(pagination, dto.users(users))
     }
 )
 
@@ -79,7 +83,7 @@ router.get(
             },
         }))
 
-        ctx.body = Pagination.dto(pagination, dto.comments(comments))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, dto.comments(comments))
     }
 )
 
@@ -97,7 +101,7 @@ router.get(
             },
         }))
 
-        ctx.body = Pagination.dto(pagination, collectionsDto.collections(collections))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, collectionsDto.collections(collections))
     }
 )
 
@@ -115,7 +119,7 @@ router.get(
             },
         }))
 
-        ctx.body = Pagination.dto(pagination, collectionsDto.collections(collections))
+        ctx.body = Pagination.dto(Pagination.PAGINATION_TYPE_PAGE)(pagination, collectionsDto.collections(collections))
     }
 )
 
@@ -125,17 +129,10 @@ router.post(
     auth.hasRole('admin'),
     validation.validateBody(schemas.create),
     async ctx => {
-        try {
-            const createdUser = await Users.create(ctx.request.body)
+        const createdUser = await Users.create(ctx.request.body)
 
-            ctx.status = 200
-            ctx.body   = createdUser
-        } catch (error) {
-            console.error(error)
-
-            ctx.status = 500
-            ctx.body   = 'Internal Server Error'
-        }
+        ctx.status = 201
+        ctx.body   = createdUser
     }
 )
 
