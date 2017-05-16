@@ -8,24 +8,148 @@
 	},
 	"item": [
 		{
-			"name": "groups",
+			"name": "collections",
 			"description": "",
 			"item": [
 				{
-					"name": "fetch groups",
+					"name": "fetch collections",
 					"request": {
-						"url": "http://localhost:7000/api/v1/groups",
+						"url": "http://localhost:7000/api/v1/collections",
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
 						"body": {},
-						"description": "Fetch all groups"
+						"description": "Fetch all collections"
 					},
 					"response": []
 				},
 				{
-					"name": "create group",
+					"name": "fetch collection comments",
 					"request": {
-						"url": "http://localhost:7000/api/v1/groups",
+						"url": "http://localhost:7000/api/v1/collections/55c6605c-96dc-44d3-af07-1af4ac90e133/comments",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch collection subscribers",
+					"request": {
+						"url": "http://localhost:7000/api/v1/collections/bc0e04f7-4f56-4740-a1b1-389d478b4db2/subscribers",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch collection feed",
+					"request": {
+						"url": {
+							"raw": "http://localhost:7000/api/v1/collections/:id/feed",
+							"protocol": "http",
+							"auth": {},
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"v1",
+								"collections",
+								":id",
+								"feed"
+							],
+							"variable": [
+								{
+									"value": "5d122d1b-72f2-41e0-9a73-de7201700372",
+									"id": "id"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch collection",
+					"request": {
+						"url": "http://localhost:7000/api/v1/collections/55c6605c-96dc-44d3-af07-1af4ac90e134",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "comments",
+			"description": "",
+			"item": [
+				{
+					"name": "fetch comments",
+					"request": {
+						"url": "http://localhost:7000/api/v1/comments",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "elastic",
+			"description": "",
+			"item": [
+				{
+					"name": "by ids",
+					"request": {
+						"url": "http://localhost:9222/flambo/item/_search",
 						"method": "POST",
 						"header": [
 							{
@@ -36,9 +160,346 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"new group\"\n}"
+							"raw": "{\n\t\"query\": {\n\t\t\"bool\": {\n            \"filter\": [\n            \t{\n            \t\t\"terms\": {\n            \t\t\t\"id\": [\n            \t\t\t\t\"2f54ba35-b568-4a1f-83b4-74e8a15c7daa\",\n            \t\t\t\t\"8af1e7ea-a68f-4da3-bf0b-2342ed8445c6\"\n            \t\t\t]\n            \t\t}\n            \t}\n\t\t\t]\n        }\n\t}\n}"
 						},
-						"description": "Create new group"
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "all",
+					"request": {
+						"url": "http://localhost:9222/flambo/item/_search",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"query\": { \"match_all\": {} }\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "with image",
+					"request": {
+						"url": "http://localhost:9222/flambo/item/_search",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"query\": { \"exists\": { \"field\": \"image\" } }\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "feed",
+			"description": "",
+			"item": [
+				{
+					"name": "fetch feed",
+					"request": {
+						"url": "http://localhost:7000/api/v1/feed",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Fetch all users"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "groups",
+			"description": "",
+			"item": [
+				{
+					"name": "fetch groups",
+					"request": {
+						"url": "http://localhost:7000/api/v1/groups",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Fetch all groups"
+					},
+					"response": []
+				},
+				{
+					"name": "fetch group",
+					"request": {
+						"url": {
+							"raw": "http://localhost:7000/api/v1/groups/:id",
+							"protocol": "http",
+							"auth": {},
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								":id"
+							],
+							"variable": [
+								{
+									"value": "6bd04081-c4df-40f5-87fc-79b35a699f27",
+									"id": "id"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "create group",
+					"request": {
+						"url": "http://localhost:7000/api/v1/groups",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM4ODAzNDF9.Rzbr6fSypIdp8YgzcHCbwqm2YM8eFbSm0xqL-TNH-PY",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"crap\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch group comments",
+					"request": {
+						"url": {
+							"raw": "http://localhost:7000/api/v1/groups/:id/comments",
+							"protocol": "http",
+							"auth": {},
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								":id",
+								"comments"
+							],
+							"variable": [
+								{
+									"value": "1e11c28b-c65a-4dc5-999d-18c2797b1ab8",
+									"id": "id"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "add group comment",
+					"request": {
+						"url": {
+							"raw": "http://localhost:7000/api/v1/groups/:id/comments",
+							"protocol": "http",
+							"auth": {},
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								":id",
+								"comments"
+							],
+							"variable": [
+								{
+									"value": "1e11c28b-c65a-4dc5-999d-18c2797b1ab8",
+									"id": "id"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"content\": \"This is a new comment\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch group members",
+					"request": {
+						"url": {
+							"raw": "http://localhost:7000/api/v1/groups/:id/members",
+							"protocol": "http",
+							"auth": {},
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								":id",
+								"members"
+							],
+							"variable": [
+								{
+									"value": "00a9faba-afad-4e61-a9f8-0a882dcc3a6a",
+									"id": "id"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Fetch all groups"
+					},
+					"response": []
+				},
+				{
+					"name": "fetch group sources",
+					"request": {
+						"url": "http://localhost:7000/api/v1/groups/94938908-1009-4e8d-8657-eab1fe5ce007/sources",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "media",
+			"description": "",
+			"item": [
+				{
+					"name": "upload media",
+					"request": {
+						"url": "http://localhost:7000/api/v1/media/upload",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"enabled": true,
+									"src": "foreign-samurai-photos-01.jpg"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch all media",
+					"request": {
+						"url": "http://localhost:7000/api/v1/media",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
 					},
 					"response": []
 				}
@@ -49,13 +510,67 @@
 			"description": "",
 			"item": [
 				{
-					"name": "http://localhost:7000/api/v1/sources",
+					"name": "fetch sources",
 					"request": {
 						"url": "http://localhost:7000/api/v1/sources",
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
 						"body": {},
 						"description": "Fetch all sources"
+					},
+					"response": []
+				},
+				{
+					"name": "create source",
+					"request": {
+						"url": "http://localhost:7000/api/v1/sources",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Postman source\",\n\t\"type\": \"rss\",\n\t\"data\": {\n\t\t\"url\": \"https://nodejs.org/en/feed/blog.xml\"\n\t}\n}"
+						},
+						"description": "Create new user"
+					},
+					"response": []
+				},
+				{
+					"name": "load source",
+					"request": {
+						"url": "http://localhost:7000/api/v1/sources/af56d187-f8e3-47e4-a6a4-9c15e0b69a87/load",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch source jobs",
+					"request": {
+						"url": "http://localhost:7000/api/v1/sources/6bd5b236-02cb-4ee3-bfa5-706f3d15ce3e/jobs",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
 					},
 					"response": []
 				}
@@ -87,9 +602,49 @@
 					"request": {
 						"url": "http://localhost:7000/api/v1/users",
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
 						"body": {},
 						"description": "Fetch all users"
+					},
+					"response": []
+				},
+				{
+					"name": "stats: user count",
+					"request": {
+						"url": "http://localhost:7000/api/v1/users/stats/total",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "me",
+					"request": {
+						"url": "http://localhost:7000/api/v1/users/me",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_auth}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Fetch current user info"
 					},
 					"response": []
 				},
@@ -112,8 +667,140 @@
 						"description": "Create new user"
 					},
 					"response": []
+				},
+				{
+					"name": "fetch user",
+					"request": {
+						"url": "http://localhost:7000/api/v1/users/2dd4b172-2e0c-4181-9484-97bb3d60f195",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Fetch all users"
+					},
+					"response": []
+				},
+				{
+					"name": "fetch user public collections",
+					"request": {
+						"url": {
+							"raw": "http://localhost:7000/api/v1/users/:id/collections/public",
+							"protocol": "http",
+							"auth": {},
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":id",
+								"collections",
+								"public"
+							],
+							"variable": [
+								{
+									"value": "4f9f038d-99a3-4905-98ab-6801ba22f576",
+									"id": "id"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch user collections subscriptions",
+					"request": {
+						"url": {
+							"raw": "http://localhost:7000/api/v1/users/:id/collections/subscriptions",
+							"protocol": "http",
+							"auth": {},
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":id",
+								"collections",
+								"subscriptions"
+							],
+							"variable": [
+								{
+									"value": "4f9f038d-99a3-4905-98ab-6801ba22f576",
+									"id": "id"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch user comments",
+					"request": {
+						"url": "http://localhost:7000/api/v1/users/d797f62b-5e92-4546-afc7-b39266720a82/comments",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE0OTM5MTI0NjZ9.moyZd_Pg4UBk6McbLvhwgME4uKhh_l7PcpGP_qUW5d4",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "login",
+			"request": {
+				"url": "http://localhost:7000/api/v1/login",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"login\": \"raph@flambo.io\",\n\t\"password\": \"raph\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }
