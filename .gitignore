@@ -12,6 +12,10 @@ terraform.tfstate.backup
 hubot.conf
 .hubot_history
 
+# website
+website/public
+.gatsby-context.js
+
 # IDE
 .idea
 
@@ -19,6 +23,7 @@ hubot.conf
 node_modules
 npm-debug*
 yarn-error.log
+lerna-debug.log
 
 # misc
 /old

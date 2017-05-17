@@ -44,6 +44,33 @@ help: ##prints help
 
 ########################################################################################################################
 #
+# CONTROL
+#
+########################################################################################################################
+
+install: ##@control Install dependencies
+	@yarn run lerna bootstrap
+
+clean: ##@control Remove all components
+	@${DOCKER_COMPOSE} stop -t 0
+	@${DOCKER_COMPOSE} rm -f
+	@yarn run lerna clean
+
+up: ##@control setup stack
+	@${DOCKER_COMPOSE} up -d postgres elastic
+	@make wait-for-postgres
+	@make wait-for-elastic
+	@sleep 3
+	@${DOCKER_COMPOSE} up -d
+
+log: ##@control Print stdout of all servers
+	@${DOCKER_COMPOSE} logs --tail=$${TAIL_LENGTH:-100}
+
+log-%: ##@control Get stdout of running server (log-api, log-postgresql)
+	@${DOCKER_COMPOSE} logs --tail=$${TAIL_LENGTH:-100} ${*}
+
+########################################################################################################################
+#
 # BUILD/PUBLISH
 #
 ########################################################################################################################
@@ -68,23 +95,6 @@ docker-ls: ##@build List local related Docker images
 	@echo "${YELLOW}Available Docker images for: \"${PRODUCT_NAME}\"${RESET}"
 	@docker images | grep ${PRODUCT_NAME}
 
-clean: ##@control Remove all components
-	@${DOCKER_COMPOSE} stop -t 0
-	@${DOCKER_COMPOSE} rm -f
-
-up: ##@control setup stack
-	@${DOCKER_COMPOSE} up -d postgres elastic
-	@make wait-for-postgres
-	@make wait-for-elastic
-	@sleep 3
-	@${DOCKER_COMPOSE} up -d
-
-log: ##@control Print stdout of all servers
-	@${DOCKER_COMPOSE} logs --tail=$${TAIL_LENGTH:-100}
-
-log-%: ##@control Get stdout of running server (log-api, log-postgresql)
-	@${DOCKER_COMPOSE} logs --tail=$${TAIL_LENGTH:-100} ${*}
-
 ########################################################################################################################
 #
 # TESTING
@@ -96,18 +106,17 @@ test: test-api-unit ##@testing Run all tests
 test-api-unit: ##@testing Run API unit tests
 	@cd api && yarn run test-unit
 
-install:
-	@cd api && yarn install
-	@cd webapp && yarn install
-	@cd sources/meetup && yarn install
-	@cd sources/rss && yarn install
-	@make link-packages
+########################################################################################################################
+#
+# WEBSITE
+#
+########################################################################################################################
 
-link-packages:
-	@cd sources/meetup && yarn link
-	@cd sources/rss && yarn link
-	@cd api yarn link flambo-source-meetup
-	@cd api yarn link flambo-source-rss
+website-build: ##@website build static website
+	@cd website && yarn run build
+
+website-publish: ##@website publish static website to github pages
+	@cd website && yarn run deploy
 
 ########################################################################################################################
 #
