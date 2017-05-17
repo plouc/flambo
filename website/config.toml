@@ -1,0 +1,27 @@
+siteTitle="flambo"
+baseColor = "#17385d"
+linkPrefix = "/flambo"
+
+[docNav]
+
+  [docNav.gettingStarted]
+  path = "/docs/getting-started/"
+
+  [docNav.api]
+  path = "/docs/api/"
+  children = [
+    "/docs/api/rest/",
+    "/docs/api/graphql/",
+  ]
+
+  [docNav.apiClient]
+  path = "/docs/api-client/"
+
+  [docNav.bot]
+  path = "/docs/bot/"
+
+  [docNav.webapp]
+  path = "/docs/webapp/"
+
+  [docNav.cli]
+  path = "/docs/cli/"
