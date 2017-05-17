@@ -1,0 +1,19 @@
+swagger: '2.0'
+info:
+  description: flambo API
+  version:     1.0.0
+  title:       flambo
+  contact:     {}
+host:     localhost:8090
+basePath: /api/v1
+produces:
+  - application/json
+paths:
+  # groups
+  /groups:      { $ref: groups/spec/paths.yml#/root }
+  /groups/{id}: { $ref: groups/spec/paths.yml#/id   }
+
+  # collections
+  /collections: { $ref: collections/spec/paths.yml#/root }
+
+

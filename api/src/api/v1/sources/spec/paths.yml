@@ -1,0 +1,30 @@
+root:
+  get:
+    description: List sources
+    summary:     List sources
+    tags:
+      - sources
+    responses:
+      200:
+        description: Return the collections
+        schema:
+          $ref: ./definitions.yml#/Collections
+
+id:
+  get:
+    description: Get a collection
+    summary:     Get a collection
+    tags:
+      - collections
+    parameters:
+      - name:        id
+        in:          path
+        description: Collection id
+        required:    true
+        type:        string
+    responses:
+      200:
+        description: Return the collection
+        schema:
+          $ref: ./definitions.yml#/Collection
+

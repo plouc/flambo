@@ -16,7 +16,8 @@
     "collect": "node collect.js",
     "init-es": "node scripts/initElastic.js",
     "reset": "npm run index-init && npm run load-data && npm run collect",
-    "doc": "jsdoc src api-tester --configure .jsdoc.json --readme ../docs/README.md"
+    "doc": "jsdoc src api-tester --configure .jsdoc.json --readme ../docs/README.md",
+    "swagger-gen": "node scripts/swagger-gen.js"
   },
   "author": "Raphaël Benitte",
   "license": "ISC",
@@ -61,6 +62,8 @@
     "eslint": "3.0.0",
     "faker": "^4.1.0",
     "jest": "^19.0.2",
-    "jsdoc": "3.4.0"
+    "jsdoc": "3.4.0",
+    "json-refs": "^3.0.0",
+    "swagger-tools": "^0.10.1"
   }
 }

@@ -1,0 +1,31 @@
+root:
+  get:
+    description: List groups
+    summary:     List groups
+    tags:
+      - groups
+    responses:
+      200:
+        description: Return the groups
+        schema:
+          $ref: ./definitions.yml#/Groups
+
+id:
+  get:
+    description: Get a group
+    summary:     Get a group
+    tags:
+      - groups
+    parameters:
+      - name:        id
+        in:          path
+        description: Group id
+        required:    true
+        type:        string
+
+    responses:
+      200:
+        description: Return the group
+        schema:
+          $ref: ./definitions.yml#/Group
+

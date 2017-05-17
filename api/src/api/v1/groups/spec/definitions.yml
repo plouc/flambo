@@ -1,0 +1,28 @@
+Group:
+  type: object
+  required:
+    - id
+    - name
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+
+Groups:
+  type: object
+  required:
+    - items
+    - page
+    - hasNextPage
+  properties:
+    items:
+      type: array
+      items:
+        $ref: ./definitions.yml#/Group
+    page:
+      description: the page number
+      type:        number
+    hasNextPage:
+      description: Indicates if you can have more results or if you are on the last page
+      type:        boolean
