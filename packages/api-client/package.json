@@ -1,0 +1,11 @@
+{
+  "name": "@flambo/api-client",
+  "version": "0.1.2",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
+  }
+}
