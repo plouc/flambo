@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
+import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import Nav from './navigation'
 import Home from './home'
@@ -23,6 +24,7 @@ const Container = styled.div`
 
 export default ({ match }) => (
     <Container>
+        <Helmet titleTemplate="%s | flambo documentation"/>
         <Nav/>
         <div>
             <Switch>

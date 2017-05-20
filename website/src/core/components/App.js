@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, NavLink, Switch, Route }      from 'react-router-dom'
+import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import DocIcon    from 'react-icons/lib/fa/book'
 import GithubIcon from 'react-icons/lib/fa/github-alt'
@@ -59,6 +60,10 @@ export default ({
     title = 'This is the default title',
 }) => (
     <div>
+        <Helmet
+            titleTemplate="%s | flambo"
+            title="Home"
+        />
         <Header>
             <InnerHeader>
                 <Link to="/" style={{ height: '100%' }}>
