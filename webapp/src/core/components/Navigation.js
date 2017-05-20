@@ -7,6 +7,7 @@ import SettingsIcon         from 'react-icons/lib/fa/sliders'
 import UsersIcon            from 'react-icons/lib/md/portrait'
 import CollectionsIcon      from 'react-icons/lib/md/folder-open'
 import SourcesIcon          from 'react-icons/lib/fa/bolt'
+import DocIcon              from 'react-icons/lib/fa/book'
 import AboutIcon            from 'react-icons/lib/md/info-outline'
 
 import { Picto, Typo }      from './Logo'
@@ -77,6 +78,15 @@ export default class Navigation extends Component {
                 <NavigationItem label="sources"     to="/sources"     icon={SourcesIcon}/>
                 <NavigationItem label="users"       to="/users"       icon={UsersIcon}/>
                 <NavigationItem label="settings"    to="/settings"    icon={SettingsIcon}/>
+                <a
+                    href="http://flambo.co/doc"
+                    target="_blank"
+                >
+                    <Item>
+                        <FormattedMessage id="documentation"/>
+                        <DocIcon/>
+                    </Item>
+                </a>
                 <NavigationItem label="about"       to="/about"       icon={AboutIcon}/>
             </div>
         )

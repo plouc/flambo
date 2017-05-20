@@ -15,9 +15,11 @@ export default {
     picture: 'picture',
     owner: 'owner',
     form_cancel_message: 'The form has been modified, are you sure you want to leave this page?',
+    documentation: 'documentation',
 
     // login
     login: 'login',
+    logout: 'logout',
     password: 'password',
 
     // errors
