@@ -49,10 +49,9 @@ jobs:
       script:
         - make website-install --no-print-directory
         - make website-build --no-print-directory
-        - ls -al website/public
       deploy:
         skip_cleanup: true
         provider:     surge
-        project:      ./website/public/
+        project:      ./website/build/
 
 
