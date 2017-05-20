@@ -1,4 +1,4 @@
-![flambo](./assets/flambo_logo.png)
+[![flambo](./assets/flambo_logo.png)](http://flambo.co)
 
 [![Travis CI][travis-image]][travis-url]
 
@@ -13,7 +13,9 @@
     - Meetup
     - hoping to add more in the future (contributions are welcome :))
 
+
 ![workflow](./assets/workflow.png)
+
 
 ## Components
 
