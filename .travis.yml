@@ -13,7 +13,6 @@ before_deploy:
 deploy:
   provider: surge
   project:  ./website/public/
-  domain:   flambo.surge.sh
 
 # this is automatically included into test stage
 before_script:
