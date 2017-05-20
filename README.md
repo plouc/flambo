@@ -2,7 +2,7 @@
 
 [![Travis CI][travis-image]][travis-url]
 
-**flambo** is a content reader/aggregator.
+**flambo** is a content aggregation platform built upon Node.js.
 
 ## Features
 
@@ -12,6 +12,8 @@
     - RSS feeds
     - Meetup
     - hoping to add more in the future (contributions are welcome :))
+
+![workflow](./assets/workflow.png)
 
 ## Components
 
