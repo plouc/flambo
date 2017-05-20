@@ -6,8 +6,7 @@ node_js:
   - "7.6"
 
 before_deploy:
-  - ls -al
-  - cat Makefile
+  - cd ..
   - make website-install --no-print-directory
   - make website-build --no-print-directory
 
