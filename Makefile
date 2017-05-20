@@ -48,7 +48,7 @@ help: ##prints help
 #
 ########################################################################################################################
 
-install: ##@control Install dependencies
+install: website-install ##@control Install dependencies
 	@yarn run lerna bootstrap
 
 clean: ##@control Remove all components
@@ -112,11 +112,26 @@ test-api-unit: ##@testing Run API unit tests
 #
 ########################################################################################################################
 
+website-install: ##@website install website deps
+	@cd website && yarn install
+
 website-build: ##@website build static website
 	@cd website && yarn run build
 
-website-publish: ##@website publish static website to github pages
+website-build-rest-api-doc: api-swagger-build ##@website generate rest API static documentation
+	@cd website && yarn run rest-api-gen
+
+website-publish: website-build ##@website publish static website to github pages
 	@cd website && yarn run deploy
+
+########################################################################################################################
+#
+# API
+#
+########################################################################################################################
+
+api-swagger-build: ##@api generate swagger API spec with resolved refs
+	@cd api && yarn run swagger-gen
 
 ########################################################################################################################
 #

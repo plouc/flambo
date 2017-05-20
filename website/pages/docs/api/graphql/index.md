@@ -1,6 +1,0 @@
----
-title: GraphQL API
----
-
-
-@todo

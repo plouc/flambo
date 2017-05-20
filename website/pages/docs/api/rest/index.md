@@ -1,6 +1,0 @@
----
-title: Rest API
----
-
-
-@todo

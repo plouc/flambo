@@ -13,8 +13,7 @@ hubot.conf
 .hubot_history
 
 # website
-website/public
-.gatsby-context.js
+website/build
 
 # IDE
 .idea
