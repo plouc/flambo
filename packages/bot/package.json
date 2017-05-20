@@ -6,7 +6,6 @@
   "dependencies": {
     "columnify": "^1.5.4",
     "hubot": "^2.19.0",
-    "hubot-flowdock": "^0.7.7",
     "hubot-slack": "^4.3.4"
   },
   "scripts": {

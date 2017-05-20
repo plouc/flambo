@@ -101,6 +101,12 @@ docker-ls: ##@build List local related Docker images
 #
 ########################################################################################################################
 
+check-security: ##@testing Check for potential security issues
+	@cd api && ../node_modules/.bin/nsp check
+	@cd webapp && ../node_modules/.bin/nsp check
+	@cd website && ../node_modules/.bin/nsp check
+	@find packages -mindepth 1 -maxdepth 1 -type d -exec bash -c "cd '{}' && ../../node_modules/.bin/nsp check" \; -o -quit;
+
 test: test-api-unit ##@testing Run all tests
 
 test-api-unit: ##@testing Run API unit tests

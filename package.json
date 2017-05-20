@@ -1,8 +1,11 @@
 {
+  "name": "flambo",
   "scripts": {
-    "lerna": "lerna"
+    "lerna": "lerna",
+    "nsp": "nsp"
   },
   "devDependencies": {
-    "lerna": "^2.0.0-rc.4"
+    "lerna": "^2.0.0-rc.4",
+    "nsp": "^2.6.3"
   }
 }
