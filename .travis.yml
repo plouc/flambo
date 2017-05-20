@@ -5,16 +5,6 @@ language: node_js
 node_js:
   - "7.6"
 
-before_deploy:
-  - cd ..
-  - make website-install --no-print-directory
-  - make website-build --no-print-directory
-
-deploy:
-  skip_cleanup: true
-  provider:     surge
-  project:      ./website/public/
-
 # this is automatically included into test stage
 before_script:
   - cd api
@@ -53,4 +43,15 @@ jobs:
         - make log-api --no-print-directory
         - COMMAND="API_BASE_URL=http://localhost:80 yarn run bdd" make run-in-api --no-print-directory
         - make clean --no-print-directory
+
+    - stage: deploy
+      script: skip
+      before_deploy:
+        - make website-install --no-print-directory
+        - make website-build --no-print-directory
+      deploy:
+        skip_cleanup: true
+        provider:     surge
+        project:      ./website/public/
+
 
