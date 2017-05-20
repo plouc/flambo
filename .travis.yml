@@ -46,8 +46,7 @@ jobs:
 
     - stage: deploy
       before_script: skip
-      script: skip
-      before_deploy:
+      script:
         - make website-install --no-print-directory
         - make website-build --no-print-directory
       deploy:
