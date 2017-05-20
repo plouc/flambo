@@ -1,6 +1,6 @@
 const _         = require('lodash')
-const meetup    = require('flambo-source-meetup')
-const rss       = require('flambo-source-rss')
+const meetup    = require('@flambo/source-meetup')
+const rss       = require('@flambo/source-rss')
 
 const dbHelpers = require('../../core/database/helpers')
 const config    = require('../../core/config')
