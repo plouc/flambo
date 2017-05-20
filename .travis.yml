@@ -6,9 +6,8 @@ node_js:
   - "7.6"
 
 before_deploy:
-  script:
-    - make website-install
-    - make website-build
+  - make website-install --no-print-directory
+  - make website-build --no-print-directory
 
 deploy:
   provider: surge
