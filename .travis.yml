@@ -45,6 +45,7 @@ jobs:
         - make clean --no-print-directory
 
     - stage: deploy
+      before_script: skip
       script: skip
       before_deploy:
         - make website-install --no-print-directory
