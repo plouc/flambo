@@ -33,6 +33,9 @@ _install_docker: &_install_docker
 
 jobs:
   include:
+    - stage: security
+      script:
+        - make check-security
     - stage: test
       before_script:
         *_install_docker
