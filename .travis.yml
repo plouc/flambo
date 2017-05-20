@@ -11,8 +11,9 @@ before_deploy:
   - make website-build --no-print-directory
 
 deploy:
-  provider: surge
-  project:  ./website/public/
+  skip_cleanup: true
+  provider:     surge
+  project:      ./website/public/
 
 # this is automatically included into test stage
 before_script:
