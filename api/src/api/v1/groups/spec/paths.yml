@@ -28,4 +28,22 @@ id:
         description: Return the group
         schema:
           $ref: ./definitions.yml#/Group
+        examples:
+          application/json:
+            id: edd52c99-3280-44a2-ae5b-c6aa5ebc7e51
+            name: flambo group
+            slug: flambo-group
+            description: The awesome flambo group
+            created_at: '2017-05-16T01:48:41.596Z'
+            updated_at: '2017-05-16T01:48:41.596Z'
+            members_count: 5
+            owner:
+              id: 8ec88282-8c29-45c1-abe5-cbed11378794
+              first_name: Raphaël
+              last_name: Benitte
+              avatar_url: 'http://flambo.io/static/user.png'
+            viewer_is_owner: true
+            picture_url: 'http://flambo.io/static/group.png'
+            viewer_is_member: false
+            viewer_is_administrator: false
 

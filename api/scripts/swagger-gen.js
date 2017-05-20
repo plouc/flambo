@@ -87,7 +87,7 @@ const generateSwagger = (file, targetPath) => loadEntryPoint(file)
 
 generateSwagger('src/api/v1/swagger_with_refs.yml', 'src/api/v1/swagger.yml')
     .then(schema => {
-        console.log(yaml.safeDump(schema))
+        //console.log(yaml.safeDump(schema))
     })
     .catch(err => {
         console.error(err)

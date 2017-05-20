@@ -10,6 +10,17 @@ root:
         schema:
           $ref: ./definitions.yml#/Collections
 
+  post:
+    description: Create a collection
+    summary:     Create a collection
+    tags:
+      - collections
+    responses:
+      200:
+        description: Return the created collection
+        schema:
+          $ref: ./definitions.yml#/Collection
+
 id:
   get:
     description: Get a collection
@@ -28,3 +39,56 @@ id:
         schema:
           $ref: ./definitions.yml#/Collection
 
+feed:
+  get:
+    description: Get a collection feed
+    summary:     Get a collection feed
+    tags:
+      - collections
+    parameters:
+      - name:        id
+        in:          path
+        description: Collection id
+        required:    true
+        type:        string
+    responses:
+      200:
+        description: Return the collection feed
+        schema:
+          $ref: ./definitions.yml#/Collection
+
+comments:
+  get:
+    description: Get a collection comments
+    summary:     Get a collection comments
+    tags:
+      - collections
+    parameters:
+      - name:        id
+        in:          path
+        description: Collection id
+        required:    true
+        type:        string
+    responses:
+      200:
+        description: Return the collection comments
+        schema:
+          $ref: ./definitions.yml#/Collection
+
+subscribers:
+  get:
+    description: Get a collection subscribers
+    summary:     Get a collection subscribers
+    tags:
+      - collections
+    parameters:
+      - name:        id
+        in:          path
+        description: Collection id
+        required:    true
+        type:        string
+    responses:
+      200:
+        description: Return the collection subscribers
+        schema:
+          $ref: ./definitions.yml#/Collection

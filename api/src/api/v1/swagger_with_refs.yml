@@ -6,14 +6,25 @@ info:
   contact:     {}
 host:     localhost:8090
 basePath: /api/v1
+consumes:
+  - application/json
 produces:
   - application/json
+securityDefinitions:
+  JWT:
+    type: apiKey
+    name: Authorization
+    in: header
 paths:
   # groups
   /groups:      { $ref: groups/spec/paths.yml#/root }
   /groups/{id}: { $ref: groups/spec/paths.yml#/id   }
 
   # collections
-  /collections: { $ref: collections/spec/paths.yml#/root }
+  /collections:                  { $ref: collections/spec/paths.yml#/root        }
+  /collections/{id}:             { $ref: collections/spec/paths.yml#/id          }
+  /collections/{id}/feed:        { $ref: collections/spec/paths.yml#/feed        }
+  /collections/{id}/comments:    { $ref: collections/spec/paths.yml#/comments    }
+  /collections/{id}/subscribers: { $ref: collections/spec/paths.yml#/subscribers }
 
 
