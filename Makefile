@@ -54,7 +54,7 @@ install: website-install ##@control Install dependencies
 clean: ##@control Remove all components
 	@${DOCKER_COMPOSE} stop -t 0
 	@${DOCKER_COMPOSE} rm -f
-	@yarn run lerna clean
+	@yarn run lerna clean --yes
 
 up: ##@control setup stack
 	@${DOCKER_COMPOSE} up -d postgres elastic
