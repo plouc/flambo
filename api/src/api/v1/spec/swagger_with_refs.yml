@@ -1,0 +1,40 @@
+swagger: '2.0'
+info:
+  description: flambo API
+  version:     1.0.0
+  title:       flambo
+  contact:     {}
+host:     localhost:7000
+basePath: /api/v1
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  JWT:
+    type: apiKey
+    name: Authorization
+    in:   header
+paths:
+  # groups
+  /groups:               { $ref: ../groups/spec/paths.yml#/root     }
+  /groups/{id}:          { $ref: ../groups/spec/paths.yml#/id       }
+  /groups/{id}/feed:     { $ref: ../groups/spec/paths.yml#/feed     }
+  /groups/{id}/comments: { $ref: ../groups/spec/paths.yml#/comments }
+
+  # collections
+  /collections:                  { $ref: ../collections/spec/paths.yml#/root        }
+  /collections/{id}:             { $ref: ../collections/spec/paths.yml#/id          }
+  /collections/{id}/feed:        { $ref: ../collections/spec/paths.yml#/feed        }
+  /collections/{id}/comments:    { $ref: ../collections/spec/paths.yml#/comments    }
+  /collections/{id}/subscribers: { $ref: ../collections/spec/paths.yml#/subscribers }
+
+  # sources
+  /sources:      { $ref: ../sources/spec/paths.yml#/root }
+  /sources/{id}: { $ref: ../sources/spec/paths.yml#/id   }
+
+  # sources
+  /users:      { $ref: ../users/spec/paths.yml#/root }
+  /users/{id}: { $ref: ../users/spec/paths.yml#/id   }
+
+

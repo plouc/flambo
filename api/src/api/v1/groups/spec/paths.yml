@@ -2,8 +2,13 @@ root:
   get:
     description: List groups
     summary:     List groups
+    security:
+      - JWT: []
     tags:
       - groups
+    parameters:
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
     responses:
       200:
         description: Return the groups
@@ -14,15 +19,12 @@ id:
   get:
     description: Get a group
     summary:     Get a group
+    security:
+      - JWT: []
     tags:
       - groups
     parameters:
-      - name:        id
-        in:          path
-        description: Group id
-        required:    true
-        type:        string
-
+      - $ref: ./definitions.yml#/GroupId
     responses:
       200:
         description: Return the group
@@ -46,4 +48,36 @@ id:
             picture_url: 'http://flambo.io/static/group.png'
             viewer_is_member: false
             viewer_is_administrator: false
+
+feed:
+  get:
+    description: Get a group feed
+    summary:     Get a group feed
+    security:
+      - JWT: []
+    tags:
+      - groups
+    parameters:
+      - $ref: ./definitions.yml#/GroupId
+    responses:
+      200:
+        description: Return the group feed
+        schema:
+          $ref: ./definitions.yml#/Groups
+
+comments:
+  get:
+    description: Get a group comments
+    summary:     Get a group comments
+    security:
+      - JWT: []
+    tags:
+      - groups
+    parameters:
+      - $ref: ./definitions.yml#/GroupId
+    responses:
+      200:
+        description: Return the group comments
+        schema:
+          $ref: ../../comments/spec/definitions.yml#/Comments
 

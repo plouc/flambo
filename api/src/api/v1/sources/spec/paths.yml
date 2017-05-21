@@ -2,29 +2,31 @@ root:
   get:
     description: List sources
     summary:     List sources
+    security:
+      - JWT: []
     tags:
       - sources
+    parameters:
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
     responses:
       200:
-        description: Return the collections
+        description: Return the sources
         schema:
-          $ref: ./definitions.yml#/Collections
+          $ref: ./definitions.yml#/Sources
 
 id:
   get:
-    description: Get a collection
-    summary:     Get a collection
+    description: Get a source
+    summary:     Get a source
+    security:
+      - JWT: []
     tags:
-      - collections
+      - sources
     parameters:
-      - name:        id
-        in:          path
-        description: Collection id
-        required:    true
-        type:        string
+      - $ref: ./definitions.yml#/SourceId
     responses:
       200:
-        description: Return the collection
+        description: Return the source
         schema:
-          $ref: ./definitions.yml#/Collection
-
+          $ref: ./definitions.yml#/Source

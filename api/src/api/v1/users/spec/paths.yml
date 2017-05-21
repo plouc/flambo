@@ -1,0 +1,32 @@
+root:
+  get:
+    description: List users
+    summary:     List users
+    security:
+      - JWT: []
+    tags:
+      - users
+    parameters:
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
+    responses:
+      200:
+        description: Return the users
+        schema:
+          $ref: ./definitions.yml#/Users
+
+id:
+  get:
+    description: Get a user
+    summary:     Get a user
+    security:
+      - JWT: []
+    tags:
+      - users
+    parameters:
+      - $ref: ./definitions.yml#/UserId
+    responses:
+      200:
+        description: Return the user
+        schema:
+          $ref: ./definitions.yml#/User

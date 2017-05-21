@@ -1,13 +1,37 @@
+GroupId:
+  name:        id
+  in:          path
+  description: The group ID
+  required:    true
+  type:        string
+
 Group:
   type: object
-  required:
-    - id
-    - name
   properties:
     id:
       type: string
     name:
       type: string
+    slug:
+      type: string
+    description:
+      type: string
+    picture_url:
+      type: string
+    members_count:
+      type: integer
+    viewer_is_owner:
+      type: boolean
+    viewer_is_member:
+      type: boolean
+    viewer_is_administrator:
+      type: boolean
+    created_at:
+      type: string
+    updated_at:
+      type: string
+    owner:
+      $ref: ../../users/spec/definitions.yml#/RelatedUser
 
 Groups:
   type: object

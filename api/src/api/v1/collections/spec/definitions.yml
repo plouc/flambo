@@ -1,13 +1,40 @@
+CollectionId:
+  name:        id
+  in:          path
+  description: The collection ID
+  required:    true
+  type:        string
+
 Collection:
   type: object
-  required:
-    - id
-    - name
   properties:
     id:
       type: string
     name:
       type: string
+    description:
+      type: string
+    picture_url:
+      type: string
+    public:
+      type: boolean
+    subscribers_count:
+      type: integer
+    viewer_is_owner:
+      type: boolean
+    viewer_is_subscriber:
+      type: boolean
+    viewer_is_contributor:
+      type: boolean
+    created_at:
+      type: string
+    updated_at:
+      type: string
+    owner:
+      $ref: ../../users/spec/definitions.yml#/RelatedUser
+#      "selection": {
+#        "ids": []
+#      },
 
 Collections:
   type: object

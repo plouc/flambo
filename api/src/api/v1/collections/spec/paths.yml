@@ -2,8 +2,13 @@ root:
   get:
     description: List collections
     summary:     List collections
+    security:
+      - JWT: []
     tags:
       - collections
+    parameters:
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
     responses:
       200:
         description: Return the collections
@@ -13,6 +18,8 @@ root:
   post:
     description: Create a collection
     summary:     Create a collection
+    security:
+      - JWT: []
     tags:
       - collections
     responses:
@@ -25,14 +32,12 @@ id:
   get:
     description: Get a collection
     summary:     Get a collection
+    security:
+      - JWT: []
     tags:
       - collections
     parameters:
-      - name:        id
-        in:          path
-        description: Collection id
-        required:    true
-        type:        string
+      - $ref: ./definitions.yml#/CollectionId
     responses:
       200:
         description: Return the collection
@@ -43,14 +48,12 @@ feed:
   get:
     description: Get a collection feed
     summary:     Get a collection feed
+    security:
+      - JWT: []
     tags:
       - collections
     parameters:
-      - name:        id
-        in:          path
-        description: Collection id
-        required:    true
-        type:        string
+      - $ref: ./definitions.yml#/CollectionId
     responses:
       200:
         description: Return the collection feed
@@ -61,32 +64,28 @@ comments:
   get:
     description: Get a collection comments
     summary:     Get a collection comments
+    security:
+      - JWT: []
     tags:
       - collections
     parameters:
-      - name:        id
-        in:          path
-        description: Collection id
-        required:    true
-        type:        string
+      - $ref: ./definitions.yml#/CollectionId
     responses:
       200:
         description: Return the collection comments
         schema:
-          $ref: ./definitions.yml#/Collection
+          $ref: ../../comments/spec/definitions.yml#/Comments
 
 subscribers:
   get:
     description: Get a collection subscribers
     summary:     Get a collection subscribers
+    security:
+      - JWT: []
     tags:
       - collections
     parameters:
-      - name:        id
-        in:          path
-        description: Collection id
-        required:    true
-        type:        string
+      - $ref: ./definitions.yml#/CollectionId
     responses:
       200:
         description: Return the collection subscribers

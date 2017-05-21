@@ -1,33 +1,18 @@
-SourceId:
-  name:        id
-  in:          path
-  description: The source ID
-  required:    true
-  type:        string
-
-Source:
+Comment:
   type: object
   properties:
     id:
       type: string
-    type:
-      type: string
-    name:
-      type: string
-    description:
+    content:
       type: string
     created_at:
       type: string
     updated_at:
       type: string
-    owner:
+    author:
       $ref: ../../users/spec/definitions.yml#/RelatedUser
 
-#  "data": {
-#    "url": "https://alistapart.com/main/feed"
-#  },
-
-Sources:
+Comments:
   type: object
   required:
     - items
@@ -37,10 +22,11 @@ Sources:
     items:
       type: array
       items:
-        $ref: ./definitions.yml#/Source
+        $ref: ./definitions.yml#/Comment
     page:
       description: the page number
       type:        number
     hasNextPage:
       description: Indicates if you can have more results or if you are on the last page
       type:        boolean
+

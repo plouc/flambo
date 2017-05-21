@@ -1,33 +1,43 @@
-SourceId:
+UserId:
   name:        id
   in:          path
-  description: The source ID
+  description: The user ID
   required:    true
   type:        string
 
-Source:
+User:
   type: object
   properties:
     id:
       type: string
-    type:
+    first_name:
       type: string
-    name:
+    last_name:
       type: string
-    description:
+    role:
+      type: string
+    intro:
+      type: string
+    avatar_url:
       type: string
     created_at:
       type: string
     updated_at:
       type: string
-    owner:
-      $ref: ../../users/spec/definitions.yml#/RelatedUser
 
-#  "data": {
-#    "url": "https://alistapart.com/main/feed"
-#  },
+RelatedUser:
+  type: object
+  properties:
+    id:
+      type: string
+    first_name:
+      type: string
+    last_name:
+      type: string
+    avatar_url:
+      type: string
 
-Sources:
+Users:
   type: object
   required:
     - items
@@ -37,7 +47,7 @@ Sources:
     items:
       type: array
       items:
-        $ref: ./definitions.yml#/Source
+        $ref: ./definitions.yml#/User
     page:
       description: the page number
       type:        number

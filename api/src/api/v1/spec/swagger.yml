@@ -1,0 +1,450 @@
+swagger: '2.0'
+info:
+  description: flambo API
+  version: 1.0.0
+  title: flambo
+  contact: {}
+host: 'localhost:7000'
+basePath: /api/v1
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  JWT:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /groups:
+    get:
+      description: List groups
+      summary: List groups
+      security:
+        - JWT: []
+      tags:
+        - groups
+      parameters:
+        - &ref_4
+          name: page
+          description: The desired page (starts at 1).
+          in: query
+          type: integer
+          required: false
+          default: 1
+        - &ref_5
+          name: per_page
+          description: The desired number of items per page (max 100).
+          in: query
+          type: number
+          required: false
+          default: 10
+      responses:
+        '200':
+          description: Return the groups
+          schema: &ref_2
+            type: object
+            required:
+              - items
+              - page
+              - hasNextPage
+            properties:
+              items:
+                type: array
+                items: &ref_0
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    slug:
+                      type: string
+                    description:
+                      type: string
+                    picture_url:
+                      type: string
+                    members_count:
+                      type: integer
+                    viewer_is_owner:
+                      type: boolean
+                    viewer_is_member:
+                      type: boolean
+                    viewer_is_administrator:
+                      type: boolean
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    owner: &ref_3
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        first_name:
+                          type: string
+                        last_name:
+                          type: string
+                        avatar_url:
+                          type: string
+              page:
+                description: the page number
+                type: number
+              hasNextPage:
+                description: >-
+                  Indicates if you can have more results or if you are on the
+                  last page
+                type: boolean
+  '/groups/{id}':
+    get:
+      description: Get a group
+      summary: Get a group
+      tags:
+        - groups
+      parameters:
+        - &ref_1
+          name: id
+          in: path
+          description: The group ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Return the group
+          schema: *ref_0
+          examples:
+            application/json:
+              id: edd52c99-3280-44a2-ae5b-c6aa5ebc7e51
+              name: flambo group
+              slug: flambo-group
+              description: The awesome flambo group
+              created_at: '2017-05-16T01:48:41.596Z'
+              updated_at: '2017-05-16T01:48:41.596Z'
+              members_count: 5
+              owner:
+                id: 8ec88282-8c29-45c1-abe5-cbed11378794
+                first_name: Raphaël
+                last_name: Benitte
+                avatar_url: 'http://flambo.io/static/user.png'
+              viewer_is_owner: true
+              picture_url: 'http://flambo.io/static/group.png'
+              viewer_is_member: false
+              viewer_is_administrator: false
+  '/groups/{id}/feed':
+    get:
+      description: Get a group feed
+      summary: Get a group feed
+      security:
+        - JWT: []
+      tags:
+        - groups
+      parameters:
+        - *ref_1
+      responses:
+        '200':
+          description: Return the group feed
+          schema: *ref_2
+  '/groups/{id}/comments':
+    get:
+      description: Get a group comments
+      summary: Get a group comments
+      security:
+        - JWT: []
+      tags:
+        - groups
+      parameters:
+        - *ref_1
+      responses:
+        '200':
+          description: Return the group comments
+          schema: &ref_8
+            type: object
+            required:
+              - items
+              - page
+              - hasNextPage
+            properties:
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    content:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    author: *ref_3
+              page:
+                description: the page number
+                type: number
+              hasNextPage:
+                description: >-
+                  Indicates if you can have more results or if you are on the
+                  last page
+                type: boolean
+  /collections:
+    get:
+      description: List collections
+      summary: List collections
+      security:
+        - JWT: []
+      tags:
+        - collections
+      parameters:
+        - *ref_4
+        - *ref_5
+      responses:
+        '200':
+          description: Return the collections
+          schema:
+            type: object
+            required:
+              - items
+              - page
+              - hasNextPage
+            properties:
+              items:
+                type: array
+                items: &ref_6
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    picture_url:
+                      type: string
+                    public:
+                      type: boolean
+                    subscribers_count:
+                      type: integer
+                    viewer_is_owner:
+                      type: boolean
+                    viewer_is_subscriber:
+                      type: boolean
+                    viewer_is_contributor:
+                      type: boolean
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    owner: *ref_3
+              page:
+                description: the page number
+                type: number
+              hasNextPage:
+                description: >-
+                  Indicates if you can have more results or if you are on the
+                  last page
+                type: boolean
+    post:
+      description: Create a collection
+      summary: Create a collection
+      security:
+        - JWT: []
+      tags:
+        - collections
+      responses:
+        '200':
+          description: Return the created collection
+          schema: *ref_6
+  '/collections/{id}':
+    get:
+      description: Get a collection
+      summary: Get a collection
+      security:
+        - JWT: []
+      tags:
+        - collections
+      parameters:
+        - &ref_7
+          name: id
+          in: path
+          description: The collection ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Return the collection
+          schema: *ref_6
+  '/collections/{id}/feed':
+    get:
+      description: Get a collection feed
+      summary: Get a collection feed
+      security:
+        - JWT: []
+      tags:
+        - collections
+      parameters:
+        - *ref_7
+      responses:
+        '200':
+          description: Return the collection feed
+          schema: *ref_6
+  '/collections/{id}/comments':
+    get:
+      description: Get a collection comments
+      summary: Get a collection comments
+      security:
+        - JWT: []
+      tags:
+        - collections
+      parameters:
+        - *ref_7
+      responses:
+        '200':
+          description: Return the collection comments
+          schema: *ref_8
+  '/collections/{id}/subscribers':
+    get:
+      description: Get a collection subscribers
+      summary: Get a collection subscribers
+      security:
+        - JWT: []
+      tags:
+        - collections
+      parameters:
+        - *ref_7
+      responses:
+        '200':
+          description: Return the collection subscribers
+          schema: *ref_6
+  /sources:
+    get:
+      description: List sources
+      summary: List sources
+      security:
+        - JWT: []
+      tags:
+        - sources
+      parameters:
+        - *ref_4
+        - *ref_5
+      responses:
+        '200':
+          description: Return the sources
+          schema:
+            type: object
+            required:
+              - items
+              - page
+              - hasNextPage
+            properties:
+              items:
+                type: array
+                items: &ref_9
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                    owner: *ref_3
+              page:
+                description: the page number
+                type: number
+              hasNextPage:
+                description: >-
+                  Indicates if you can have more results or if you are on the
+                  last page
+                type: boolean
+  '/sources/{id}':
+    get:
+      description: Get a source
+      summary: Get a source
+      security:
+        - JWT: []
+      tags:
+        - sources
+      parameters:
+        - name: id
+          in: path
+          description: The source ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Return the source
+          schema: *ref_9
+  /users:
+    get:
+      description: List users
+      summary: List users
+      security:
+        - JWT: []
+      tags:
+        - users
+      parameters:
+        - *ref_4
+        - *ref_5
+      responses:
+        '200':
+          description: Return the users
+          schema:
+            type: object
+            required:
+              - items
+              - page
+              - hasNextPage
+            properties:
+              items:
+                type: array
+                items: &ref_10
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+                    role:
+                      type: string
+                    intro:
+                      type: string
+                    avatar_url:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+              page:
+                description: the page number
+                type: number
+              hasNextPage:
+                description: >-
+                  Indicates if you can have more results or if you are on the
+                  last page
+                type: boolean
+  '/users/{id}':
+    get:
+      description: Get a user
+      summary: Get a user
+      security:
+        - JWT: []
+      tags:
+        - users
+      parameters:
+        - name: id
+          in: path
+          description: The user ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Return the user
+          schema: *ref_10

@@ -1,0 +1,15 @@
+Page:
+  name:        page
+  description: The desired page (starts at 1).
+  in:          query
+  type:        integer
+  required:    false
+  default:     1
+
+PerPage:
+  name:        per_page
+  description: The desired number of items per page (max 100).
+  in:          query
+  type:        number
+  required:    false
+  default:     10
