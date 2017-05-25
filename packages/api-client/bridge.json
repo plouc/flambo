@@ -1,0 +1,92 @@
+{
+  "collections": {
+    "find": {
+      "path": "/collections",
+      "args": [["page", "per_page"]]
+    },
+    "get": {
+      "path": "/collections/{id}",
+      "args": ["id"]
+    },
+    "create": {
+      "path": "/collections",
+      "method": "post",
+      "args": ["collection"]
+    },
+    "feed": {
+      "path": "/collections/{id}/feed",
+      "args": ["id", ["page", "per_page"]]
+    },
+    "comments": {
+      "path": "/collections/{id}/comments",
+      "args": ["id", ["page", "per_page"]]
+    },
+    "subscribers": {
+      "path": "/collections/{id}/subscribers",
+      "args": ["id", ["page", "per_page"]]
+    }
+  },
+  "groups": {
+    "find": {
+      "path": "/groups",
+      "args": [["page", "per_page"]]
+    },
+    "get": {
+      "path": "/groups/{id}",
+      "args": ["id"]
+    },
+    "create": {
+      "path": "/groups",
+      "method": "post",
+      "args": ["group"]
+    },
+    "feed": {
+      "path": "/groups/{id}/feed",
+      "args": ["id", ["page", "per_page"]]
+    },
+    "comments": {
+      "path": "/groups/{id}/comments",
+      "args": ["id", ["page", "per_page"]]
+    },
+    "sources": {
+      "path": "/groups/{id}/sources",
+      "args": ["id", ["page", "per_page"]]
+    },
+    "members": {
+      "path": "/groups/{id}/members",
+      "args": ["id", ["page", "per_page"]]
+    }
+  },
+  "sources": {
+    "find": {
+      "path": "/sources",
+      "args": [["page", "per_page"]]
+    },
+    "get": {
+      "path": "/sources/{id}",
+      "args": ["id"]
+    },
+    "feed": {
+      "path": "/sources/{id}/feed",
+      "args": ["id", ["page", "per_page"]]
+    }
+  },
+  "users": {
+    "find": {
+      "path": "/users",
+      "args": [["page", "per_page"]]
+    },
+    "get": {
+      "path": "/users/{id}",
+      "args": ["id"]
+    },
+    "feed": {
+      "path": "/users/{id}/feed",
+      "args": ["id", ["page", "per_page"]]
+    },
+    "comments": {
+      "path": "/users/{id}/comments",
+      "args": ["id", ["page", "per_page"]]
+    }
+  }
+}

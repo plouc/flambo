@@ -36,7 +36,7 @@ jobs:
     - stage: security
       before_script: skip
       script:
-        - make check-security
+        - make check-security --no-print-directory
 
     - stage: test
       before_script:

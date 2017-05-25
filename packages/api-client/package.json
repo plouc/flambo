@@ -1,11 +1,23 @@
 {
   "name": "@flambo/api-client",
   "version": "0.1.2",
-  "main": "index.js",
+  "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.4",
-    "request": "^2.81.0",
-    "request-promise-native": "^1.0.4"
+    "qs": "^6.4.0"
+  },
+  "devDependencies": {
+    "@flambo/react-doc": "*",
+    "babel-generator": "^6.24.1",
+    "babylon": "^6.17.1",
+    "isomorphic-fetch": "^2.2.1",
+    "jsdoc": "^3.4.3",
+    "prettier": "^1.3.1"
+  },
+  "scripts": {
+    "gen": "node scripts/generate.js",
+    "doc": "jsdoc lib -t ./node_modules/@flambo/react-doc -d doc",
+    "build": "yarn gen && yarn doc"
   }
 }

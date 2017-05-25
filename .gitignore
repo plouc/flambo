@@ -15,6 +15,10 @@ hubot.conf
 # website
 website/build
 
+# api-client
+packages/api-client/doc/
+packages/api-client/sample.js
+
 # IDE
 .idea
 

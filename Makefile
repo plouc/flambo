@@ -124,9 +124,6 @@ website-install: ##@website install website deps
 website-build: ##@website build static website
 	@cd website && yarn run build
 
-website-build-rest-api-doc: api-swagger-build ##@website generate rest API static documentation
-	@cd website && yarn run rest-api-gen
-
 website-publish: website-build ##@website publish static website to github pages
 	@cd website && yarn run deploy
 
@@ -137,7 +134,20 @@ website-publish: website-build ##@website publish static website to github pages
 ########################################################################################################################
 
 api-swagger-build: ##@api generate swagger API spec with resolved refs
+	@echo "${YELLOW}Generating API swagger specification${RESET}"
 	@cd api && yarn run swagger-gen
+
+########################################################################################################################
+#
+# API CLIENT
+#
+########################################################################################################################
+
+api-client-build: api-swagger-build ##@api-client build api-client (code & documentation)
+	@echo "${YELLOW}Generating api-client${RESET}"
+	@cp api/src/api/v1/spec/swagger.json packages/api-client
+	@cd packages/api-client && yarn run build
+	@cp -r packages/api-client/doc website/src/modules/doc/components/api_client
 
 ########################################################################################################################
 #
