@@ -1,0 +1,12 @@
+parserOptions:
+  ecmaVersion: 8
+  sourceType: script
+env:
+  node: true
+  es6: true
+  mocha: true
+extends: eslint:recommended
+rules:
+  no-unused-vars: off
+  no-console: off
+  no-undef: off

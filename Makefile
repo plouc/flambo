@@ -1,15 +1,23 @@
-.DEFAULT_GOAL := help
+.DEFAULT_GOAL  := help
 
-PRODUCT_NAME ?= flambo
+PRODUCT_NAME   := flambo
+NODE_IMAGE     := node:7
+POSTGRES_IMAGE := postgres:9-alpine
+ELASTIC_IMAGE  := docker.elastic.co/elasticsearch/elasticsearch:5.3.0
+
+OS             := $(shell uname)
 
 ifdef CI
-    DOCKER_COMPOSE_FILE ?= "docker-compose-ci.yml"
+    DOCKER_COMPOSE_FILE := "docker-compose-ci.yml"
 else
-    DOCKER_COMPOSE_FILE ?= "docker-compose-full.yml"
+    DOCKER_COMPOSE_FILE := "docker-compose.yml"
 endif
 
-DOCKER_COMPOSE ?= docker-compose -f ${DOCKER_COMPOSE_FILE}
-
+DOCKER_COMPOSE := export \
+    NODE_IMAGE=${NODE_IMAGE} \
+    POSTGRES_IMAGE=${POSTGRES_IMAGE} \
+    ELASTIC_IMAGE=${ELASTIC_IMAGE}; \
+    docker-compose -f ${DOCKER_COMPOSE_FILE}
 
 ########################################################################################################################
 #
@@ -48,26 +56,63 @@ help: ##prints help
 #
 ########################################################################################################################
 
-install: website-install ##@control Install dependencies
-	@yarn run lerna bootstrap
+install: ##@control Install dependencies
+	@make make-in-node MAKE_RULE=_install
 
-clean: ##@control Remove all components
-	@${DOCKER_COMPOSE} stop -t 0
-	@${DOCKER_COMPOSE} rm -f
+_install: #@see install
+	@echo "${YELLOW}installing dependencies${RESET}"
+	@yarn install
+	@yarn run lerna bootstrap
+	@yarn run lerna ls
+
+uninstall: ##@control Uninstall dependencies
 	@yarn run lerna clean -- --yes
+	@rm -rf bin
 
 up: ##@control setup stack
-	@${DOCKER_COMPOSE} up -d postgres elastic
-	@make wait-for-postgres
-	@make wait-for-elastic
-	@sleep 3
-	@${DOCKER_COMPOSE} up -d
+	@make download-modd
 
-log: ##@control Print stdout of all servers
-	@${DOCKER_COMPOSE} logs --tail=$${TAIL_LENGTH:-100}
+	@${DOCKER_COMPOSE} up -d node
+	@make install
 
-log-%: ##@control Get stdout of running server (log-api, log-postgresql)
-	@${DOCKER_COMPOSE} logs --tail=$${TAIL_LENGTH:-100} ${*}
+	# setup storage
+	#@${DOCKER_COMPOSE} up -d postgres elastic
+	#@make wait-for-postgres
+	#@make wait-for-elastic
+	#@sleep 3
+
+	#@${DOCKER_COMPOSE} up --remove-orphans -d
+
+clean: ##@control Remove all components
+	@echo "${YELLOW}Stopping stack and removing components${RESET}"
+	@${DOCKER_COMPOSE} stop -t 0
+	@${DOCKER_COMPOSE} rm -f
+
+sync-docker-stack: ##@control run docker-compose
+	@${DOCKER_COMPOSE} up --remove-orphans -d
+
+dev: ##@control Watch for files changes and restart services accordingly
+	@./bin/modd
+
+restart-%: ##@control restart % service. To restart Quickly use QUICK=1
+    ifdef QUICK
+		@${DOCKER_COMPOSE} restart -t 0 ${*}
+    else
+		@${DOCKER_COMPOSE} restart ${*}
+    endif
+
+restart: ##@control restart all services. To restart Quickly use QUICK=1
+    ifdef QUICK
+		@${DOCKER_COMPOSE} restart -t 0
+    else
+		@${DOCKER_COMPOSE} restart
+    endif
+
+log: ##@control Print logs for all services
+	@${DOCKER_COMPOSE} logs -f --tail=$${TAIL_LENGTH:-50}
+
+log-%: ##@control Print logs for a given service (e.g. log-api)
+	@${DOCKER_COMPOSE} logs --tail=$${TAIL_LENGTH:-50} -f ${*}
 
 ########################################################################################################################
 #
@@ -109,8 +154,18 @@ check-security: ##@testing Check for potential security issues
 
 test: test-api-unit ##@testing Run all tests
 
-test-api-unit: ##@testing Run API unit tests
-	@cd api && yarn run test-unit
+test-unit: ##@testing Run all unit tests
+	@make make-in-node MAKE_RULE=_test-unit
+
+_test-unit: #@see test-unit
+	@cd api && yarn run test-unit -- --color
+
+lint: ##@testing run eslint
+	@make make-in-node MAKE_RULE=_lint
+
+_lint: ##@testing run eslint
+	@echo "${YELLOW}Running eslint${RESET}"
+	@./node_modules/.bin/lerna run eslint -- --quiet
 
 ########################################################################################################################
 #
@@ -179,6 +234,26 @@ _%-should-be-up: ##@utils make sure % container is up
         fi \
     '
 
-run-in-%: ##@utils Run a make command in % container
-	@make _${*}-should-be-up
-	@${DOCKER_COMPOSE} exec -T ${*} /bin/bash -c "${COMMAND}"
+run-in-%: ##@utils Run a command in given service
+    ifdef NO_DOCKER
+		@${COMMAND}
+    else
+		@make _${*}-should-be-up
+		@${DOCKER_COMPOSE} exec --user ${LOCAL_USER_UID}:${LOCAL_USER_GID} -T ${*} /bin/sh -c "${COMMAND}"
+    endif
+
+make-in-%: ##@utils Run a make command in given service
+	@make run-in-${*} COMMAND="${ENV} make ${MAKE_RULE} args='${args}'"
+
+download-modd: ##@utils Download modd watcher
+	@mkdir -p ./bin
+    ifeq ("$(wildcard ./bin/modd)","")
+		@echo "${YELLOW}Downloading modd watcher${RESET}"
+        ifeq ($(OS), Darwin)
+			@curl -L https://github.com/cortesi/modd/releases/download/v0.4/modd-0.4-osx64.tgz | tar xvf - --strip-components=1 -C ./bin
+        endif
+        ifeq ($(OS), Linux)
+			@curl -L https://github.com/cortesi/modd/releases/download/v0.4/modd-0.4-linux64.tgz | tar xvf - --strip-components=1 -C ./bin
+        endif
+    endif
+

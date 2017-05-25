@@ -29,6 +29,7 @@ yarn-error.log
 lerna-debug.log
 
 # misc
+/bin
 /old
 .env
 

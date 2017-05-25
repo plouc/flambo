@@ -28,6 +28,7 @@ module.exports = config => source => new Promise((resolve, reject) => {
         const stream = this
         let item
 
+        // eslint-disable-next-line no-cond-assign
         while (item = stream.read()) {
             items.push({
                 id:           uuid.v4(),

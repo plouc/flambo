@@ -1,7 +1,7 @@
 version: '2'
 services:
   elastic:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.3.0
+    image: ${ELASTIC_IMAGE}
     environment:
       http.host:              0.0.0.0
       xpack.security.enabled: 'false'
@@ -10,10 +10,50 @@ services:
       - 9333:9300
 
   postgres:
-    image: postgres:9.6.2-alpine
+    image: ${POSTGRES_IMAGE}
     environment:
       POSTGRES_DB:       flambo
       POSTGRES_USER:     pg
       POSTGRES_PASSWORD: pg
     ports:
       - 5444:5432
+
+  node:
+    image:       ${NODE_IMAGE}
+    command:     /bin/bash -c "while [ 1 ]; do sleep 3600; done"
+    working_dir: /data
+    environment:
+      NODE_ENV: dev
+    volumes:
+      - ${PWD}:/data:delegated
+
+  api:
+    image:       ${NODE_IMAGE}
+    working_dir: /data
+    command:     node api/index.js
+    ports:
+      - 91:80
+    environment:
+      NODE_ENV: dev
+      PORT:     80
+    volumes:
+      - ${PWD}/api:/data/api:delegated
+      - ${PWD}/packages:/data/packages:delegated
+    depends_on:
+      - postgres
+      - elastic
+
+#  bot:
+#    image:       ${NODE_IMAGE}
+#    working_dir: /data/bot
+#    command:     yarn start
+#    ports:
+#      - 92:80
+#    environment:
+#      NODE_ENV: dev
+#    volumes:
+#      - ${PWD}/packages:/data:delegated
+#    depends_on:
+#      - api
+
+

@@ -8,7 +8,7 @@
 //   plouc
 //
 const columnify = require('columnify')
-const client    = require('flambo-api-client')
+const client    = require('@flambo/api-client')
 
 
 module.exports = bot => {

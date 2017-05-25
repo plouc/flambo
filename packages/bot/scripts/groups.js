@@ -7,7 +7,7 @@
 // Author:
 //   plouc
 //
-const client = require('flambo-api-client')
+const client = require('@flambo/api-client')
 
 
 module.exports = bot => {
