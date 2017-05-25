@@ -12,8 +12,18 @@ return elastic.deleteByQuery({
             query: { match_all: {} },
         },
     })
-    .then(() => Sources.all({ limit: 50 }))
+    .then(() => Sources.all({
+        limit: 50,
+        query: {
+            type: 'rss',
+            name: 'Docker blog',
+        },
+    }))
     .then(sources => {
+        sources.forEach(source => {
+            console.log('source:', source.name, source.type)
+        })
+
         return Promise.all(
             sources.map(source => {
                 return new Promise(resolve => {
@@ -25,6 +35,8 @@ return elastic.deleteByQuery({
                 })
                     .then(items => {
                         if (items.length === 0) return true
+
+                        console.log(items)
 
                         const body = []
                         items.forEach(item => {

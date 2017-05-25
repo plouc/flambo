@@ -15,6 +15,8 @@ securityDefinitions:
     type: apiKey
     name: Authorization
     in: header
+schemes:
+  - http
 paths:
   /groups:
     get:
@@ -25,16 +27,16 @@ paths:
       tags:
         - groups
       parameters:
-        - &ref_4
+        - &ref_5
           name: page
-          description: The desired page (starts at 1).
+          description: '[pagination] The desired page (starts at 1).'
           in: query
           type: integer
           required: false
           default: 1
-        - &ref_5
+        - &ref_6
           name: per_page
-          description: The desired number of items per page (max 100).
+          description: '[pagination] The desired number of items per page (max 100).'
           in: query
           type: number
           required: false
@@ -42,7 +44,7 @@ paths:
       responses:
         '200':
           description: Return the groups
-          schema: &ref_2
+          schema: &ref_7
             type: object
             required:
               - items
@@ -51,7 +53,7 @@ paths:
             properties:
               items:
                 type: array
-                items: &ref_0
+                items: &ref_2
                   type: object
                   properties:
                     id:
@@ -76,7 +78,7 @@ paths:
                       type: string
                     updated_at:
                       type: string
-                    owner: &ref_3
+                    owner: &ref_9
                       type: object
                       properties:
                         id:
@@ -95,14 +97,89 @@ paths:
                   Indicates if you can have more results or if you are on the
                   last page
                 type: boolean
+        '400':
+          description: |
+            Validation error, in case pagination parameters are invalid
+          schema: &ref_0
+            type: object
+            required:
+              - type
+              - message
+              - errors
+            properties:
+              type:
+                type: string
+                enum:
+                  - validation_error
+              message:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                    path:
+                      type: string
+                    message:
+                      type: string
+        '500': &ref_1
+          description: Internal server error
+          schema:
+            type: object
+            required:
+              - type
+              - message
+            properties:
+              type:
+                type: string
+                enum:
+                  - internal_server_error
+              message:
+                type: string
+    post:
+      summary: Create a group
+      description: |
+        Create a new group, the owner will be the current user.
+      tags:
+        - groups
+      consumes:
+        - application/json
+      parameters:
+        - name: group
+          in: body
+          description: Properties of the group to create
+          required: true
+          schema:
+            type: object
+            required:
+              - name
+              - slug
+            properties:
+              name:
+                type: string
+              slug:
+                type: string
+              description:
+                type: string
+      responses:
+        '201':
+          description: Return the created group
+        '400': &ref_3
+          description: Validation error
+          schema: *ref_0
+        '500': *ref_1
   '/groups/{id}':
     get:
-      description: Get a group
       summary: Get a group
+      description: Get a group by its ID
+      security:
+        - JWT: []
       tags:
         - groups
       parameters:
-        - &ref_1
+        - &ref_4
           name: id
           in: path
           description: The group ID
@@ -111,7 +188,7 @@ paths:
       responses:
         '200':
           description: Return the group
-          schema: *ref_0
+          schema: *ref_2
           examples:
             application/json:
               id: edd52c99-3280-44a2-ae5b-c6aa5ebc7e51
@@ -130,6 +207,22 @@ paths:
               picture_url: 'http://flambo.io/static/group.png'
               viewer_is_member: false
               viewer_is_administrator: false
+        '400': *ref_3
+        '404':
+          description: Group not found
+          schema: &ref_8
+            type: object
+            required:
+              - type
+              - message
+            properties:
+              type:
+                type: string
+                enum:
+                  - resource_not_found
+              message:
+                type: string
+        '500': *ref_1
   '/groups/{id}/feed':
     get:
       description: Get a group feed
@@ -139,11 +232,18 @@ paths:
       tags:
         - groups
       parameters:
-        - *ref_1
+        - *ref_4
+        - *ref_5
+        - *ref_6
       responses:
         '200':
           description: Return the group feed
-          schema: *ref_2
+          schema: *ref_7
+        '400': *ref_3
+        '404':
+          description: Group not found
+          schema: *ref_8
+        '500': *ref_1
   '/groups/{id}/comments':
     get:
       description: Get a group comments
@@ -153,11 +253,13 @@ paths:
       tags:
         - groups
       parameters:
-        - *ref_1
+        - *ref_4
+        - *ref_5
+        - *ref_6
       responses:
         '200':
           description: Return the group comments
-          schema: &ref_8
+          schema: &ref_10
             type: object
             required:
               - items
@@ -177,7 +279,7 @@ paths:
                       type: string
                     updated_at:
                       type: string
-                    author: *ref_3
+                    author: *ref_9
               page:
                 description: the page number
                 type: number
@@ -186,6 +288,53 @@ paths:
                   Indicates if you can have more results or if you are on the
                   last page
                 type: boolean
+        '400': *ref_3
+        '404':
+          description: Group not found
+          schema: *ref_8
+        '500': *ref_1
+  '/groups/{id}/sources':
+    get:
+      description: Get group sources
+      summary: Get group sources
+      security:
+        - JWT: []
+      tags:
+        - groups
+      parameters:
+        - *ref_4
+        - *ref_5
+        - *ref_6
+      responses:
+        '200':
+          description: Return the group sources
+          schema: *ref_10
+        '400': *ref_3
+        '404':
+          description: Group not found
+          schema: *ref_8
+        '500': *ref_1
+  '/groups/{id}/members':
+    get:
+      description: Get group members
+      summary: Get group members
+      security:
+        - JWT: []
+      tags:
+        - groups
+      parameters:
+        - *ref_4
+        - *ref_5
+        - *ref_6
+      responses:
+        '200':
+          description: Return the group members
+          schema: *ref_10
+        '400': *ref_3
+        '404':
+          description: Group not found
+          schema: *ref_8
+        '500': *ref_1
   /collections:
     get:
       description: List collections
@@ -195,8 +344,8 @@ paths:
       tags:
         - collections
       parameters:
-        - *ref_4
         - *ref_5
+        - *ref_6
       responses:
         '200':
           description: Return the collections
@@ -209,7 +358,7 @@ paths:
             properties:
               items:
                 type: array
-                items: &ref_6
+                items: &ref_11
                   type: object
                   properties:
                     id:
@@ -222,6 +371,7 @@ paths:
                       type: string
                     public:
                       type: boolean
+                      description: Defines if the collection is publicly visible
                     subscribers_count:
                       type: integer
                     viewer_is_owner:
@@ -234,7 +384,7 @@ paths:
                       type: string
                     updated_at:
                       type: string
-                    owner: *ref_3
+                    owner: *ref_9
               page:
                 description: the page number
                 type: number
@@ -243,17 +393,46 @@ paths:
                   Indicates if you can have more results or if you are on the
                   last page
                 type: boolean
+        '400':
+          description: |
+            Validation error, in case pagination parameters are invalid
+          schema: *ref_0
+        '500': *ref_1
     post:
-      description: Create a collection
       summary: Create a collection
+      description: Create a collection for the current user.
       security:
         - JWT: []
       tags:
         - collections
+      consumes:
+        - application/json
+      parameters:
+        - name: collection
+          in: body
+          description: Properties of the collection to create
+          required: true
+          schema:
+            type: object
+            required:
+              - name
+              - public
+            properties:
+              name:
+                type: string
+                description: Collection name
+              description:
+                type: string
+                description: Collection description
+              public:
+                type: boolean
+                description: Defines if the collection will be publicly visible
       responses:
-        '200':
+        '201':
           description: Return the created collection
-          schema: *ref_6
+          schema: *ref_11
+        '400': *ref_3
+        '500': *ref_1
   '/collections/{id}':
     get:
       description: Get a collection
@@ -263,7 +442,7 @@ paths:
       tags:
         - collections
       parameters:
-        - &ref_7
+        - &ref_12
           name: id
           in: path
           description: The collection ID
@@ -272,7 +451,12 @@ paths:
       responses:
         '200':
           description: Return the collection
-          schema: *ref_6
+          schema: *ref_11
+        '400': *ref_3
+        '404':
+          description: Collection not found
+          schema: *ref_8
+        '500': *ref_1
   '/collections/{id}/feed':
     get:
       description: Get a collection feed
@@ -282,11 +466,18 @@ paths:
       tags:
         - collections
       parameters:
-        - *ref_7
+        - *ref_12
+        - *ref_5
+        - *ref_6
       responses:
         '200':
           description: Return the collection feed
-          schema: *ref_6
+          schema: *ref_11
+        '400': *ref_3
+        '404':
+          description: Collection not found
+          schema: *ref_8
+        '500': *ref_1
   '/collections/{id}/comments':
     get:
       description: Get a collection comments
@@ -296,11 +487,18 @@ paths:
       tags:
         - collections
       parameters:
-        - *ref_7
+        - *ref_12
+        - *ref_5
+        - *ref_6
       responses:
         '200':
           description: Return the collection comments
+          schema: *ref_10
+        '400': *ref_3
+        '404':
+          description: Collection not found
           schema: *ref_8
+        '500': *ref_1
   '/collections/{id}/subscribers':
     get:
       description: Get a collection subscribers
@@ -310,11 +508,18 @@ paths:
       tags:
         - collections
       parameters:
-        - *ref_7
+        - *ref_12
+        - *ref_5
+        - *ref_6
       responses:
         '200':
           description: Return the collection subscribers
-          schema: *ref_6
+          schema: *ref_11
+        '400': *ref_3
+        '404':
+          description: Collection not found
+          schema: *ref_8
+        '500': *ref_1
   /sources:
     get:
       description: List sources
@@ -324,12 +529,12 @@ paths:
       tags:
         - sources
       parameters:
-        - *ref_4
         - *ref_5
+        - *ref_6
       responses:
         '200':
           description: Return the sources
-          schema:
+          schema: &ref_15
             type: object
             required:
               - items
@@ -338,7 +543,7 @@ paths:
             properties:
               items:
                 type: array
-                items: &ref_9
+                items: &ref_13
                   type: object
                   properties:
                     id:
@@ -353,7 +558,7 @@ paths:
                       type: string
                     updated_at:
                       type: string
-                    owner: *ref_3
+                    owner: *ref_9
               page:
                 description: the page number
                 type: number
@@ -362,6 +567,41 @@ paths:
                   Indicates if you can have more results or if you are on the
                   last page
                 type: boolean
+        '400':
+          description: |
+            Validation error, in case pagination parameters are invalid
+          schema: *ref_0
+        '500': *ref_1
+    post:
+      summary: Create a source
+      description: |
+        Create a new source, the owner will be the current user.
+      tags:
+        - sources
+      consumes:
+        - application/json
+      parameters:
+        - name: payload
+          in: body
+          description: Source payload
+          required: true
+          schema:
+            type: object
+            required:
+              - name
+              - type
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+              description:
+                type: string
+      responses:
+        '201':
+          description: Return the created source
+        '400': *ref_3
+        '500': *ref_1
   '/sources/{id}':
     get:
       description: Get a source
@@ -371,7 +611,8 @@ paths:
       tags:
         - sources
       parameters:
-        - name: id
+        - &ref_14
+          name: id
           in: path
           description: The source ID
           required: true
@@ -379,7 +620,33 @@ paths:
       responses:
         '200':
           description: Return the source
-          schema: *ref_9
+          schema: *ref_13
+        '400': *ref_3
+        '404':
+          description: Source not found
+          schema: *ref_8
+        '500': *ref_1
+  '/sources/{id}/feed':
+    get:
+      description: Get source feed
+      summary: Get source feed
+      security:
+        - JWT: []
+      tags:
+        - sources
+      parameters:
+        - *ref_14
+        - *ref_5
+        - *ref_6
+      responses:
+        '200':
+          description: Return the source feed
+          schema: *ref_15
+        '400': *ref_3
+        '404':
+          description: Source not found
+          schema: *ref_8
+        '500': *ref_1
   /users:
     get:
       description: List users
@@ -389,12 +656,12 @@ paths:
       tags:
         - users
       parameters:
-        - *ref_4
         - *ref_5
+        - *ref_6
       responses:
         '200':
           description: Return the users
-          schema:
+          schema: &ref_18
             type: object
             required:
               - items
@@ -403,7 +670,7 @@ paths:
             properties:
               items:
                 type: array
-                items: &ref_10
+                items: &ref_16
                   type: object
                   properties:
                     id:
@@ -430,6 +697,11 @@ paths:
                   Indicates if you can have more results or if you are on the
                   last page
                 type: boolean
+        '400':
+          description: |
+            Validation error, in case pagination parameters are invalid
+          schema: *ref_0
+        '500': *ref_1
   '/users/{id}':
     get:
       description: Get a user
@@ -439,7 +711,8 @@ paths:
       tags:
         - users
       parameters:
-        - name: id
+        - &ref_17
+          name: id
           in: path
           description: The user ID
           required: true
@@ -447,4 +720,51 @@ paths:
       responses:
         '200':
           description: Return the user
+          schema: *ref_16
+        '400': *ref_3
+        '404':
+          description: User not found
+          schema: *ref_8
+        '500': *ref_1
+  '/users/{id}/feed':
+    get:
+      description: Get user feed
+      summary: Get user feed
+      security:
+        - JWT: []
+      tags:
+        - users
+      parameters:
+        - *ref_17
+        - *ref_5
+        - *ref_6
+      responses:
+        '200':
+          description: Return the user feed
+          schema: *ref_18
+        '400': *ref_3
+        '404':
+          description: User not found
+          schema: *ref_8
+        '500': *ref_1
+  '/users/{id}/comments':
+    get:
+      description: Get user comments
+      summary: Get user comments
+      security:
+        - JWT: []
+      tags:
+        - users
+      parameters:
+        - *ref_17
+        - *ref_5
+        - *ref_6
+      responses:
+        '200':
+          description: Return the user comments
           schema: *ref_10
+        '400': *ref_3
+        '404':
+          description: User not found
+          schema: *ref_8
+        '500': *ref_1

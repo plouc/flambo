@@ -10,10 +10,35 @@ root:
       - $ref: ../../spec/definitions.yml#/Page
       - $ref: ../../spec/definitions.yml#/PerPage
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      400:
+        description: |
+          Validation error, in case pagination parameters are invalid
+        schema:
+          $ref: ../../spec/definitions.yml#/ValidationError
       200:
         description: Return the sources
         schema:
           $ref: ./definitions.yml#/Sources
+
+  post:
+    summary:     Create a source
+    description: |
+      Create a new source, the owner will be the current user.
+    tags:
+      - sources
+    consumes:
+      - application/json
+    parameters:
+      - $ref: ./definitions.yml#/SourceCreatePayload
+    responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
+      201:
+        description: Return the created source
 
 id:
   get:
@@ -26,7 +51,41 @@ id:
     parameters:
       - $ref: ./definitions.yml#/SourceId
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Source not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
       200:
         description: Return the source
         schema:
           $ref: ./definitions.yml#/Source
+
+feed:
+  get:
+    description: Get source feed
+    summary:     Get source feed
+    security:
+      - JWT: []
+    tags:
+      - sources
+    parameters:
+      - $ref: ./definitions.yml#/SourceId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
+    responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Source not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
+      200:
+        description: Return the source feed
+        schema:
+          $ref: ./definitions.yml#/Sources

@@ -1,6 +1,6 @@
 Page:
   name:        page
-  description: The desired page (starts at 1).
+  description: '[pagination] The desired page (starts at 1).'
   in:          query
   type:        integer
   required:    false
@@ -8,8 +8,62 @@ Page:
 
 PerPage:
   name:        per_page
-  description: The desired number of items per page (max 100).
+  description: '[pagination] The desired number of items per page (max 100).'
   in:          query
   type:        number
   required:    false
   default:     10
+
+ResourceNotFound:
+  type: object
+  required:
+    - type
+    - message
+  properties:
+    type:
+      type: string
+      enum:
+        - resource_not_found
+    message:
+      type: string
+
+InternalServerError:
+  type: object
+  required:
+    - type
+    - message
+  properties:
+    type:
+      type: string
+      enum:
+        - internal_server_error
+    message:
+      type: string
+
+ValidationErrorInfo:
+  type: object
+  properties:
+    code:
+      type: string
+    path:
+      type: string
+    message:
+      type: string
+
+ValidationError:
+  type: object
+  required:
+    - type
+    - message
+    - errors
+  properties:
+    type:
+      type: string
+      enum:
+        - validation_error
+    message:
+      type: string
+    errors:
+      type: array
+      items:
+        $ref: ./definitions.yml#/ValidationErrorInfo

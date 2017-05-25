@@ -10,6 +10,13 @@ root:
       - $ref: ../../spec/definitions.yml#/Page
       - $ref: ../../spec/definitions.yml#/PerPage
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      400:
+        description: |
+          Validation error, in case pagination parameters are invalid
+        schema:
+          $ref: ../../spec/definitions.yml#/ValidationError
       200:
         description: Return the users
         schema:
@@ -26,7 +33,67 @@ id:
     parameters:
       - $ref: ./definitions.yml#/UserId
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: User not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
       200:
         description: Return the user
         schema:
           $ref: ./definitions.yml#/User
+
+feed:
+  get:
+    description: Get user feed
+    summary:     Get user feed
+    security:
+      - JWT: []
+    tags:
+      - users
+    parameters:
+      - $ref: ./definitions.yml#/UserId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
+    responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: User not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
+      200:
+        description: Return the user feed
+        schema:
+          $ref: ./definitions.yml#/Users
+
+comments:
+  get:
+    description: Get user comments
+    summary:     Get user comments
+    security:
+      - JWT: []
+    tags:
+      - users
+    parameters:
+      - $ref: ./definitions.yml#/UserId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
+    responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: User not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
+      200:
+        description: Return the user comments
+        schema:
+          $ref: ../../comments/spec/definitions.yml#/Comments

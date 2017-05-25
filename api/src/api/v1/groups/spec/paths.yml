@@ -10,15 +10,40 @@ root:
       - $ref: ../../spec/definitions.yml#/Page
       - $ref: ../../spec/definitions.yml#/PerPage
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      400:
+        description: |
+          Validation error, in case pagination parameters are invalid
+        schema:
+          $ref: ../../spec/definitions.yml#/ValidationError
       200:
         description: Return the groups
         schema:
           $ref: ./definitions.yml#/Groups
 
+  post:
+    summary:     Create a group
+    description: |
+      Create a new group, the owner will be the current user.
+    tags:
+      - groups
+    consumes:
+      - application/json
+    parameters:
+      - $ref: ./definitions.yml#/GroupCreatePayload
+    responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
+      201:
+        description: Return the created group
+
 id:
   get:
-    description: Get a group
     summary:     Get a group
+    description: Get a group by its ID
     security:
       - JWT: []
     tags:
@@ -26,6 +51,14 @@ id:
     parameters:
       - $ref: ./definitions.yml#/GroupId
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Group not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
       200:
         description: Return the group
         schema:
@@ -59,7 +92,17 @@ feed:
       - groups
     parameters:
       - $ref: ./definitions.yml#/GroupId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Group not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
       200:
         description: Return the group feed
         schema:
@@ -75,9 +118,71 @@ comments:
       - groups
     parameters:
       - $ref: ./definitions.yml#/GroupId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Group not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
       200:
         description: Return the group comments
+        schema:
+          $ref: ../../comments/spec/definitions.yml#/Comments
+
+sources:
+  get:
+    description: Get group sources
+    summary:     Get group sources
+    security:
+      - JWT: []
+    tags:
+      - groups
+    parameters:
+      - $ref: ./definitions.yml#/GroupId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
+    responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Group not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
+      200:
+        description: Return the group sources
+        schema:
+          $ref: ../../comments/spec/definitions.yml#/Comments
+
+members:
+  get:
+    description: Get group members
+    summary:     Get group members
+    security:
+      - JWT: []
+    tags:
+      - groups
+    parameters:
+      - $ref: ./definitions.yml#/GroupId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
+    responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Group not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
+      200:
+        description: Return the group members
         schema:
           $ref: ../../comments/spec/definitions.yml#/Comments
 

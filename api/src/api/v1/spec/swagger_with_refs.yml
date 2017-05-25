@@ -15,12 +15,16 @@ securityDefinitions:
     type: apiKey
     name: Authorization
     in:   header
+schemes:
+  - http
 paths:
   # groups
   /groups:               { $ref: ../groups/spec/paths.yml#/root     }
   /groups/{id}:          { $ref: ../groups/spec/paths.yml#/id       }
   /groups/{id}/feed:     { $ref: ../groups/spec/paths.yml#/feed     }
   /groups/{id}/comments: { $ref: ../groups/spec/paths.yml#/comments }
+  /groups/{id}/sources:  { $ref: ../groups/spec/paths.yml#/sources  }
+  /groups/{id}/members:  { $ref: ../groups/spec/paths.yml#/members  }
 
   # collections
   /collections:                  { $ref: ../collections/spec/paths.yml#/root        }
@@ -30,11 +34,14 @@ paths:
   /collections/{id}/subscribers: { $ref: ../collections/spec/paths.yml#/subscribers }
 
   # sources
-  /sources:      { $ref: ../sources/spec/paths.yml#/root }
-  /sources/{id}: { $ref: ../sources/spec/paths.yml#/id   }
+  /sources:           { $ref: ../sources/spec/paths.yml#/root }
+  /sources/{id}:      { $ref: ../sources/spec/paths.yml#/id   }
+  /sources/{id}/feed: { $ref: ../sources/spec/paths.yml#/feed }
 
   # sources
-  /users:      { $ref: ../users/spec/paths.yml#/root }
-  /users/{id}: { $ref: ../users/spec/paths.yml#/id   }
+  /users:               { $ref: ../users/spec/paths.yml#/root     }
+  /users/{id}:          { $ref: ../users/spec/paths.yml#/id       }
+  /users/{id}/feed:     { $ref: ../users/spec/paths.yml#/feed     }
+  /users/{id}/comments: { $ref: ../users/spec/paths.yml#/comments }
 
 

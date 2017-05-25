@@ -27,9 +27,7 @@ exports.types = {
 }
 
 
-exports.all = ({ limit, offset, query }) => {
-    return dao.find({ limit, offset, query })
-}
+exports.all = dao.find
 
 exports.get = id => dao.findOne({ query: { id } })
 

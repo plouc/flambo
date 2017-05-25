@@ -70,13 +70,22 @@ const validateSchema = schema => new Promise((resolve, reject) => {
     }
 })
 
-const writeResolvedSchema = path => schema => {
+const writeFile = (path, content) => {
     return new Promise((resolve, reject) => {
-        fs.writeFile(path, yaml.safeDump(schema), err => {
+        fs.writeFile(path, content, err => {
             if (err) return reject(err)
-            resolve(schema)
+            resolve(true)
         })
     })
+}
+
+const writeResolvedSchema = path => schema => {
+    return Promise.all([
+        writeFile(`${path}.yml`, yaml.safeDump(schema)),
+        writeFile(`${path}.json`, JSON.stringify(schema, null, '    ')),
+        writeFile('../website/src/modules/doc/components/rest_api/swagger.json', JSON.stringify(schema, null, '    ')),
+    ])
+        .then(() => schema)
 }
 
 const generateSwagger = (file, targetPath) => loadEntryPoint(file)
@@ -85,7 +94,7 @@ const generateSwagger = (file, targetPath) => loadEntryPoint(file)
     .then(validateSchema)
     .then(writeResolvedSchema(targetPath))
 
-generateSwagger('src/api/v1/spec/swagger_with_refs.yml', 'src/api/v1/spec/swagger.yml')
+generateSwagger('src/api/v1/spec/swagger_with_refs.yml', 'src/api/v1/spec/swagger')
     .then(schema => {
         //console.log(yaml.safeDump(schema))
     })

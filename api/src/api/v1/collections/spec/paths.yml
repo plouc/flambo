@@ -10,20 +10,35 @@ root:
       - $ref: ../../spec/definitions.yml#/Page
       - $ref: ../../spec/definitions.yml#/PerPage
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      400:
+        description: |
+          Validation error, in case pagination parameters are invalid
+        schema:
+          $ref: ../../spec/definitions.yml#/ValidationError
       200:
         description: Return the collections
         schema:
           $ref: ./definitions.yml#/Collections
 
   post:
-    description: Create a collection
     summary:     Create a collection
+    description: Create a collection for the current user.
     security:
       - JWT: []
     tags:
       - collections
+    consumes:
+      - application/json
+    parameters:
+      - $ref: ./definitions.yml#/CollectionCreatePayload
     responses:
-      200:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
+      201:
         description: Return the created collection
         schema:
           $ref: ./definitions.yml#/Collection
@@ -39,6 +54,14 @@ id:
     parameters:
       - $ref: ./definitions.yml#/CollectionId
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Collection not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
       200:
         description: Return the collection
         schema:
@@ -54,7 +77,17 @@ feed:
       - collections
     parameters:
       - $ref: ./definitions.yml#/CollectionId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Collection not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
       200:
         description: Return the collection feed
         schema:
@@ -70,7 +103,17 @@ comments:
       - collections
     parameters:
       - $ref: ./definitions.yml#/CollectionId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Collection not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
       200:
         description: Return the collection comments
         schema:
@@ -86,7 +129,17 @@ subscribers:
       - collections
     parameters:
       - $ref: ./definitions.yml#/CollectionId
+      - $ref: ../../spec/definitions.yml#/Page
+      - $ref: ../../spec/definitions.yml#/PerPage
     responses:
+      500:
+        $ref: ../../spec/responses.yml#/InternalServerError
+      404:
+        description: Collection not found
+        schema:
+          $ref: ../../spec/definitions.yml#/ResourceNotFound
+      400:
+        $ref: ../../spec/responses.yml#/ValidationError
       200:
         description: Return the collection subscribers
         schema:

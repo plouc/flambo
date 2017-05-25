@@ -50,3 +50,21 @@ Groups:
     hasNextPage:
       description: Indicates if you can have more results or if you are on the last page
       type:        boolean
+
+GroupCreatePayload:
+  name:        group
+  in:          body
+  description: Properties of the group to create
+  required:    true
+  schema:
+    type: object
+    required:
+      - name
+      - slug
+    properties:
+      name:
+        type: string
+      slug:
+        type: string
+      description:
+        type: string

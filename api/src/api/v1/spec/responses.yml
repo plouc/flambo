@@ -1,0 +1,14 @@
+EntityNotFound:
+  description: Entity not found
+  schema:
+    $ref: ./definitions.yml#/ResourceNotFound
+
+InternalServerError:
+  description: Internal server error
+  schema:
+    $ref: ./definitions.yml#/InternalServerError
+
+ValidationError:
+  description: Validation error
+  schema:
+    $ref: ./definitions.yml#/ValidationError

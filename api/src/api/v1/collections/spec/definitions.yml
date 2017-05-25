@@ -18,6 +18,7 @@ Collection:
       type: string
     public:
       type: boolean
+      description: Defines if the collection is publicly visible
     subscribers_count:
       type: integer
     viewer_is_owner:
@@ -53,3 +54,24 @@ Collections:
     hasNextPage:
       description: Indicates if you can have more results or if you are on the last page
       type:        boolean
+
+CollectionCreatePayload:
+  name:        collection
+  in:          body
+  description: Properties of the collection to create
+  required:    true
+  schema:
+    type: object
+    required:
+      - name
+      - public
+    properties:
+      name:
+        type: string
+        description: Collection name
+      description:
+        type: string
+        description: Collection description
+      public:
+        type: boolean
+        description: Defines if the collection will be publicly visible
