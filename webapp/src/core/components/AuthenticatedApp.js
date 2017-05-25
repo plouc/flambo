@@ -2,6 +2,7 @@ import React                from 'react'
 import styled               from 'styled-components'
 import { Route, Switch }    from 'react-router-dom'
 
+import LogoutButton         from '../../modules/auth/containers/LogoutButtonContainer'
 import Home                 from './Home'
 import Users                from '../../modules/users/components/Users'
 import Groups               from '../../modules/groups/components/Groups'
@@ -60,7 +61,9 @@ const AuthenticatedApp = () => (
         <Sidebar>
             <Navigation/>
         </Sidebar>
-        <AppBar/>
+        <AppBar>
+            <LogoutButton/>
+        </AppBar>
         <Content>
             <Switch>
                 <Route path="/"            component={Home} exact/>

@@ -1,5 +1,5 @@
+import api           from '@flambo/api-client'
 import { fetchTime } from '../../../core/actions/actionsHelpers'
-import { comments }  from '../api'
 
 
 export const FETCH_GROUP_COMMENTS_REQUEST = 'FETCH_GROUP_COMMENTS_REQUEST'
@@ -23,7 +23,7 @@ export const fetchGroupComments = (id, _options = {}) => (dispatch, getState) =>
 
     dispatch({ type: FETCH_GROUP_COMMENTS_REQUEST, id, ...options })
 
-    return comments(token, id, options)
+    return api.groups.comments(id, options, { token })
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_GROUP_COMMENTS_SUCCESS,

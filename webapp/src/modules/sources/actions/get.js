@@ -1,5 +1,5 @@
+import api                   from '@flambo/api-client'
 import { fetchItemIfNeeded } from '../../../core/actions/actionsHelpers'
-import { get }               from '../api'
 
 
 export const FETCH_SOURCE_REQUEST = 'FETCH_SOURCE_REQUEST'
@@ -12,7 +12,7 @@ export const fetchSource = id => (dispatch, getState) => {
 
     const { auth: { token } } = getState()
 
-    return get(token, id)
+    return api.sources.get(id, { token })
         .then(data => {
             dispatch({ type: FETCH_SOURCE_SUCCESS, id, data })
         })

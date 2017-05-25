@@ -1,5 +1,5 @@
 import { fetchItemIfNeeded } from '../../../core/actions/actionsHelpers'
-import { get }               from '../api'
+import api                   from '@flambo/api-client'
 
 
 export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST'
@@ -12,7 +12,7 @@ export const fetchUser = id => (dispatch, getState) => {
 
     const { auth: { token } } = getState()
 
-    return get(token, id)
+    return api.users.get(id, { token })
         .then(data => {
             dispatch({ type: FETCH_USER_SUCCESS, id, data })
         })

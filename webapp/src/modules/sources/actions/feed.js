@@ -1,5 +1,5 @@
+import api           from '@flambo/api-client'
 import { fetchTime } from '../../../core/actions/actionsHelpers'
-import { feed }      from '../api'
 
 
 export const FETCH_SOURCE_FEED_REQUEST = 'FETCH_SOURCE_FEED_REQUEST'
@@ -23,7 +23,7 @@ export const fetchSourceFeed = (id, _options = {}) => (dispatch, getState) => {
 
     dispatch({ type: FETCH_SOURCE_FEED_REQUEST, id, ...options })
 
-    return feed(token, id, options)
+    return api.sources.feed(id, options, { token })
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_SOURCE_FEED_SUCCESS,

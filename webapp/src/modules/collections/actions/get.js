@@ -1,5 +1,5 @@
 import { fetchItemIfNeeded } from '../../../core/actions/actionsHelpers'
-import { get }               from '../api'
+import api                   from '@flambo/api-client'
 
 
 export const FETCH_COLLECTION_REQUEST = 'FETCH_COLLECTION_REQUEST'
@@ -12,7 +12,7 @@ export const fetchCollection = id => (dispatch, getState) => {
 
     const { auth: { token } } = getState()
 
-    return get(token, id)
+    return api.collections.get(id, { token })
         .then(data => {
             dispatch({ type: FETCH_COLLECTION_SUCCESS, id, data })
         })

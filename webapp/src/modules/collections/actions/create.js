@@ -1,7 +1,6 @@
 import Joi                       from 'joi-browser'
-
+import api                       from '@flambo/api-client'
 import history                   from '../../../core/history'
-import { create }                from '../api'
 import schema                    from '../schemas/collectionSchema'
 import { invalidateCollections } from './index'
 import * as media                from '../../media/api'
@@ -13,8 +12,6 @@ export const CREATE_COLLECTION_FAILURE = 'CREATE_COLLECTION_FAILURE'
 export const CREATE_COLLECTION_RESET   = 'CREATE_COLLECTION_RESET'
 
 export const createCollection = _data => (dispatch, getState) => {
-    console.log(_data)
-
     const { value: data } = Joi.validate(_data, schema)
 
     dispatch({ type: CREATE_COLLECTION_REQUEST, data })
@@ -28,8 +25,8 @@ export const createCollection = _data => (dispatch, getState) => {
             }
         })
         .then(medium => {
-            if (medium) return create(token, { ...data, picture_id: medium.id })
-            return create(token, data)
+            if (medium) return api.collections.create({ ...data, picture_id: medium.id }, token)
+            return api.collections.create(data, { token })
         })
         .then(() => {
             dispatch({ type: CREATE_COLLECTION_SUCCESS })

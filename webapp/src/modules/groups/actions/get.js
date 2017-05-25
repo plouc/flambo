@@ -1,5 +1,5 @@
+import api                   from '@flambo/api-client'
 import { fetchItemIfNeeded } from '../../../core/actions/actionsHelpers'
-import { get }               from '../api'
 
 
 export const FETCH_GROUP_REQUEST = 'FETCH_GROUP_REQUEST'
@@ -12,7 +12,7 @@ export const fetchGroup = id => (dispatch, getState) => {
 
     const { auth: { token } } = getState()
 
-    return get(token, id)
+    return api.groups.get(id, { token })
         .then(data => {
             dispatch({ type: FETCH_GROUP_SUCCESS, id, data })
         })

@@ -25,37 +25,8 @@ export const list = (token, { first, after }) => {
         .then(checkApiResponse())
 }
 
-export const get = (token, id) => {
-    return apiGet(`${endpoint}/${id}`, { token })
-        .then(checkApiResponse({ id, entity: 'user' }))
-}
-
 export const getMe = token => {
     return apiGet(`${endpoint}/me`, { token })
-        .then(checkApiResponse())
-}
-
-export const feed = (token, id, { perPage, page, sort: _sort = {}, filters: _filters = {} }) => {
-    const query = new URLSearchParams()
-
-    query.append(API_PAGINATION_PER_PAGE, perPage)
-    query.append(API_PAGINATION_PAGE,     page)
-
-    const feedEndpoint = `${endpoint}/${id}/feed`
-
-    return apiGet(query ? `${feedEndpoint}?${query}` : feedEndpoint, { token })
-        .then(checkApiResponse())
-}
-
-export const comments = (token, id, { perPage, page, sort: _sort = {}, filters: _filters = {} }) => {
-    const query = new URLSearchParams()
-
-    query.append(API_PAGINATION_PER_PAGE, perPage)
-    query.append(API_PAGINATION_PAGE,     page)
-
-    const commentsEndpoint = `${endpoint}/${id}/comments`
-
-    return apiGet(query ? `${commentsEndpoint}?${query}` : commentsEndpoint, { token })
         .then(checkApiResponse())
 }
 

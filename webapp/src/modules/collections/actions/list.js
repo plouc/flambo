@@ -1,6 +1,5 @@
 import isEqual       from 'lodash/isEqual'
-
-import { list }      from '../api'
+import api           from '@flambo/api-client'
 import { fetchTime } from '../../../core/actions/actionsHelpers'
 
 
@@ -25,7 +24,7 @@ export const fetchCollections = (_options = {}) => (dispatch, getState) => {
 
     dispatch({ type: FETCH_COLLECTIONS_REQUEST, ...options })
 
-    return list(token, options)
+    return api.collections.find(options, { token })
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_COLLECTIONS_SUCCESS,

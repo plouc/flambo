@@ -6,10 +6,12 @@
     "react-scripts": "0.9.5"
   },
   "dependencies": {
+    "@flambo/api-client": "*",
     "color": "^1.0.3",
     "history": "^4.6.1",
     "joi-browser": "^10.0.6",
     "lodash": "^4.17.4",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-dropzone": "^3.13.1",
