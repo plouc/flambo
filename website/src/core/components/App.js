@@ -22,7 +22,7 @@ const Header = styled.header`
 `
 
 const InnerHeader = styled.div`
-    max-width:       1080px;
+    max-width:       1280px;
     height:          60px;
     display:         flex;
     justify-content: space-between;

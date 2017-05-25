@@ -16,7 +16,7 @@ const Banner = styled.div`
 `
 
 const InnerBanner = styled.div`
-    max-width: 1080px;
+    max-width: 1280px;
     height: 100%;
     margin: 0 auto;
     position: relative;
@@ -63,7 +63,7 @@ const InfoBar = styled.div`
 `
 
 const InnerInfoBar = styled.div`
-    max-width: 1080px;
+    max-width: 1280px;
     margin: 0 auto;
     height: 60px;
     display: flex;
@@ -71,7 +71,7 @@ const InnerInfoBar = styled.div`
 `
 
 const Container = styled.div`
-    max-width: 1080px;
+    max-width: 1280px;
     margin: 12px auto 12px;
     padding-bottom: 60px;
     display: grid;
@@ -163,7 +163,7 @@ export default () => (
                 <p>flambo is made up of several components:</p>
                 <List>
                     <ListItem>
-                        an API, available in both <Link to="/doc/rest-api">Rest</Link>{' '}
+                        an API, available in both <Link to="/doc/api">Rest</Link>{' '}
                         and <Link to="/doc/graphql-api">GraphQL</Link>
                     </ListItem>
                     <ListItem>

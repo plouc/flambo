@@ -66,16 +66,16 @@ export default () => (
     <Container>
         <Nav>
             <MenuItem to="/doc/api">
-                Rest API
+                API
                 <RestApiIcon color="#3e6096"/>
-            </MenuItem>
-            <MenuItem to="/doc/graphql-api">
-                GraphQL API
-                <GraphqlApiIcon color="#3e6096"/>
             </MenuItem>
             <MenuItem to="/doc/api-client">
                 API client
                 <ApiClientIcon color="#3e6096"/>
+            </MenuItem>
+            <MenuItem to="/doc/graphql-api">
+                GraphQL API
+                <GraphqlApiIcon color="#3e6096"/>
             </MenuItem>
             <MenuItem to="/doc/webapp">
                 Webapp
