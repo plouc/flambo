@@ -1,0 +1,29 @@
+{
+  "name": "@flambo/react-doc",
+  "version": "0.1.2",
+  "main": "publish.js",
+  "license": "MIT",
+  "keywords": [
+    "flambo",
+    "jsdoc",
+    "documentation",
+    "template",
+    "theme"
+  ],
+  "dependencies": {
+    "babel-generator": "^6.24.1",
+    "babel-preset-env": "^1.5.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "babylon": "^6.17.1",
+    "babylon-jsx": "^1.0.0",
+    "fs-extra": "^3.0.1",
+    "jsdoc": "^3.4.3",
+    "lodash": "^4.17.4",
+    "mustache": "^2.3.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-router-dom": "^4.1.1",
+    "rimraf": "^2.6.1"
+  }
+}
