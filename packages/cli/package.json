@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@flambo/api-client": "*",
     "commander": "^2.9.0",
     "lodash": "^4.17.4",
     "ora": "^1.2.0",

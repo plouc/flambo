@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@flambo/api-client": "*",
     "columnify": "^1.5.4",
     "hubot": "^2.19.0",
     "hubot-slack": "^4.3.4"
