@@ -1,5 +1,7 @@
-const partialRight = require('lodash/partialRight')
-const modules      = require('./modules')
+'use strict';
+
+var partialRight = require('lodash/partialRight');
+var modules = require('./modules');
 
 /**
  * @typedef {Object} ClientOptions
@@ -8,28 +10,30 @@ const modules      = require('./modules')
  * @property {Object} [headers={}]
  */
 
-Object.keys(modules).forEach(moduleId => {
-    const module = modules[moduleId]
-    exports[moduleId] = module
-})
+Object.keys(modules).forEach(function (moduleId) {
+    var module = modules[moduleId];
+    exports[moduleId] = module;
+});
 
 /**
  * @method init
  * @param {ClientOptions} options
  * @return {{collections, groups, sources, users}}
  */
-exports.client = (options = {}) => {
-    const api = {}
-    Object.keys(modules).forEach(moduleId => {
-        const module = modules[moduleId]
+exports.client = function () {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-        const boundModule = {}
-        Object.keys(module).forEach(method => {
-            boundModule[method] = partialRight(module[method], options)
-        })
+    var api = {};
+    Object.keys(modules).forEach(function (moduleId) {
+        var module = modules[moduleId];
 
-        api[moduleId] = boundModule
-    })
+        var boundModule = {};
+        Object.keys(module).forEach(function (method) {
+            boundModule[method] = partialRight(module[method], options);
+        });
 
-    return api
-}
+        api[moduleId] = boundModule;
+    });
+
+    return api;
+};

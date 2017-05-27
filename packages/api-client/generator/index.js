@@ -1,8 +1,10 @@
 const fs        = require('fs')
+const path      = require('path')
 const generate  = require('babel-generator').default
 const prettier  = require('prettier')
 const fragments = require('./fragments')
 
+const OUTPUT_DIR = 'src'
 
 const format = true
 
@@ -81,7 +83,7 @@ exports.generateModule = (ctx, name, methodSpecs) => {
     }
 
     return new Promise((resolve, reject) => {
-        fs.writeFile(`lib/${name}.js`, code, err => {
+        fs.writeFile(path.join(OUTPUT_DIR, `${name}.js`), code, err => {
             if (err) return reject(err)
             resolve(code)
         })
@@ -127,7 +129,7 @@ exports.generateEntrypoint = modules => {
     }
 
     return new Promise((resolve, reject) => {
-        fs.writeFile(`lib/modules.js`, code, err => {
+        fs.writeFile(path.join(OUTPUT_DIR, 'modules.js'), code, err => {
             if (err) return reject(err)
             resolve(code)
         })

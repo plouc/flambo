@@ -1,52 +1,53 @@
-const memoize  = require('lodash/memoize')
-const template = require('lodash/template')
-const defaults = require('lodash/defaults')
-const qs       = require('qs')
+'use strict';
 
+var memoize = require('lodash/memoize');
+var template = require('lodash/template');
+var defaults = require('lodash/defaults');
+var qs = require('qs');
 
-const clientDefaults = {
-    apiUrl:  'http://localhost:7000/api/v1',
-    headers: {},
-}
+var clientDefaults = {
+    apiUrl: 'http://localhost:7000/api/v1',
+    headers: {}
+};
 
-const pathTemplate         = path => template(path, { interpolate: /{([\s\S]+?)}/g })
-const memoizedPathTemplate = memoize(pathTemplate)
+var pathTemplate = function pathTemplate(path) {
+    return template(path, { interpolate: /{([\s\S]+?)}/g });
+};
+var memoizedPathTemplate = memoize(pathTemplate);
 
-exports.build = (
-    clientOptions = {},
-    {
-        path,
-        params  = {},
-        method  = 'GET',
-        headers = {},
-        query,
-        body,
-    }
-) => {
-    const options = defaults(clientOptions, clientDefaults)
+exports.build = function () {
+    var clientOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _ref = arguments[1];
+    var path = _ref.path,
+        _ref$params = _ref.params,
+        params = _ref$params === undefined ? {} : _ref$params,
+        _ref$method = _ref.method,
+        method = _ref$method === undefined ? 'GET' : _ref$method,
+        _ref$headers = _ref.headers,
+        headers = _ref$headers === undefined ? {} : _ref$headers,
+        query = _ref.query,
+        body = _ref.body;
+
+    var options = defaults(clientOptions, clientDefaults);
     if (!options.token) {
-        throw new Error(`You must provide a valid token`)
+        throw new Error('You must provide a valid token');
     }
 
-    const pathTemplate = memoizedPathTemplate(path)
+    var pathTemplate = memoizedPathTemplate(path);
 
-    let url = `${options.apiUrl}${pathTemplate(params)}`
+    var url = '' + options.apiUrl + pathTemplate(params);
     if (query !== undefined && Object.keys(query).length > 0) {
-        url = `${url}?${qs.stringify(query)}`
+        url = url + '?' + qs.stringify(query);
     }
 
-    const requestOptions = {
-        method,
-        headers: Object.assign(
-            {
-                'Authorization': `Bearer ${options.token}`,
-                'Content-Type': 'application/json',
-            },
-            options.headers,
-            headers
-        ),
-        body,
-    }
+    var requestOptions = {
+        method: method,
+        headers: Object.assign({
+            'Authorization': 'Bearer ' + options.token,
+            'Content-Type': 'application/json'
+        }, options.headers, headers),
+        body: body
+    };
 
-    return { url, options: requestOptions }
-}
+    return { url: url, options: requestOptions };
+};

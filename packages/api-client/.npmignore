@@ -1,0 +1,7 @@
+/generator
+/src
+/doc
+sample.js
+swagger.json
+bridge.json
+.babelrc
