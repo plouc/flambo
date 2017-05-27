@@ -3,19 +3,12 @@ services:
   server:
     image: abiosoft/caddy:0.9.5
     volumes:
-      - ${PWD}/Caddyfile:/etc/Caddyfile
+      - ${PWD}/demo/Caddyfile:/etc/Caddyfile
     depends_on:
       - api
       - webapp
     ports:
       - 8090:2015
-
-  postgres:
-    image: postgres:9.6.2-alpine
-    environment:
-      POSTGRES_DB:       flambo
-      POSTGRES_USER:     pg
-      POSTGRES_PASSWORD: pg
 
   elastic:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.3.0
@@ -26,23 +19,31 @@ services:
       - 9222:9200
       - 9333:9300
 
-  api:
-    image: flambo/api:latest
-    depends_on:
-      - postgres
-      - elastic
+  postgres:
+    image: postgres:9-alpine
     environment:
+      POSTGRES_DB:       flambo
+      POSTGRES_USER:     pg
+      POSTGRES_PASSWORD: pg
+    ports:
+      - 5444:5432
+
+  api:
+    image: plouc/flambo-api:beta
+    environment:
+      NODE_ENV:        dev
       PORT:            80
-      STATIC_BASE_URL: http://localhost:8090/static
       POSTGRES_HOST:   postgres
       POSTGRES_PORT:   5432
       POSTGRES_USER:   pg
       POSTGRES_PWD:    pg
       POSTGRES_DB:     flambo
-      ELASTIC_HOST:    http://elastic
+      ELASTIC_HOST:    elastic
       ELASTIC_PORT:    9200
+      STATIC_BASE_URL: http://localhost:8090/static
+    depends_on:
+      - postgres
+      - elastic
 
   webapp:
-    image: flambo/webapp:latest
-
-
+    image: plouc/flambo-webapp:beta

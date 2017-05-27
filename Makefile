@@ -1,23 +1,35 @@
-.DEFAULT_GOAL  := help
+.DEFAULT_GOAL      := help
 
-PRODUCT_NAME   := flambo
-NODE_IMAGE     := node:7
-POSTGRES_IMAGE := postgres:9-alpine
-ELASTIC_IMAGE  := docker.elastic.co/elasticsearch/elasticsearch:5.3.0
+PRODUCT_NAME       := flambo
+DOCKER_USER        := plouc
+DOCKER_TAG         ?= beta
+NODE_IMAGE         := node:7
+POSTGRES_IMAGE     := postgres:9-alpine
+ELASTIC_IMAGE      := docker.elastic.co/elasticsearch/elasticsearch:5.3.0
 
-OS             := $(shell uname)
+OS                 := $(shell uname)
+PACKAGES           := $(shell find packages -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
 
 ifdef CI
-    DOCKER_COMPOSE_FILE := "docker-compose-ci.yml"
+    STACK_MODE := CI
 else
-    DOCKER_COMPOSE_FILE := "docker-compose.yml"
+    ifdef DEMO
+        STACK_MODE := DEMO
+    else
+        STACK_MODE := DEV
+    endif
 endif
+
+STACK_SUFFIX   := $(shell echo ${STACK_MODE} | tr '[A-Z]' '[a-z]')
+STACK_NAME     := "${PRODUCT_NAME}-${STACK_SUFFIX}"
 
 DOCKER_COMPOSE := export \
     NODE_IMAGE=${NODE_IMAGE} \
     POSTGRES_IMAGE=${POSTGRES_IMAGE} \
     ELASTIC_IMAGE=${ELASTIC_IMAGE}; \
-    docker-compose -f ${DOCKER_COMPOSE_FILE}
+    docker-compose \
+    -p ${STACK_NAME} \
+    -f docker-compose-${STACK_SUFFIX}.yml
 
 ########################################################################################################################
 #
@@ -70,25 +82,33 @@ uninstall: ##@control Uninstall dependencies
 	@rm -rf bin
 
 up: ##@control setup stack
-	@make download-modd
+	@echo "${YELLOW}Launching stack in ${RESET}${WHITE}${STACK_MODE}${RESET}${YELLOW} mode${RESET} (${STACK_NAME})"
 
-	@${DOCKER_COMPOSE} up -d node
-	@make install
+    ifeq ($(STACK_MODE), DEV)
+		@make download-modd
+		@${DOCKER_COMPOSE} up -d node
+		@make install
+    endif
 
-	# setup storage
-	#@${DOCKER_COMPOSE} up -d postgres elastic
-	#@make wait-for-postgres
-	#@make wait-for-elastic
-	#@sleep 3
+    ifeq ($(STACK_MODE), DEMO)
+		@echo "${YELLOW}Pulling up to date service images${RESET}"
+		@${DOCKER_COMPOSE} pull
+    endif
 
-	#@${DOCKER_COMPOSE} up --remove-orphans -d
+	@echo "${YELLOW}Initializing postgres & elastic${RESET}"
+	@${DOCKER_COMPOSE} up --remove-orphans -d postgres elastic
+	@make wait-for-postgres
+	@make wait-for-elastic
+	@sleep 3
+
+	@make dc-up
 
 clean: ##@control Remove all components
 	@echo "${YELLOW}Stopping stack and removing components${RESET}"
 	@${DOCKER_COMPOSE} stop -t 0
 	@${DOCKER_COMPOSE} rm -f
 
-sync-docker-stack: ##@control run docker-compose
+dc-up: ##@control run docker-compose
 	@${DOCKER_COMPOSE} up --remove-orphans -d
 
 dev: ##@control Watch for files changes and restart services accordingly
@@ -114,31 +134,78 @@ log: ##@control Print logs for all services
 log-%: ##@control Print logs for a given service (e.g. log-api)
 	@${DOCKER_COMPOSE} logs --tail=$${TAIL_LENGTH:-50} -f ${*}
 
+bash-%: ##@control Get a bash in given running service
+	@make _${*}-should-be-up
+	@${DOCKER_COMPOSE} exec ${*} /bin/bash
+
 ########################################################################################################################
 #
-# BUILD/PUBLISH
+# BUILD
 #
 ########################################################################################################################
 
-build: build-webapp docker-build-webapp docker-build-api docker-ls ##@build Build all Docker images
+build: ##@build Build all Docker images
+	@make build-webapp WEBAPP_PUBLIC_URL=/webapp WEBAPP_API_URL=/api/v1
+	@make build-api-spec
+	@make build-website
+	@make docker-build-webapp
+	@make docker-build-api
+	@make docker-build-bot
+	@make docker-ls
 
 build-webapp: ##@build Build webapp
-	@echo "${YELLOW}Building webapp targeting env: \"${TARGET_ENV}\"${RESET}"
-	@cd webapp && PUBLIC_URL=/webapp \
-		REACT_APP_API_URL=/api/v1 \
+	@echo "${YELLOW}Building webapp${RESET}"
+	@cd webapp && PUBLIC_URL=${WEBAPP_PUBLIC_URL} \
+		REACT_APP_API_URL=${WEBAPP_API_URL} \
 		yarn run build
 
-docker-build-webapp: ##@build Build webapp Docker image
-	@echo "${YELLOW}Building webapp Docker image: \"${PRODUCT_NAME}/webapp:latest\"${RESET}"
-	@cd webapp && docker build -t ${PRODUCT_NAME}/webapp:latest .
+build-api-client: ##@build Build api-client (code & documentation)
+	@echo "${YELLOW}Generating api-client${RESET}"
+	@cp api/src/api/v1/spec/swagger.json packages/api-client
+	@cd packages/api-client && yarn run build
+	@cp -r packages/api-client/doc website/src/modules/doc/components/api_client
 
-docker-build-api: ##@build Build API Docker image
-	@echo "${YELLOW}Building API Docker image: \"${PRODUCT_NAME}/api:latest\"${RESET}"
-	@cd api && docker build -t ${PRODUCT_NAME}/api:latest .
+build-website: ##@build Build static website
+	@echo "${YELLOW}Building website${RESET}"
+	@cd website && yarn run build
+
+build-api-spec: ##@build Generate swagger API spec with resolved refs
+	@echo "${YELLOW}Generating API swagger specification${RESET}"
+	@cd api && yarn run swagger-gen
+
+docker-build-%: ##@build Build given Docker image, must be a package or top level directory (e.g. docker-build-api)
+	@echo "${YELLOW}Building ${*} Docker image: \"${DOCKER_USER}/${PRODUCT_NAME}-${*}:${DOCKER_TAG}\"${RESET}"
+	@if [[ "${PACKAGES}" =~ " ${*} " ]]; then \
+        echo "building from package packages/${*}"; \
+        cd packages/${*} && docker build -t ${DOCKER_USER}/${PRODUCT_NAME}-${*}:${DOCKER_TAG} .; \
+    else \
+        cd ${*} && docker build -t ${DOCKER_USER}/${PRODUCT_NAME}-${*}:${DOCKER_TAG} .; \
+    fi
+	@echo "${GREEN}Successfully built \"${DOCKER_USER}/${PRODUCT_NAME}-${*}:${DOCKER_TAG}\"${RESET}"
 
 docker-ls: ##@build List local related Docker images
 	@echo "${YELLOW}Available Docker images for: \"${PRODUCT_NAME}\"${RESET}"
 	@docker images | grep ${PRODUCT_NAME}
+
+########################################################################################################################
+#
+# PUBLISH
+#
+########################################################################################################################
+
+publish: build ##@publish Build & publish all Docker images & packages
+	@echo "${YELLOW}Building & publishing images/packages/website${RESET}"
+	@make docker-publish-webapp
+	@make docker-publish-api
+	@make docker-publish-bot
+	@make publish-website
+
+publish-website: ##@publish Publish static website to github pages
+	@cd website && yarn run deploy
+
+docker-publish-%: ##@publish Publish given Docker image (e.g. docker-publish-api)
+	@echo "${YELLOW}Publishing Docker image: \"${DOCKER_USER}/${PRODUCT_NAME}-${*}:${DOCKER_TAG}\"${RESET}"
+	@docker push ${DOCKER_USER}/${PRODUCT_NAME}-${*}:${DOCKER_TAG}
 
 ########################################################################################################################
 #
@@ -157,13 +224,13 @@ test: test-api-unit ##@testing Run all tests
 test-unit: ##@testing Run all unit tests
 	@make make-in-node MAKE_RULE=_test-unit
 
-_test-unit: #@see test-unit
+_test-unit: # see test-unit
 	@cd api && yarn run test-unit -- --color
 
-lint: ##@testing run eslint
+lint: ##@testing Run eslint on directories exposing an eslint script in package.json
 	@make make-in-node MAKE_RULE=_lint
 
-_lint: ##@testing run eslint
+_lint: # see lint
 	@echo "${YELLOW}Running eslint${RESET}"
 	@./node_modules/.bin/lerna run eslint -- --quiet
 
@@ -176,33 +243,31 @@ _lint: ##@testing run eslint
 website-install: ##@website install website deps
 	@cd website && yarn install
 
-website-build: ##@website build static website
-	@cd website && yarn run build
-
-website-publish: website-build ##@website publish static website to github pages
-	@cd website && yarn run deploy
-
 ########################################################################################################################
 #
-# API
+# DEPLOY
 #
 ########################################################################################################################
 
-api-swagger-build: ##@api generate swagger API spec with resolved refs
-	@echo "${YELLOW}Generating API swagger specification${RESET}"
-	@cd api && yarn run swagger-gen
+deploy-aws-plan: ##@deploy Deploy flambo to AWS
+	@$(eval PUBLIC_IP := $(shell curl -s ipinfo.io/ip))
+	@cd deploy/aws && ./generate_files.sh
+	@cd deploy/aws && terraform plan \
+        -var admin_cidr_ingress='"${PUBLIC_IP}/32"'
 
-########################################################################################################################
-#
-# API CLIENT
-#
-########################################################################################################################
+deploy-aws: ##@deploy Deploy flambo to AWS
+	@$(eval PUBLIC_IP := $(shell curl -s ipinfo.io/ip))
+	@cd deploy/aws && ./generate_files.sh
+	@cd deploy/aws && terraform apply \
+        -var admin_cidr_ingress='"${PUBLIC_IP}/32"'
 
-api-client-build: api-swagger-build ##@api-client build api-client (code & documentation)
-	@echo "${YELLOW}Generating api-client${RESET}"
-	@cp api/src/api/v1/spec/swagger.json packages/api-client
-	@cd packages/api-client && yarn run build
-	@cp -r packages/api-client/doc website/src/modules/doc/components/api_client
+deploy-aws-show:
+	@cd deploy/aws && terraform show
+
+deploy-aws-destroy: ##@deploy Destroy flambo AWS resources
+	@$(eval PUBLIC_IP := $(shell curl -s ipinfo.io/ip))
+	@cd deploy/aws && terraform destroy \
+        -var admin_cidr_ingress='"${PUBLIC_IP}/32"'
 
 ########################################################################################################################
 #

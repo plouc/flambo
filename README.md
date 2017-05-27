@@ -17,6 +17,18 @@
 ![workflow](./assets/workflow.png)
 
 
+## Demo
+
+Running the demo is quite easy:
+
+``` sh
+git clone git@github.com:plouc/flambo.git
+cd flambo
+DEMO=1 make up
+open http://localhost:8090/webapp
+```
+
+
 ## Components
 
 **flambo** is made up of several components
