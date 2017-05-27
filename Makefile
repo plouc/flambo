@@ -103,6 +103,13 @@ up: ##@control setup stack
 
 	@make dc-up
 
+stop: ##@control Stop all services. To stop Quickly use QUICK=1
+    ifdef QUICK
+		@${DOCKER_COMPOSE} stop -t 0
+    else
+		@${DOCKER_COMPOSE} stop
+    endif
+
 clean: ##@control Remove all components
 	@echo "${YELLOW}Stopping stack and removing components${RESET}"
 	@${DOCKER_COMPOSE} stop -t 0

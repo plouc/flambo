@@ -6,6 +6,7 @@ import styled                     from 'styled-components'
 import Swagger                    from 'swagger-client'
 import Operation                  from '../../../../core/components/swagger/operation'
 import spec                       from './swagger.json'
+import Home                       from './home'
 
 
 const operations = []
@@ -50,8 +51,8 @@ const Header = styled.div`
 `
 
 const Title = styled.h1`
-    margin: 0;
-    padding: 0;
+    //margin: 0;
+    //padding: 0;
 `
 
 const Aside = styled.div`
@@ -132,6 +133,7 @@ class RestApiIndex extends Component {
                         {false && client && <ApiMeta>{url}</ApiMeta>}
                     </Header>
                     <Switch>
+                        <Route path={match.url} exact component={Home}/>
                         {Object.keys(tags).map(tag => (
                             <Route key={tag} path={`${match.url}/${tag}`} render={() => {
                                 return (
@@ -151,6 +153,14 @@ class RestApiIndex extends Component {
                 </div>
                 <Aside>
                     <Nav>
+                        <NavLink
+                            to={match.url}
+                            style={{ textDecoration: 'none' }}
+                            exact
+                            activeClassName="active"
+                        >
+                            <Tag>index</Tag>
+                        </NavLink>
                         {Object.keys(tags).map(tag => (
                             <div key={tag}>
                                 <NavLink

@@ -8,6 +8,7 @@ import WebappIcon from 'react-icons/lib/md/devices'
 import CliIcon from 'react-icons/lib/fa/terminal'
 import BotIcon from 'react-icons/lib/fa/cogs'
 import SourcesIcon from 'react-icons/lib/md/call-merge'
+import DeployIcon from 'react-icons/lib/md/play-circle-outline'
 
 
 const Container = styled.div`
@@ -92,6 +93,10 @@ export default () => (
             <MenuItem to="/doc/sources">
                 Sources
                 <SourcesIcon color="#3e6096"/>
+            </MenuItem>
+            <MenuItem to="/doc/deploy/aws">
+                Deploy on AWS
+                <DeployIcon color="#3e6096"/>
             </MenuItem>
         </Nav>
     </Container>

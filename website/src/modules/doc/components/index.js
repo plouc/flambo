@@ -11,6 +11,7 @@ import Bot from './bot'
 import Webapp from './webapp'
 import Cli from './cli'
 import Sources from './sources'
+import DeployAWS from './deploy_aws'
 
 
 const Container = styled.div`
@@ -36,6 +37,7 @@ export default ({ match }) => (
                 <Route path={`${match.url}/webapp`} component={Webapp}/>
                 <Route path={`${match.url}/cli`} component={Cli}/>
                 <Route path={`${match.url}/sources`} component={Sources}/>
+                <Route path={`${match.url}/deploy/aws`} component={DeployAWS}/>
             </Switch>
         </div>
     </Container>
