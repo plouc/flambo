@@ -1,5 +1,6 @@
-import api           from '@flambo/api-client'
-import { fetchTime } from '../../../core/actions/actionsHelpers'
+import api                      from '@flambo/api-client'
+import { fetchTime }            from '../../../core/actions/actionsHelpers'
+import { apiBaseUrl as apiUrl } from '../../../core/api'
 
 
 export const FETCH_GROUP_MEMBERS_REQUEST = 'FETCH_GROUP_MEMBERS_REQUEST'
@@ -23,7 +24,7 @@ export const fetchGroupMembers = (id, _options = {}) => (dispatch, getState) => 
 
     dispatch({ type: FETCH_GROUP_MEMBERS_REQUEST, id, ...options })
 
-    return api.groups.members(id, options, { token })
+    return api.groups.members(id, options, { apiUrl, token })
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_GROUP_MEMBERS_SUCCESS,

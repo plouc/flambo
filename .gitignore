@@ -5,8 +5,10 @@ api/static
 webapp/build
 
 # deploy
-terraform.tfstate
-terraform.tfstate.backup
+terraform.tfstate*
+terraform.tfvars
+webapp_files.tf
+.terraform*
 
 # bot
 hubot.conf
@@ -16,6 +18,7 @@ hubot.conf
 website/build
 
 # api-client
+packages/api-client/lib/
 packages/api-client/doc/
 packages/api-client/sample.js
 

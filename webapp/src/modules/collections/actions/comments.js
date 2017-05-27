@@ -1,5 +1,6 @@
-import api           from '@flambo/api-client'
-import { fetchTime } from '../../../core/actions/actionsHelpers'
+import api                      from '@flambo/api-client'
+import { fetchTime }            from '../../../core/actions/actionsHelpers'
+import { apiBaseUrl as apiUrl } from '../../../core/api'
 
 
 export const FETCH_COLLECTION_COMMENTS_REQUEST = 'FETCH_COLLECTION_COMMENTS_REQUEST'
@@ -23,7 +24,7 @@ export const fetchCollectionComments = (id, _options = {}) => (dispatch, getStat
 
     dispatch({ type: FETCH_COLLECTION_COMMENTS_REQUEST, id, ...options })
 
-    return api.collections.comments(id, options, { token })
+    return api.collections.comments(id, options, { token, apiUrl })
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_COLLECTION_COMMENTS_SUCCESS,

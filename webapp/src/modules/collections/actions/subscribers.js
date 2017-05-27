@@ -1,5 +1,6 @@
-import api             from '@flambo/api-client'
-import { fetchTime }   from '../../../core/actions/actionsHelpers'
+import api                      from '@flambo/api-client'
+import { fetchTime }            from '../../../core/actions/actionsHelpers'
+import { apiBaseUrl as apiUrl } from '../../../core/api'
 
 
 export const FETCH_COLLECTION_SUBSCRIBERS_REQUEST = 'FETCH_COLLECTION_SUBSCRIBERS_REQUEST'
@@ -23,7 +24,7 @@ export const fetchCollectionSubscribers = (id, _options = {}) => (dispatch, getS
 
     dispatch({ type: FETCH_COLLECTION_SUBSCRIBERS_REQUEST, id, ...options })
 
-    return api.collections.subscribers(id, options, { token })
+    return api.collections.subscribers(id, options, { apiUrl, token })
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_COLLECTION_SUBSCRIBERS_SUCCESS,

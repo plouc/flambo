@@ -1,5 +1,7 @@
-import api           from '@flambo/api-client'
-import { fetchTime } from '../../../core/actions/actionsHelpers'
+import api                      from '@flambo/api-client'
+import { fetchTime }            from '../../../core/actions/actionsHelpers'
+import { apiBaseUrl as apiUrl } from '../../../core/api'
+
 
 export const FETCH_GROUPS_REQUEST = 'FETCH_GROUPS_REQUEST'
 export const FETCH_GROUPS_SUCCESS = 'FETCH_GROUPS_SUCCESS'
@@ -23,7 +25,7 @@ export const fetchGroups = (_options = {}) => (dispatch, getState) => {
         ...options,
     })
 
-    return api.groups.find(options, { token })
+    return api.groups.find(options, { apiUrl, token })
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_GROUPS_SUCCESS,

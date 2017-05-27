@@ -1,6 +1,7 @@
-import isEqual       from 'lodash/isEqual'
-import api           from '@flambo/api-client'
-import { fetchTime } from '../../../core/actions/actionsHelpers'
+import isEqual                  from 'lodash/isEqual'
+import api                      from '@flambo/api-client'
+import { fetchTime }            from '../../../core/actions/actionsHelpers'
+import { apiBaseUrl as apiUrl } from '../../../core/api'
 
 
 export const FETCH_SOURCES_REQUEST = 'FETCH_SOURCES_REQUEST'
@@ -27,7 +28,7 @@ export const fetchSources = (_options = {}) => (dispatch, getState) => {
         ...options,
     })
 
-    return api.sources.find(options, { token })
+    return api.sources.find(options, { apiUrl, token })
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_SOURCES_SUCCESS,

@@ -4,6 +4,7 @@ import history                   from '../../../core/history'
 import schema                    from '../schemas/collectionSchema'
 import { invalidateCollections } from './index'
 import * as media                from '../../media/api'
+import { apiBaseUrl as apiUrl }  from '../../../core/api'
 
 
 export const CREATE_COLLECTION_REQUEST = 'CREATE_COLLECTION_REQUEST'
@@ -26,7 +27,7 @@ export const createCollection = _data => (dispatch, getState) => {
         })
         .then(medium => {
             if (medium) return api.collections.create({ ...data, picture_id: medium.id }, token)
-            return api.collections.create(data, { token })
+            return api.collections.create(data, { apiUrl, token })
         })
         .then(() => {
             dispatch({ type: CREATE_COLLECTION_SUCCESS })

@@ -1,5 +1,6 @@
-import api           from '@flambo/api-client'
-import { fetchTime } from '../../../core/actions/actionsHelpers'
+import api                      from '@flambo/api-client'
+import { fetchTime }            from '../../../core/actions/actionsHelpers'
+import { apiBaseUrl as apiUrl } from '../../../core/api'
 
 
 export const FETCH_USER_FEED_REQUEST = 'FETCH_USER_FEED_REQUEST'
@@ -23,7 +24,7 @@ export const fetchUserFeed = (id, _options = {}) => (dispatch, getState) => {
 
     dispatch({ type: FETCH_USER_FEED_REQUEST, id, ...options })
 
-    return api.users.feed(id, options, { token })
+    return api.users.feed(id, options, { apiUrl, token })
         .then(res => {
             dispatch(fetchTime({
                 type: FETCH_USER_FEED_SUCCESS,
