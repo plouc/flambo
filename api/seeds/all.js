@@ -1,7 +1,6 @@
 const path    = require('path')
 const uuid    = require('uuid')
 const _       = require('lodash')
-const faker   = require('faker')
 const fs      = require('fs-extra')
 const mime    = require('mime-types')
 const yaml    = require('js-yaml')
@@ -53,7 +52,7 @@ const users = _.mapValues(
             _.omit(user, 'avatar'),
             {
                 id:        uuid.v4(),
-                email:     `${_.deburr(_.lowerCase(user.first_name))}@flambo.io`,
+                email:     `${_.deburr(_.lowerCase(user.first_name))}@flambo.co`,
                 password:  _.deburr(_.lowerCase(user.first_name)),
                 role:      user.role || 'user',
                 avatar_id: user.avatar ? getRelatedId('avatar', media, user.avatar) : null,

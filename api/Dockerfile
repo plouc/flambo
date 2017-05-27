@@ -1,22 +1,24 @@
+# Flambo API
+#
+
 FROM node:7.6
 
-COPY ./package.json /data/package.json
-COPY ./yarn.lock    /data/yarn.lock
+LABEL description="Flambo API"
+
+COPY ["./package.json", "./yarn.lock", "/data/"]
 
 WORKDIR /data
 
-RUN yarn
+RUN yarn install --prod
 
-COPY ./src             /data/src
-COPY ./conf            /data/conf
-COPY ./index.js        /data/index.js
-COPY ./knexfile.js     /data/knexfile.js
-COPY ./migrations      /data/migrations
-COPY ./seeds           /data/seeds
-COPY ./scripts         /data/scripts
-COPY ./tests           /data/tests
+COPY ./src        /data/src
+COPY ./conf       /data/conf
+COPY ./migrations /data/migrations
+COPY ./seeds      /data/seeds
+COPY ./scripts    /data/scripts
 
-COPY ./wrapper.sh  /data/wrapper.sh
+COPY ["./index.js", "./knexfile.js", "./wrapper.sh", "/data/"]
+
 RUN chmod +x wrapper.sh
 
 CMD ["./wrapper.sh"]

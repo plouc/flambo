@@ -2,7 +2,7 @@
 set -e
 
 yarn run migrate
-yarn run init-es
+yarn run init-elastic
 yarn run load-data
-node scripts/load-sources.js
+yarn run load-sources
 node index.js

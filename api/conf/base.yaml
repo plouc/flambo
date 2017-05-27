@@ -11,7 +11,7 @@ db:
   debug:      false
   connection:
     host:     localhost
-    port:     5444
+    port:     5432
     database: flambo
     user:     pg
     password: pg
@@ -21,7 +21,7 @@ db:
 
 elastic:
   host:  localhost
-  port:  9222
+  port:  9200
   log:   warning
   index: flambo
 

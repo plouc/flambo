@@ -11,13 +11,12 @@
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
     "load-data": "knex seed:run",
+    "load-sources": "node scripts/load_sources.js",
     "bdd": "cucumber-js --require tests/functional/support tests/functional/features",
     "eslint": "eslint .",
-    "collect": "node collect.js",
-    "init-es": "node scripts/initElastic.js",
-    "reset": "npm run index-init && npm run load-data && npm run collect",
+    "init-elastic": "node scripts/init_elastic.js",
     "doc": "jsdoc src api-tester --configure .jsdoc.json --readme ../docs/README.md",
-    "swagger-gen": "node scripts/swagger-gen.js"
+    "swagger-gen": "node scripts/swagger_gen.js"
   },
   "author": "Raphaël Benitte",
   "license": "ISC",
