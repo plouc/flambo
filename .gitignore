@@ -30,6 +30,7 @@ node_modules
 npm-debug*
 yarn-error.log
 lerna-debug.log
+*.lerna_backup
 
 # misc
 /bin

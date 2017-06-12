@@ -1,4 +1,5 @@
 const Router     = require('koa-router')
+const log        = require('@ekino/logger')('api:v1:collections')
 
 const auth       = require('../../../core/auth')
 const validation = require('../../../core/validation')
@@ -30,9 +31,25 @@ router.get(
     '/:id',
     auth.middleware,
     async ctx => {
-        const source = await Sources.get(ctx.params.id)
+        const sourceId = ctx.params.id
 
-        ctx.body = dto.item(source)
+        try {
+            const source = await Sources.get(sourceId)
+
+            if (!source) {
+                ctx.status = 404
+                ctx.body   = {message: `No source found for id: ${sourceId}`}
+                return
+            }
+
+            ctx.body = dto.item(source)
+        } catch (error) {
+            const errorMessage = `An error occurred while fetching source: ${sourceId}`
+            log.error(errorMessage, { error, sourceId })
+
+            ctx.status = 500
+            ctx.body   = { error: errorMessage }
+        }
     }
 )
 
