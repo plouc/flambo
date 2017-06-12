@@ -2,7 +2,15 @@
 # yarn lockfile v1
 
 
-"@flambo/source-meetup@^0.1.3":
+"@ekino/logger@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@ekino/logger/-/logger-0.1.0.tgz#cfef55a59af3e913264529101f340ac391fecea4"
+  dependencies:
+    lodash "4.x.x"
+    prettyoutput "1.x.x"
+    uuid "3.x.x"
+
+"@flambo/source-meetup@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@flambo/source-meetup/-/source-meetup-0.1.2.tgz#02bc3f60b87977bcff874c240851ff88e82764de"
   dependencies:
@@ -10,7 +18,7 @@
     request-promise-native "^1.0.4"
     uuid "^3.0.1"
 
-"@flambo/source-rss@^0.1.3":
+"@flambo/source-rss@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@flambo/source-rss/-/source-rss-0.1.2.tgz#25f4732a203c58efe2c68594ec5d9a1b6eb08dc7"
   dependencies:
@@ -686,7 +694,7 @@ colors@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.0.3.tgz#0433f44d809680fdeb60ed260f1b0c262e82a40b"
 
-colors@^1.1.2:
+colors@1.1.2, colors@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.1.2.tgz#168a4701756b6a7f51a12ce0c97bfa28c084ed63"
 
@@ -696,7 +704,7 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.2.0, commander@^2.5.0, commander@^2.7.1, commander@^2.8.1, commander@^2.9.0:
+commander@2.9.0, commander@^2.2.0, commander@^2.5.0, commander@^2.7.1, commander@^2.8.1, commander@^2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.9.0.tgz#9c99094176e12240cb22d6c5146098400fe0f7d4"
   dependencies:
@@ -860,13 +868,13 @@ debug@*, debug@^2.1.3, debug@~2.2.0:
   dependencies:
     ms "0.7.1"
 
-debug@2, debug@^2.2.0, debug@^2.6.0, debug@^2.6.1:
+debug@2, debug@^2.1.1, debug@^2.2.0, debug@^2.6.0, debug@^2.6.1:
   version "2.6.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.6.tgz#a9fa6fbe9ca43cf1e79f73b75c0189cbb7d6db5a"
   dependencies:
     ms "0.7.3"
 
-debug@2.6.7, debug@^2.1.1, debug@^2.6.3:
+debug@2.6.7, debug@^2.6.3:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.7.tgz#92bad1f6d05bbb6bba22cca88bcd0ec894c2861e"
   dependencies:
@@ -2337,14 +2345,14 @@ js-tokens@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.1.tgz#08e9f132484a2c45a30907e9dc4d5567b7f114d7"
 
-js-yaml@3.6.1:
+js-yaml@3.6.1, js-yaml@^3.5.1:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.6.1.tgz#6e5fe67d8b205ce4d22fad05b7781e8dadcc4b30"
   dependencies:
     argparse "^1.0.7"
     esprima "^2.6.0"
 
-js-yaml@^3.3.1, js-yaml@^3.5.1, js-yaml@^3.7.0, js-yaml@^3.8.3:
+js-yaml@^3.3.1, js-yaml@^3.7.0, js-yaml@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.8.3.tgz#33a05ec481c850c8875929166fe1beb61c728766"
   dependencies:
@@ -2945,7 +2953,11 @@ lodash@4.13.1, lodash@^4.0.0, lodash@^4.6.0:
   version "4.13.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.13.1.tgz#83e4b10913f48496d4d16fec4a560af2ee744b68"
 
-lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0:
+lodash@4.16.6:
+  version "4.16.6"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.16.6.tgz#d22c9ac660288f3843e16ba7d2b5d06cca27d777"
+
+lodash@4.x.x, lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -3450,6 +3462,14 @@ pretty-format@^19.0.0:
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-19.0.0.tgz#56530d32acb98a3fa4851c4e2b9d37b420684c84"
   dependencies:
     ansi-styles "^3.0.0"
+
+prettyoutput@1.x.x:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/prettyoutput/-/prettyoutput-1.1.1.tgz#81f738733fc9a20a4ac9364802edf5cb66f3f742"
+  dependencies:
+    colors "1.1.2"
+    commander "2.9.0"
+    lodash "4.16.6"
 
 private@^0.1.6, private@~0.1.5:
   version "0.1.7"
@@ -4427,7 +4447,7 @@ util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
 
-uuid@3.0.1, uuid@^3.0.0, uuid@^3.0.1:
+uuid@3.0.1, uuid@3.x.x, uuid@^3.0.0, uuid@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
 

@@ -1,4 +1,5 @@
 const Router      = require('koa-router')
+const log         = require('@ekino/logger')('api:v1:collections')
 
 const auth        = require('../../../core/auth')
 const validation  = require('../../../core/validation')
@@ -39,15 +40,23 @@ router.get(
         const collectionId = ctx.params.id
         const viewerId     = ctx.state.user.id
 
-        const collection = await Collections.get(collectionId, viewerId)
+        try {
+            const collection = await Collections.get(collectionId, viewerId)
 
-        if (!collection) {
-            ctx.status = 404
-            ctx.body   = { message: `No collection found for id: ${collectionId}` }
-            return
+            if (!collection) {
+                ctx.status = 404
+                ctx.body   = {message: `No collection found for id: ${collectionId}`}
+                return
+            }
+
+            ctx.body = dto.collection(collection, viewerId)
+        } catch (error) {
+            const errorMessage = `An error occurred while fetching collection: ${collectionId}`
+            log.error(errorMessage, { error, collectionId })
+
+            ctx.status = 500
+            ctx.body   = { error: errorMessage }
         }
-
-        ctx.body = dto.collection(collection, viewerId)
     }
 )
 

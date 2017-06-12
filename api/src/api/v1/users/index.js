@@ -1,4 +1,5 @@
 const Router         = require('koa-router')
+const log            = require('@ekino/logger')('api:v1:users')
 
 const auth           = require('../../../core/auth')
 const validation     = require('../../../core/validation')
@@ -56,12 +57,24 @@ router.get(
     '/:id',
     auth.middleware,
     async ctx => {
-        const user = await Users.get(ctx.params.id)
+        const userId = ctx.params.id
 
-        if (!user) {
-            ctx.status = 404
-        } else {
+        try {
+            const user = await Users.get(userId)
+
+            if (!user) {
+                ctx.status = 404
+                ctx.body   = { message: `No user found for id: ${userId}` }
+                return
+            }
+
             ctx.body = dto.user(user)
+        } catch (error) {
+            const errorMessage = `An error occurred while fetching user: ${userId}`
+            log.error(errorMessage, { error, userId })
+
+            ctx.status = 500
+            ctx.body   = { error: errorMessage }
         }
     }
 )

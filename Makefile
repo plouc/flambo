@@ -103,6 +103,10 @@ up: ##@control setup stack
 
 	@make dc-up
 
+ifeq ($(STACK_MODE), DEV)
+		@make storage-reset
+endif
+
 stop: ##@control Stop all services. To stop Quickly use QUICK=1
     ifdef QUICK
 		@${DOCKER_COMPOSE} stop -t 0
@@ -144,6 +148,20 @@ log-%: ##@control Print logs for a given service (e.g. log-api)
 bash-%: ##@control Get a bash in given running service
 	@make _${*}-should-be-up
 	@${DOCKER_COMPOSE} exec ${*} /bin/bash
+
+########################################################################################################################
+#
+# STORAGE PG/ES
+#
+########################################################################################################################
+
+storage-reset: ##@storage reset storage (postgres & elasticsearch)
+	@make storage-init
+
+storage-init: ##@storage Init storage (run postgres migrations & init es mapping)
+	@make run-in-api COMMAND="cd api && yarn run migrate"
+	@make run-in-api COMMAND="cd api && yarn run init-elastic"
+	@make run-in-api COMMAND="cd api && yarn run load-data"
 
 ########################################################################################################################
 #

@@ -1,4 +1,5 @@
 const Router       = require('koa-router')
+const log          = require('@ekino/logger')('api:v1:groups')
 
 const auth         = require('../../../core/auth')
 const validation   = require('../../../core/validation')
@@ -39,15 +40,23 @@ router.get(
         const groupId  = ctx.params.id
         const viewerId = ctx.state.user.id
 
-        const group = await Groups.get(groupId, viewerId)
+        try {
+            const group = await Groups.get(groupId, viewerId)
 
-        if (!group) {
-            ctx.status = 404
-            ctx.body   = { message: `No group found for id: ${groupId}` }
-            return
+            if (!group) {
+                ctx.status = 404
+                ctx.body   = { message: `No group found for id: ${groupId}` }
+                return
+            }
+
+            ctx.body = dto.group(group, viewerId)
+        } catch (error) {
+            const errorMessage = `An error occurred while fetching group: ${groupId}`
+            log.error(errorMessage, { error, groupId })
+
+            ctx.status = 500
+            ctx.body   = { error: errorMessage }
         }
-
-        ctx.body = dto.group(group, viewerId)
     }
 )
 

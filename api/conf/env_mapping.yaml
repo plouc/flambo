@@ -12,3 +12,6 @@ ELASTIC_HOST: elastic.host
 ELASTIC_PORT: elastic.port
 
 MEETUP_API_KEY: meetup.api_key
+
+LOG_LEVEL:  logger.level
+LOG_OUTPUT: logger.output

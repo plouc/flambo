@@ -6,11 +6,16 @@ static:
 jwt:
   secret: fl4mboO°
 
+logger:
+  level: debug
+  namespaces: '*'
+  output: pretty
+
 db:
   client:     pg
   debug:      false
   connection:
-    host:     localhost
+    host:     postgres
     port:     5432
     database: flambo
     user:     pg
@@ -20,7 +25,7 @@ db:
     max:      10
 
 elastic:
-  host:  localhost
+  host:  elastic
   port:  9200
   log:   warning
   index: flambo

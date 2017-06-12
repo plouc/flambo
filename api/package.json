@@ -21,6 +21,7 @@
   "author": "Raphaël Benitte",
   "license": "ISC",
   "dependencies": {
+    "@ekino/logger": "0.1.0",
     "@flambo/source-meetup": "^0.1.2",
     "@flambo/source-rss": "^0.1.2",
     "amqplib": "0.4.2",

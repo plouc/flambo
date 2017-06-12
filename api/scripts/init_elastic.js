@@ -8,6 +8,7 @@ console.log(chalk.yellow('creating index…'))
 elastic.indices.delete({
     index: config.get('elastic.index'),
 })
+    // ignoring error if index does not exist
     .catch(() => {})
     .then(() => elastic.indices.create({
         index: config.get('elastic.index'),
