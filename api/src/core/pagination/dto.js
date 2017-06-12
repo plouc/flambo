@@ -52,8 +52,6 @@ exports.withCursor = ({ cursor }) => {
             cursorObject[key] = item[key]
         })
 
-        console.log('computed cursor', cursorObject)
-
         return Buffer.from(JSON.stringify(cursorObject)).toString('base64')
     }
 

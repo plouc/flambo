@@ -8,8 +8,6 @@ const generateMiddleware = (
     extractPagination
 ) => {
     return async function pagination(ctx, next) {
-        console.log('[pagination] query:', ctx.query)
-
         const {
             error: validationError,
             data:  input,
@@ -22,14 +20,10 @@ const generateMiddleware = (
             return
         }
 
-        console.log('[pagination] validated:', input)
-
         const pagination = extractPagination(input)
 
         ctx.state = ctx.state || {}
         ctx.state.pagination = pagination
-
-        console.log('[pagination] finalized:', pagination)
 
         await next()
     }
