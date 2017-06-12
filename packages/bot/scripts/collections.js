@@ -1,6 +1,10 @@
 // Description:
 //   List collections
 //
+// Configuration:
+//   API_URL
+//   API_TOKEN
+//
 // Commands:
 //   flambo collections - list collections
 //
@@ -8,12 +12,12 @@
 //   plouc
 //
 const columnify = require('columnify')
-const client    = require('@flambo/api-client')
+const client = require('../client')
 
 
 module.exports = bot => {
     bot.respond(/collections/i, msg => {
-        client.collections.find()
+        client.collections.find({})
             .then(({ items }) => {
                 const response = columnify(
                     items.map(collection => ({

@@ -47,3 +47,9 @@ services:
 
   webapp:
     image: plouc/flambo-webapp:beta
+
+  bot:
+    image: plouc/flambo-bot:beta
+    environment:
+      API_URL:   http://localhost:8090/api/v1
+      API_TOKEN: update_me

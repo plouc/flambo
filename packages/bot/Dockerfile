@@ -13,4 +13,4 @@ RUN yarn install --prod
 
 COPY ./scripts /data/scripts
 
-CMD ["yarn", "start"]
+CMD ["./node_modules/.bin/hubot", "--name", "flambo"]

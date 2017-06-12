@@ -7,10 +7,11 @@
     "@flambo/api-client": "^0.1.2",
     "columnify": "^1.5.4",
     "hubot": "^2.19.0",
-    "hubot-slack": "^4.3.4"
+    "hubot-slack": "^4.3.4",
+    "isomorphic-fetch": "^2.2.1"
   },
   "scripts": {
-    "start": "hubot --name flambo",
+    "start": "source hubot.conf && hubot --name flambo",
     "eslint": "eslint ."
   },
   "devDependencies": {

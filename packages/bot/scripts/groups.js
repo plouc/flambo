@@ -7,12 +7,12 @@
 // Author:
 //   plouc
 //
-const client = require('@flambo/api-client')
+const client = require('../client')
 
 
 module.exports = bot => {
     bot.respond(/groups/i, msg => {
-        client.groups.find()
+        client.groups.find({})
             .then(({ items }) => {
                 const header   = `*groups*`
                 const response = items.reduce((agg, item) => {
